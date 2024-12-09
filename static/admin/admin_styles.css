@@ -1,0 +1,43 @@
+#header {
+    background-color: #018dc0;  /* Set your desired color */
+}
+
+div.breadcrumbs {
+    background-color: #00A3E0;  /* Set your desired color */
+}
+
+/* admin_styles.css */
+#branding h1 {
+    color: #ffffff;  /* Set your desired color */
+}
+/* admin_styles.css */
+body {
+    font-family: "Noto Sans", sans-serif;  /* Set your desired font-family */
+}
+
+.object-tools a.addlink{
+    background-color: #4CAF50; /* Green */
+    /* color: white; */
+  }
+.object-tools a.addlink:hover {
+    background-color: #56c75a; /* Green */
+    /* color: white; */
+  }
+
+.object-tools {
+    float: right; /* Align the toolbar to the right */
+}
+
+input[type=text] {
+    /* width: 100%; */
+    /* padding: 12px 20px; */
+    /* margin: 8px 0; */
+    /* box-sizing: border-box; */
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+  }
+
+
+
