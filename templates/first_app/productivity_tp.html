@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard - IQVIA Manila Hub</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+    <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+    <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- Template Main CSS File -->
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="{% url 'first_app:index' %}" class="logo d-flex align-items-center">
+                <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+                <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+                <li class="nav-item dropdown pe-3">
+
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="{% static "img/profile.jpeg" %}" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">Jericho</span>
+                    </a><!-- End Profile Iamge Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>Jericho Barquez</h6>
+                            <span>RPS Team</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-person"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Account Settings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Need Help?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
+
+                    </ul><!-- End Profile Dropdown Items -->
+                </li><!-- End Profile Nav -->
+
+            </ul>
+        </nav>
+
+
+
+    </header><!-- End Header -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+                    <i class="bi bi-pin-map-fill"></i>
+                    <span>Manila Production Hub</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{% url 'first_app:performance' %}">
+                    <i class="bi bi-grid"></i>
+                    <span>Performance</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#productivity-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="productivity-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:productivity' region='top_management' %}" class="active">
+                            <i class="bi bi-circle"></i><span>TM REVIEW</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'first_app:productivity' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:productivity' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:productivity' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Tables Nav -->
+            <!--<li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-bar-chart-line"></i><span>C&B Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="quality-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:quality' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>--><!-- End Tables Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#quality-report-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="quality-report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:quality_report' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:quality_report' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:quality_report' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Tables Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-truck"></i><span>Service Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:service_delivery' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:service_delivery' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:service_delivery' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Tables Nav -->
+
+            <!--<li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-gear"></i><span>Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:utilization' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:utilization' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:utilization' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>-->
+        <!-- End Forms Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-gear"></i><span>Rax Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:rax_utilization' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:rax_utilization' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:rax_utilization' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Forms Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-graph-down"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:attrition' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:attrition' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:attrition' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Tables Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{% url 'first_app:headcount' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'first_app:headcount' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:headcount' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Tables Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+                    <li>
+                        <a href="{% url 'first_app:attendance' region='apac' %}">
+                            <i class="bi bi-circle"></i><span>APAC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:attendance' region='emea' %}">
+                            <i class="bi bi-circle"></i><span>EMEA</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'first_app:attendance' region='usca' %}">
+                            <i class="bi bi-circle"></i><span>USCA</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Forms Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users-profile.html">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </a>
+            </li><!-- End Profile Page Nav -->
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{% url 'first_app:pages_contact' %}">
+                    <i class="bi bi-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </li><!-- End Contact Page Nav -->
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{% url 'admin:index' %}" target="_blank">
+                    <i class="bi bi-gear"></i>
+                    <span>Administrator</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+
+
+
+
+        </ul>
+
+    </aside><!-- End Sidebar-->
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+            <h1>TM REVIEW </h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'first_app:index' %}"><i class="bi bi-house-door"></i></a></li>
+                    <li class="breadcrumb-item">Productivity</li>
+                    <li class="breadcrumb-item active">Metrics</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <!-- <div class="row"> -->
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="row">
+
+
+                  
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                {% for function in unique_functions %}
+                                <li>
+                                    <a class="dropdown-item function-filter" href="#" data-function="{{ function }}">{{ function }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+
+                        <div class="card-body">
+                            <h5 class="card-title">Actual Volume of Tasks Processed<span> | Year to Date</span></h5>
+
+                            <!-- Line Chart -->
+                            <div id="actual_vol_processed" style="min-height: 380px;" class="echart"></div>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    // Get the utilization data from Django template context
+                                    var actual_volume = {{ actual_volume_processed | safe }};
+
+                                    // Create a mapping of full month names to abbreviated names
+                                    var monthMapping = {
+                                        'january': 'Jan',
+                                        'february': 'Feb',
+                                        'march': 'Mar',
+                                        'april': 'Apr',
+                                        'may': 'May',
+                                        'june': 'Jun',
+                                        'july': 'Jul',
+                                        'august': 'Aug',
+                                        'september': 'Sep',
+                                        'october': 'Oct',
+                                        'november': 'Nov',
+                                        'december': 'Dec'
+                                    };
+
+                                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                                    // Function to update the chart based on selected function
+                                    function updateChart(selectedFunction) {
+                                        var yAxisData = [];
+                                        var fteData = [];
+
+                                        months.forEach(month => {
+                                            var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                            var found = actual_volume.find(item => item.function === selectedFunction && item.lower_month === fullMonthName);
+
+                                            // Push the total_task_processed value or 0 if not found
+                                            yAxisData.push(found ? found.total_task_processed : 0);
+                                            // Push the total_fte_allocation value or 0 if not found
+                                            fteData.push(found ? found.total_fte_allocation : 0);
+                                        });
+
+                                        // Initialize or update ECharts instance
+                                        var myChart = echarts.init(document.getElementById('actual_vol_processed'));
+
+                                        // Specify chart configuration
+                                        var options = {
+                                            title: {
+                                                text: selectedFunction,
+                                                left: 'center',
+                                                textStyle: {
+                                                    fontSize: 12
+                                                }
+                                            },
+                                            toolbox: {
+                                                show: true,
+                                                feature: {
+                                                    mark: { show: true },
+                                                    dataView: { show: true, readOnly: false },
+                                                    //magicType: { type: ['line', 'bar'] },
+                                                    //restore: { show: true },
+                                                    saveAsImage: { show: true }
+                                                }
+                                            },
+                                            tooltip: {
+                                                trigger: 'axis',
+                                                axisPointer: {
+                                                    type: 'shadow'
+                                                }
+                                            },
+                                            legend: {
+                                                data: ['Volume/Task Processed', 'Total FTE Allocation'],
+                                                bottom: '1%'
+                                            },
+                                            xAxis: {
+                                                type: 'category',
+                                                data: months
+                                            },
+                                            yAxis: [
+                                                {
+                                                    type: 'value',
+                                                    name: 'Millions',
+                                                    nameTextStyle: {
+                                                        align: 'center'
+                                                    },
+                                                    nameLocation: 'middle',
+                                                    nameGap: 50,
+                                                    splitLine: {
+                                                        show: true
+                                                    }
+                                                },
+                                                {
+                                                    type: 'value',
+                                                    position: 'right',
+                                                    splitLine: {
+                                                        show: false
+                                                    }
+                                                }
+                                            ],
+                                            series: [
+                                                {
+                                                    name: 'Volume/Task Processed',
+                                                    type: 'bar',
+                                                    data: yAxisData,
+                                                    itemStyle: {
+                                                        color: '#2A93D5'
+                                                    },
+                                                    label: {
+                                                        show: true,
+                                                        position: 'inside',
+                                                        formatter: '{c}',
+                                                        color: '#fff'
+                                                    },
+                                                    yAxisIndex: 0
+                                                },
+                                                {
+                                                    name: 'Total FTE Allocation',
+                                                    type: 'line',
+                                                    data: fteData,
+                                                    itemStyle: {
+                                                        color: '#43B02A'
+                                                    },
+                                                    label: {
+                                                        show: true,
+                                                        position: 'top',
+                                                        formatter: '{c}',
+                                                        color: '#43B02A'
+                                                    },
+                                                    smooth: true,
+                                                    yAxisIndex: 1
+                                                }
+                                            ]
+                                        };
+
+                                        // Set chart configuration and render
+                                        myChart.setOption(options);
+                                    }
+
+                                    // Initial chart load for "C&B"
+                                    updateChart("C&B");
+
+                                    // Event listener for dropdown selection
+                                    document.querySelectorAll('.function-filter').forEach(item => {
+                                        item.addEventListener('click', function (event) {
+                                            event.preventDefault();
+                                            var selectedFunction = this.getAttribute('data-function');
+                                            updateChart(selectedFunction);
+                                        });
+                                    });
+                                });
+                            </script>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                {% for function in prod_unique_functions %}
+                                <li>
+                                    <a class="dropdown-item prod-filter" href="#" data-function="{{ function }}">{{ function }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Productivity Rate Comparison <span>| Year to Date</span></h5>
+
+                            <!-- Line Chart -->
+                            <div id="prod_rate_chart" style="min-height: 380px;" class="echart"></div>
+
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    // Get the productivity data from Django template context
+                                    var productivityData = {{ productivity_com_data | safe }};
+
+                                    // Create a mapping of full month names to abbreviated names
+                                    var monthMapping = {
+                                        'january': 'Jan',
+                                        'february': 'Feb',
+                                        'march': 'Mar',
+                                        'april': 'Apr',
+                                        'may': 'May',
+                                        'june': 'Jun',
+                                        'july': 'Jul',
+                                        'august': 'Aug',
+                                        'september': 'Sep',
+                                        'october': 'Oct',
+                                        'november': 'Nov',
+                                        'december': 'Dec'
+                                    };
+
+                                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                                    // Function to update the chart based on selected function
+                                    function updateProdRateChart(selectedFunction) {
+                                            var targetProdRateData = [];
+                                            var actualProdRateData = [];
+
+                                            months.forEach(month => {
+                                                var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                                var found = productivityData.find(item => item.function === selectedFunction && item.lower_month === fullMonthName);
+
+                                                // Push the avg_target_prod_rate_hour value or 0 if not found
+                                                targetProdRateData.push(found ? found.avg_target_prod_rate_hour : 0);
+                                                // Push the avg_actual_prod_rate_hr value or 0 if not found
+                                                actualProdRateData.push(found ? found.avg_actual_prod_rate_hr : 0);
+                                            });
+
+                                            // Initialize or update ECharts instance
+                                            var myChart_prod = echarts.init(document.getElementById('prod_rate_chart'));
+
+                                            // Specify chart configuration
+                                            var options = {
+                                                title: {
+                                                    text: selectedFunction,
+                                                    left: 'center',
+                                                    textStyle: {
+                                                        fontSize: 12
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    axisPointer: {
+                                                        type: 'line'
+                                                    }
+                                                },
+                                                toolbox: {
+                                                    show: true,
+                                                    feature: {
+                                                        mark: { show: true },
+                                                        dataView: { show: true, readOnly: false },
+                                                        //magicType: { type: ['line', 'bar'] },
+                                                        //restore: { show: true },
+                                                        saveAsImage: { show: true }
+                                                    }
+                                                },
+                                                legend: {
+                                                    data: ['Target Productivity', 'Actual Productivity'],
+                                                    bottom: '1%'
+                                                },
+                                                xAxis: {
+                                                    type: 'category',
+                                                    data: months
+                                                },
+                                                yAxis: {
+                                                    type: 'value',
+                                                    //name: 'Prod Rate/Hour',
+                                                    splitLine: {
+                                                        show: true
+                                                    }
+                                                },
+                                                series: [
+                                                    {
+                                                        name: 'Target Productivity',
+                                                        type: 'line',
+                                                        data: targetProdRateData,
+                                                        itemStyle: {
+                                                            color: '#43B02A'
+                                                        },
+                                                        lineStyle: {
+                                                            type: 'dashed' // Dashed line for target prod rate
+                                                        },
+                                                        label: {
+                                                            show: true,
+                                                            position: 'bottom',
+                                                            formatter: '{c}',
+                                                            color: '#43B02A'
+                                                        },
+                                                        smooth: true
+                                                    },
+                                                    {
+                                                        name: 'Actual Productivity',
+                                                        type: 'line',
+                                                        data: actualProdRateData,
+                                                        itemStyle: {
+                                                            color: '#2A93D5'
+                                                        },
+                                                        lineStyle: {
+                                                            type: 'solid' // Solid line for actual prod rate
+                                                        },
+                                                        label: {
+                                                            show: true,
+                                                            position: 'top',
+                                                            formatter: '{c}',
+                                                            color: '#2A93D5'
+                                                        },
+                                                        smooth: true
+                                                    }
+                                                ]
+                                            };
+
+                                            // Set chart configuration and render
+                                            myChart_prod.setOption(options);
+                                        }
+
+                                        // Initial chart load for "C&B"
+                                        updateProdRateChart("C&B");
+
+                                        // Event listener for dropdown selection
+                                        document.querySelectorAll('.prod-filter').forEach(item => {
+                                            item.addEventListener('click', function (event) {
+                                                event.preventDefault();
+                                                var selectedFunction = this.getAttribute('data-function');
+                                                updateProdRateChart(selectedFunction);
+                                            });
+                                        });
+                                    });
+                            </script>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                {% for function in prod_unique_functions_per_region %}
+                                <li>
+                                    <a class="dropdown-item prod-region-filter" href="#" data-function="{{ function }}">{{ function }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Productivity Rate per Region <span>| Year to Date</span></h5>
+
+                            <!-- Line Chart -->
+                            <div id="prod_rate_per_region_chart" style="min-height: 400px;" class="echart"></div>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    // Get the productivity data from Django template context
+                                    var prodperregiondata = {{ prod_rate_com_per_region_data | safe }};
+
+                                    // Create a mapping of full month names to abbreviated names
+                                    var monthMapping = {
+                                        'january': 'Jan',
+                                        'february': 'Feb',
+                                        'march': 'Mar',
+                                        'april': 'Apr',
+                                        'may': 'May',
+                                        'june': 'Jun',
+                                        'july': 'Jul',
+                                        'august': 'Aug',
+                                        'september': 'Sep',
+                                        'october': 'Oct',
+                                        'november': 'Nov',
+                                        'december': 'Dec'
+                                    };
+
+                                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                                    var regions = ['APAC', 'EMEA', 'USCA']; // Add the regions to handle the 3 bars per month
+
+                                    // Function to update the chart based on the selected function
+                                    function updateProdRateRegionChart(selectedFunction) {
+                                        var targetProdRateData = {
+                                            APAC: [],
+                                            EMEA: [],
+                                            USCA: []
+                                        };
+                                        var actualProdRateData = {
+                                            APAC: [],
+                                            EMEA: [],
+                                            USCA: []
+                                        };
+
+                                        months.forEach(month => {
+                                            var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                            regions.forEach(region => {
+                                                var found = prodperregiondata.find(item => item.function === selectedFunction && item.lower_month === fullMonthName && item.region === region);
+
+                                                // Push the avg_target_prod_rate_hour value or 0 if not found
+                                                targetProdRateData[region].push(found ? found.avg_target_prod_rate_hour : 0);
+                                                // Push the avg_actual_prod_rate_hr value or 0 if not found
+                                                actualProdRateData[region].push(found ? found.avg_actual_prod_rate_hr : 0);
+                                            });
+                                        });
+
+                                        // Initialize or update ECharts instance
+                                        var myChart_prod_region = echarts.init(document.getElementById('prod_rate_per_region_chart'));
+
+                                        // Specify chart configuration
+                                        var options = {
+                                            title: {
+                                                text: selectedFunction,
+                                                left: 'center',
+                                                textStyle: {
+                                                    fontSize: 12
+                                                }
+                                            },
+                                            toolbox: {
+                                                show: true,
+                                                feature: {
+                                                    dataView: { readOnly: false },
+                                                    //restore: { show: true },
+                                                    saveAsImage: {}
+                                                }
+                                            },
+                                            barGap: '0%',
+                                            tooltip: {
+                                                trigger: 'axis',
+                                                axisPointer: {
+                                                    type: 'shadow'
+                                                }
+                                            },
+                                            legend: {
+                                                data: ['Target Prod Rate - APAC', 'Actual Prod Rate - APAC', 'Target Prod Rate - EMEA', 'Actual Prod Rate - EMEA', 'Target Prod Rate - USCA', 'Actual Prod Rate - USCA'],
+                                                bottom: '1%'
+                                            },
+                                            xAxis: {
+                                                type: 'category',
+                                                data: months
+                                            },
+                                            yAxis: {
+                                                type: 'value',
+                                                splitLine: {
+                                                    show: true
+                                                }
+                                            },
+                                            series: [
+                                                // APAC
+                                                {
+                                                    name: 'Target Prod Rate - APAC',
+                                                    type: 'line',
+                                                    data: targetProdRateData['APAC'],
+                                                    itemStyle: { color: '#b9aa65' },
+                                                    lineStyle: { type: 'dashed' },
+                                                    label: { show: true, position: 'bottom', formatter: '{c}', color: '#b9aa65' },
+                                                    smooth: true
+                                                },
+                                                {
+                                                    name: 'Actual Prod Rate - APAC',
+                                                    type: 'bar',
+                                                    data: actualProdRateData['APAC'],
+                                                    itemStyle: { color: '#125488' },
+                                                    label: {
+                                                        show: true, position: 'insideBottom',
+                                                        formatter: function (params) {
+                                                            // Split the series name by ' - ' and take the last part, which is the region
+                                                            var region = params.seriesName.split(' - ').pop();
+                                                            return `${region} ${params.value}`;
+                                                        },
+                                                        color: '#fff', distance: 15, align: 'left', verticalAlign: 'middle', rotate: 90
+                                                    }
+                                                },
+                                                // EMEA
+                                                {
+                                                    name: 'Target Prod Rate - EMEA',
+                                                    type: 'line',
+                                                    data: targetProdRateData['EMEA'],
+                                                    itemStyle: { color: '#fc8452' },
+                                                    lineStyle: { type: 'dashed' },
+                                                    label: { show: true, position: 'top', formatter: '{c}', color: '#fc8452' },
+                                                    smooth: true
+                                                },
+                                                {
+                                                    name: 'Actual Prod Rate - EMEA',
+                                                    type: 'bar',
+                                                    data: actualProdRateData['EMEA'],
+                                                    itemStyle: { color: '#2A93D5' },
+                                                    label: { show: true, position: 'insideBottom',
+                                                        formatter: function (params) {
+                                                            // Split the series name by ' - ' and take the last part, which is the region
+                                                            var region = params.seriesName.split(' - ').pop();
+                                                            return `${region} ${params.value}`;
+                                                        },
+                                                    color: '#fff', distance: 15, align: 'left', verticalAlign: 'middle', rotate: 90 }
+                                                },
+                                                // USCA
+                                                {
+                                                    name: 'Target Prod Rate - USCA',
+                                                    type: 'line',
+                                                    data: targetProdRateData['USCA'],
+                                                    itemStyle: { color: '#fac858' },
+                                                    lineStyle: { type: 'dashed' },
+                                                    label: { show: true, position: 'bottom', formatter: '{c}', color: '#fac858' },
+                                                    smooth: true
+                                                },
+                                                {
+                                                    name: 'Actual Prod Rate - USCA',
+                                                    type: 'bar',
+                                                    data: actualProdRateData['USCA'],
+                                                    itemStyle: { color: '#0c7bc0' },
+                                                    label: {
+                                                        show: true, position: 'insideBottom',
+                                                        formatter: function (params) {
+                                                            // Split the series name by ' - ' and take the last part, which is the region
+                                                            var region = params.seriesName.split(' - ').pop();
+                                                            return `${region} ${params.value}`;
+                                                        },
+                                                        color: '#fff', distance: 15, align: 'left', verticalAlign: 'middle', rotate: 90
+                                                    }
+                                                }
+                                            ]
+                                        };
+
+                                        // Set chart configuration and render
+                                        myChart_prod_region.setOption(options);
+
+                                        myChart_prod_region.off('click');
+
+                                        // Add click event to each bar to trigger AJAX call
+                                        myChart_prod_region.on('click', function (params) {
+                                            // Get month, region, function
+                                            var clickedMonth = params.name;
+                                            var clickedRegion = params.seriesName.includes('APAC') ? 'APAC' :
+                                                params.seriesName.includes('EMEA') ? 'EMEA' :
+                                                    'USCA';
+
+                                            var currentYear = new Date().getFullYear(); // Get the current year
+
+
+
+                                            // Trigger AJAX call to Django
+                                            $.ajax({
+                                                type: 'GET',
+                                                url: '/mph/productivity_per_region_drilleddown/',
+                                                data: {
+                                                    /*'country': selectedCountry,  // Update as per your data*/
+                                                    'region': clickedRegion,
+                                                    'month': clickedMonth,
+                                                    'function': selectedFunction,
+                                                    'year': currentYear
+                                                },
+                                                success: function (data) {
+                                                    // Update the chart with the received data
+                                                    updateChartWithData(data, clickedMonth, selectedFunction, clickedRegion, currentYear);
+                                                },
+                                                error: function (error) {
+                                                    // Handle errors
+                                                    console.error('Error loading data for ' + clickedMonth, error);
+                                                }
+                                            });
+                                        });
+                                    }
+
+                                // Function to update the chart with data returned from Django (drilldown)
+                                function updateChartWithData(data, clickedMonth, selectedFunction, selectedRegion, currentYear) {
+                                    // Extract data from the response for the chart
+                                    var teamNames = data.map(item => item.team_name);
+                                    var targetProdRates = data.map(item => item.avg_target_prod_rate_hour);
+                                    var actualProdRates = data.map(item => item.avg_actual_prod_rate_hr);
+
+                                    var chartTitle = `${clickedMonth.charAt(0).toUpperCase() + clickedMonth.slice(1)} ${currentYear} ${selectedRegion} ${selectedFunction}`;
+
+                                    // Initialize or update the ECharts instance for the drilldown chart
+                                    var myChart_prod_region = echarts.init(document.getElementById('prod_rate_per_region_chart'));
+                                    myChart_prod_region.clear();
+
+                                    // Define the new options for the updated chart
+                                    var options = {
+                                        title: {
+                                            text: chartTitle,
+                                            left: 'center',
+                                            textStyle: {
+                                                fontSize: 14
+                                            }
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                dataView: { readOnly: false },
+                                                //restore: { show: true },
+                                                saveAsImage: {}
+                                            }
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow'
+                                            }
+                                        },
+                                        legend: {
+                                            data: ['Target Prod Rate', 'Actual Prod Rate'],
+                                            bottom: '-1%'
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            data: teamNames,
+                                            axisLabel: {
+                                                rotate: 15,
+                                                margin: 15
+                                            }
+                                        },
+                                        yAxis: {
+                                            type: 'value',
+                                            splitLine: {
+                                                show: true
+                                            }
+                                        },
+                                        series: [
+                                            {
+                                                name: 'Target Prod Rate',
+                                                type: 'line',
+                                                data: targetProdRates,
+                                                itemStyle: { color: '#43B02A' },
+                                                lineStyle: { type: 'dashed' },
+                                                label: { show: true, position: 'top', formatter: '{c}', color: '#125488' },
+                                                smooth: true
+                                            },
+                                            {
+                                                name: 'Actual Prod Rate',
+                                                type: 'bar',
+                                                data: actualProdRates,
+                                                itemStyle: { color: '#125488' },
+                                                label: { show: true, position: 'inside', formatter: '{c}', color: '#fff' }
+                                            }
+                                        ],
+                                        // Adding a 'Back' button using the `graphic` property
+                                        graphic: [
+                                            {
+                                                type: 'text',
+                                                right: 150,
+                                                top: 40,
+                                                style: {
+                                                    text: 'Back',
+                                                    fontSize: 12,
+                                                    fontWeight: 'bold',
+                                                    fill: '#333',
+                                                    textAlign: 'center'
+                                                },
+                                                onclick: function () {
+
+                                                    updateProdRateRegionChart(selectedFunction); // Re-render the original chart
+                                                }
+                                            }
+                                        ]
+                                    };
+
+                                    // Set new options and render the updated chart
+                                    myChart_prod_region.setOption(options);
+                                    myChart_prod_region.off('click');
+                                }
+
+                                    // Initial chart load for "C&B"
+                                    updateProdRateRegionChart("C&B");
+
+                                    // Event listener for dropdown selection
+                                    document.querySelectorAll('.prod-region-filter').forEach(item => {
+                                        item.addEventListener('click', function (event) {
+                                            event.preventDefault();
+                                            var selectedFunction = this.getAttribute('data-function');
+                                            updateProdRateRegionChart(selectedFunction);
+                                        });
+                                    });
+                                });
+                            </script>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                {% for function in prod_unique_functions_per_task %}
+                                <li>
+                                    <a class="dropdown-item prod-task-filter" href="#" data-function="{{ function }}">{{ function }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Productivity Rate per Task <span>| Year to Date</span></h5>
+
+                            <!-- Line Chart -->
+                            <div id="prod_rate_per_task_chart" style="min-height: 400px;" class="echart"></div>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <!-- Left side columns -->
+            <!-- </div> -->
+        </section>
+
+    </main><!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+
+            Designed by <a href="#">IQVIA Manila Hub</a>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <!-- <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script> -->
+    <!-- Template Main JS File -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script>
+    <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+    <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script>
+    <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+    <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+    <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script>
+    <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+    <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{% static "js/main.js" %}"></script>
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+  <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+ <!-- Vendor CSS Files -->
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+ 
+  <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+  <script src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+
+  <!-- <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script> -->
+  <style>
+    a:hover { cursor: pointer; }
+
+  
+  .card-icon i {
+    font-size: 30px;
+  }
+
+  .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #00A3E0;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #00A3E0;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #00A3E0;
+}
+
+.borderless-input {
+  border: none;
+  border-bottom: 1px solid #ced4da; /* You can add a bottom border if needed for a subtle separation */
+  border-radius: 0; /* Optionally remove border-radius to make it completely square */
+  outline: none; /* Remove the outline when the input is focused */
+  box-shadow: none; /* Remove any box shadow */
+}
+
+/* .form-control {
+    border: none;
+    box-shadow: none;
+} */
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.borderless-select {
+  border: none;
+  outline: none; /* Remove the outline on focus (optional) */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  
+}
+
+.form-select:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+  </style>
+  <script>
+    $(document).ready(function() {
+      $("#prodManagerSelect").on("change", function() {
+        const selectedProdManagers = $(this).val();
+    
+        // Send AJAX request to the server
+        $.ajax({
+          url: "/mph/get_assoc_managers/",  // Replace this with your Django view URL
+          method: "GET",
+          data: { "selected_prod_managers": selectedProdManagers },
+          success: function(data) {
+            // console.log(data)
+            // Update the Associate Manager select element
+            const assocManagerSelect = $("#assocManagerSelect");
+            assocManagerSelect.empty();
+
+            // Create objects to store the team leads and teams
+            const teamLeadsData = {};
+            const teamsData = {};
+
+            for (const managerData of data.assoc_managers) {
+              const assocManager = managerData.assoc_manager;
+              const tlead = managerData.tlead;
+              const team = managerData.team;
+              
+
+              // If the associate manager already exists in the object, append the team lead
+              if (teamLeadsData[assocManager]) {
+                if (tlead) {
+                  teamLeadsData[assocManager].add(tlead); // Using a Set to store unique team leads
+                }
+              } else {
+                // If the associate manager is not yet in the object, create a new entry
+                teamLeadsData[assocManager] = new Set(tlead ? [tlead] : []);
+              }
+
+              // If the team already exists in the object, append the team
+              if (teamsData[assocManager]) {
+                if (team) {
+                  teamsData[assocManager].push(team);
+                }
+              } else {
+                // If the team is not yet in the object, create a new entry
+                teamsData[assocManager] = team ? [team] : [];
+              }
+            }
+
+            // Add options to the select element with the associate manager's name and their team leads
+            for (const assocManager in teamLeadsData) {
+              const tleads = Array.from(teamLeadsData[assocManager]).join(", ");
+              const optionText = `${assocManager}`;
+
+              // Exclude None values from the dropdown options
+              if (assocManager && assocManager !== 'null') {
+                
+                const option = $("<option>").val(assocManager).text(optionText);
+                assocManagerSelect.append(option);
+              }
+            }
+
+            // Update the Team Lead select element
+            const teamLeadSelect = $("#teamLeadSelect");
+            teamLeadSelect.empty();
+
+            
+
+            // Update the Team select element
+            const teamSelect = $("#teamSelect");
+            teamSelect.empty();
+
+           
+          },
+          error: function(error) {
+            console.error("Error fetching Associate Managers:", error);
+          }
+        });
+      });
+
+    });
+
+
+    $(document).ready(function() {
+      const assocManagerSelect = $("#assocManagerSelect");
+      const teamLeadSelect = $("#teamLeadSelect");
+      const teamSelect = $("#teamSelect");
+
+      // Function to fetch team leads and update teamLeadSelect dropdown
+      function updateTeamLeadSelect(selectedAssocManagers) {
+        $.ajax({
+          url: "/mph/get_team_leads/", // Replace this with your Django view URL
+          method: "GET",
+          data: { "selected_assoc_managers": selectedAssocManagers },
+          success: function(data) {
+            // Create Sets to store unique team leads and teams
+            const uniqueTeamLeads = new Set();
+            const uniqueTeams = new Set();
+
+            for (const teamLeadAndTeam of data.team_leads) {
+              const teamLead = teamLeadAndTeam[0]; // Team lead is the first item in the sublist
+              const team = teamLeadAndTeam[1]; // Team is the second item in the sublist
+
+              if (teamLead !== null) {
+                uniqueTeamLeads.add(teamLead);
+              }
+
+              if (team !== null) {
+                uniqueTeams.add(team);
+              }
+            }
+
+            // Update the Team Lead select element
+            teamLeadSelect.empty();
+
+            // Add unique team leads to the dropdown
+            for (const teamLead of uniqueTeamLeads) {
+              const option = $("<option>").val(teamLead).text(teamLead);
+              teamLeadSelect.append(option);
+            }
+
+            // Update the Team select element
+            teamSelect.empty();
+
+            // Add unique teams to the dropdown
+            // for (const team of uniqueTeams) {
+            //   const option = $("<option>").val(team).text(team);
+            //   teamSelect.append(option);
+            // }
+          },
+          error: function(error) {
+            console.error("Error fetching Team Leads:", error);
+          }
+        });
+      }
+
+      // Event handler for changing assocManagerSelect dropdown
+      assocManagerSelect.on("change", function() {
+        const selectedAssocManagers = $(this).val();
+        updateTeamLeadSelect(selectedAssocManagers);
+      });
+    });
+
+
+    $(document).ready(function() {
+      // const assocManagerSelect = $("#assocManagerSelect");
+      const teamLeadSelect = $("#teamLeadSelect");
+      const teamSelect = $("#teamSelect");
+
+      // Function to fetch team leads and update teamLeadSelect dropdown
+      function updateTeamSelect(selectedTeamLead) {
+        $.ajax({
+          url: "/mph/get_teams/", // Replace this with your Django view URL
+          method: "GET",
+          data: { "selected_team_leads": selectedTeamLead },
+          success: function(data) {
+
+            // Update the Team Lead select element
+            teamSelect.empty();
+
+            // Add unique team leads to the dropdown
+            for (const teams of data.teams) {
+              const option = $("<option>").val(teams).text(teams);
+                teamSelect.append(option);
+            }
+          },
+          error: function(error) {
+            console.error("Error fetching Team Leads:", error);
+          }
+        });
+      }
+
+      // Event handler for changing assocManagerSelect dropdown
+      teamLeadSelect.on("change", function() {
+        const selectedTeamLead = $(this).val();
+        updateTeamSelect(selectedTeamLead);
+      });
+    });
+
+
+    $(document).ready(function() {
+        // Event handler for clicking the filterButton
+        $("#filterButton").on("click", function() {
+          // Get the selected values from all multi-select dropdowns
+          const selectedProdManagers = $("#prodManagerSelect").val();
+          const selectedAssocManagers = $("#assocManagerSelect").val();
+          const selectedTeamLead = $("#teamLeadSelect").val();
+          const selectedTeam = $("#teamSelect").val();
+          const fromDate = $("#fromDateInput").val();
+          const toDate = $("#toDateInput").val();
+
+          if (fromDate > toDate) {
+            // Show the alert
+            const alertDiv = `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-octagon me-1"></i>
+                From Date cannot be greater than To date. Please check the Dates!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`;
+            $("#alertContainer").html(alertDiv);
+            $("#tableBody").empty();
+            return; // Stop further execution
+          }
+
+          // Hide the alert if the validation passes
+          $("#alertContainer").empty();
+
+          // Get other selected values from other multi-select dropdowns
+
+          // Make an AJAX request to your Django view
+          $.ajax({
+            url: "/mph/get_computations/",  // Replace this with your Django view URL
+            method: "GET",
+            data: {
+              "selected_prod_managers": selectedProdManagers,
+              "selected_assoc_managers": selectedAssocManagers,
+              "selectedTeamLead":selectedTeamLead,
+              "selectedTeam":selectedTeam,
+              "from_date": fromDate,
+              "to_date": toDate,
+              "region": 'emea'
+              // Add other selected values as needed
+            },
+            success: function(data) {
+              
+              console.log(data)
+              if (data.grouped_data.length === 0) {
+                    // Show the "No data found" alert
+                    const alertDiv = `
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                          <i class="bi bi-exclamation-triangle me-1"></i>
+                            No data found. Please try to change your filter.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                    $("#alertContainer").html(alertDiv);
+                    $("#tableBody").empty();
+                } else {
+
+                  $("#prodManagerSelect").empty();
+                  for (const prod_manager of data.unique_prod_managers) {
+                      const option = $("<option>").attr("value", prod_manager).text(prod_manager);
+                      $("#prodManagerSelect").append(option);
+                  }
+                  // $("#prodManagerSelect").trigger("change");
+                  $("#assocManagerSelect").empty();
+                  for (const assoc_manager of data.unique_assoc_managers) {
+                      const option = $("<option>").attr("value", assoc_manager).text(assoc_manager);
+                      $("#assocManagerSelect").append(option);
+                  }
+
+                  $("#teamLeadSelect").empty();
+                  for (const t_leads of data.unique_tleads) {
+                      const option = $("<option>").attr("value", t_leads).text(t_leads);
+                      $("#teamLeadSelect").append(option);
+                  }
+
+                  $("#teamSelect").empty();
+                  for (const t of data.team) {
+                      const option = $("<option>").attr("value", t).text(t);
+                      $("#teamSelect").append(option);
+                  }
+
+                  // Clear the table body first
+                  $("#tableBody").empty();
+
+                  // Loop through the response data and populate the table
+                  for (const teamData of data.grouped_data) {
+                    const row = $("<tr>");
+
+                    // Update the table cells with the corresponding data
+                    $("<td>").text(teamData.team).appendTo(row);
+                    $("<td>").text(teamData.present_count).appendTo(row);
+                    $("<td>").text(teamData.planned_count).appendTo(row);
+                    $("<td>").text(teamData.unplanned_count).appendTo(row);
+                    $("<td>").text(teamData.restday_count).appendTo(row);
+                    $("<td>").text(teamData.scheduled_headcount).appendTo(row);
+                    $("<td>").text(teamData.headcount).appendTo(row);
+                    $("<td>").text(teamData.planned_rate.toFixed(2) + "%").appendTo(row);
+                    $("<td>").text(teamData.unplanned_rate.toFixed(2) + "%").appendTo(row);
+                    $("<td>").text(teamData.attendance_rate.toFixed(2) + "%").appendTo(row);
+
+                    row.appendTo("#tableBody");
+                  }
+
+                  // Extract the attendance_rate value from the computed_data_filter
+                  var attendanceRate = data.computed_data_filter.attendance_rate;
+
+                  // Extract the attendance_rate value from the computed_data_filter
+                  var plannedLeaveeRate = data.computed_data_filter.planned_rate;
+
+                  // Extract the attendance_rate value from the computed_data_filter
+                  var unplannedLeaveeRate = data.computed_data_filter.unplanned_rate;
+
+                  var headcountValue = data.total_computation_by_filter.headcount;
+
+                  var scheduledheadcountValue = data.total_computation_by_filter.scheduled_headcount;
+
+                  var presentValue = data.total_computation_by_filter.present_count;
+
+                  var restdayValue = data.total_computation_by_filter.restday_count;
+                  var plannedValue = data.total_computation_by_filter.planned_count;
+
+                  var unplannedValue = data.total_computation_by_filter.unplanned_count;
+
+                  const row_total = $("<tr>").attr("style", "font-weight: bold; background-color: rgba(0,163,224,0.04);");
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text('Total').appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(presentValue).appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(plannedValue).appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(unplannedValue).appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(restdayValue).appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(scheduledheadcountValue).appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(headcountValue).appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(data.total_computation_by_filter.planned_rate.toFixed(2)+ "%").appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(data.total_computation_by_filter.unplanned_rate.toFixed(2)+ "%").appendTo(row_total);
+                  $("<td>").attr("style", "background-color: rgba(0,163,224,0.01);").text(data.total_computation_by_filter.attendance_rate.toFixed(2)+ "%").appendTo(row_total);
+                  row_total.appendTo("#tableBody");
+                 
+                }
+            },
+            error: function(error) {
+              console.error("Error fetching data:", error);
+            }
+          });
+        });
+
+      });
+
+
+    </script>
+         
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+   <!-- ======= Sidebar ======= -->
+   <aside id="sidebar" class="sidebar">
+
+       <ul class="sidebar-nav" id="sidebar-nav">
+           <li class="nav-item">
+               <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+                   <i class="bi bi-pin-map-fill"></i>
+                   <span>Manila Production Hub</span>
+               </a>
+           </li><!-- End Dashboard Nav -->
+           <li class="nav-item">
+               <a class="nav-link collapsed" href="{% url 'first_app:performance' %}">
+                   <i class="bi bi-grid"></i>
+                   <span>Performance</span>
+               </a>
+           </li><!-- End Dashboard Nav -->
+           <li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#Productivity-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="Productivity-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:productivity' region='top_management' %}">
+                           <i class="bi bi-circle"></i><span>TM REVIEW</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:productivity' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:productivity' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:productivity' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+
+               </ul>
+           </li><!-- End Tables Nav -->
+           <!--<li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-bar-chart-line"></i><span>C&B Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="quality-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:quality' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:quality' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:quality' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+
+               </ul>
+           </li>--><!-- End Tables Nav -->
+           <li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#quality-report-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="quality-report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:quality_report' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:quality_report' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:quality_report' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+
+               </ul>
+           </li><!-- End Tables Nav -->
+           <li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-truck"></i><span>Service Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:service_delivery' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:service_delivery' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:service_delivery' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+
+               </ul>
+           </li><!-- End Tables Nav -->
+
+           <li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-gear"></i><span>Rax Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:rax_utilization' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:rax_utilization' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:rax_utilization' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+               </ul>
+           </li><!-- End Forms Nav -->
+
+           <li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-bar-chart"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:attrition' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:attrition' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:attrition' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+
+               </ul>
+           </li><!-- End Tables Nav -->
+
+           <li class="nav-item">
+               <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:headcount' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:headcount' region='emea' %}">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:headcount' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+               </ul>
+           </li><!-- End Tables Nav -->
+
+           <li class="nav-item">
+               <a class="nav-link" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                   <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+               </a>
+               <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                   <li>
+                       <a href="{% url 'first_app:attendance' region='apac' %}">
+                           <i class="bi bi-circle"></i><span>APAC</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:attendance' region='emea' %}" class="active">
+                           <i class="bi bi-circle"></i><span>EMEA</span>
+                       </a>
+                   </li>
+                   <li>
+                       <a href="{% url 'first_app:attendance' region='usca' %}">
+                           <i class="bi bi-circle"></i><span>USCA</span>
+                       </a>
+                   </li>
+
+               </ul>
+           </li><!-- End Forms Nav -->
+
+
+           <!--<li class="nav-item">
+               <a class="nav-link collapsed" href="users-profile.html">
+                   <i class="bi bi-person"></i>
+                   <span>Profile</span>
+               </a>
+           </li>--><!-- End Profile Page Nav -->
+
+
+
+           <li class="nav-item">
+               <a class="nav-link collapsed" href="{% url 'first_app:pages_contact' %}">
+                   <i class="bi bi-envelope"></i>
+                   <span>Contact</span>
+               </a>
+           </li><!-- End Contact Page Nav -->
+
+
+           <li class="nav-item">
+               <a class="nav-link collapsed" href="{% url 'admin:index' %}" target="_blank">
+                   <i class="bi bi-gear"></i>
+                   <span>Administrator</span>
+               </a>
+           </li><!-- End Login Page Nav -->
+
+
+       </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>EMEA</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="bi bi-house-door"></i></a></li>
+          <li class="breadcrumb-item">Attendance</li>
+          <li class="breadcrumb-item active">Report</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-xl-4">
+              <div class="card info-card sales-card">
+                <div class="card-body">
+                  <h5 class="card-title">Attendance Rate<span>| Year to Date</span></h5>
+                    <div id="attendance_rate" style="width: 100%; height: 100px;" class="echart"></div>
+
+                    <script>
+                      document.addEventListener("DOMContentLoaded", () => {
+
+                        var attendance_rate = echarts.init(document.getElementById('attendance_rate'));
+
+                        var value = {{ attendance_rate | safe }}; // Assuming you pass the value from the server-side
+                        
+                        var converted_value = (value * 100).toFixed(2)
+                        var color;
+                        var color2;
+
+                        // Define color based on value
+                        if (converted_value <= 25) {
+                            color = '#FF5C5C';
+                            color2 = '#DB0000'; // Lighter shade for gradient
+                            color3 = '#F50000'
+                        } else if (converted_value <= 75) {
+                            color = '#FFC51A';
+                            color2 = '#E6AC00'; // Lighter shade for gradient
+                            color3 = '#E6AC00'
+                        } else {
+                            
+                            color = '#1DDA5C'; // Lighter shade for gradient
+                            color2 = '#118036'
+                            color3 = '#17AD49'
+                        }
+
+                        var option = {
+                            series: [
+                                {
+                                    type: 'gauge',
+                                    startAngle: 180,
+                                    endAngle: 0,
+                                    center: ['50%', '100%'],
+                                    radius: '180%',
+                                    min: 0,
+                                    max: 100,
+                                    splitNumber: 12,
+                                    axisLine: {
+                                        lineStyle: {
+                                            width: 15,
+                                        }
+                                    },
+                                    progress: {
+                                        show: true,
+                                        width: 15,
+                                        itemStyle: {
+                                            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                                {offset: 0, color: color},
+                                                {offset: 1, color: color2}
+                                            ])
+                                        }
+                                    },
+                                    pointer: {
+                                       
+                                        show: false
+                                    },
+                                    axisTick: {
+                                        
+                                        distance: -25,
+                                        splitNumber: 5,
+                                        lineStyle: {
+                                          width: 1,
+                                          color: '#999'
+                                        }
+                                    },
+                                    splitLine: {
+                                       
+                                        distance: -30,
+                                        length: 7,
+                                        lineStyle: {
+                                          width: 2,
+                                          color: '#999'
+                                        }
+                                    },
+                                    axisLabel: {
+                                        show: false // Hide the axis labels for Grade A, B, C, and D
+                                  
+                                    },
+                                    detail: {
+                                        fontSize: 25,
+                                        offsetCenter: [0, '-7%'],
+                                        valueAnimation: true,
+                                        formatter: '{value}%', 
+                                        color: color3
+                                    },
+                                    data: [
+                                        {
+                                            value: converted_value
+                                        }
+                                    ]
+                                },
+                              
+                            ]
+                        };
+
+                        attendance_rate.setOption(option);
+
+                      });
+                    </script>
+                    
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+           
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-xl-4">
+              <div class="card info-card revenue-card">
+                <div class="card-body">
+                  <h5 class="card-title">Planned Leave <span>| Year to Date</span></h5>
+
+                  <div id="planned_leave" style="width: 100%; height: 100px;" class="echart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+
+                      var planned_leave = echarts.init(document.getElementById('planned_leave'));
+
+                      var value = {{ planned_leave_rate | safe }}; // Assuming you pass the value from the server-side
+                      
+                      var converted_value = (value * 100).toFixed(2)
+                      var color;
+                      var color2;
+
+                      // Define color based on value
+                      if (converted_value <= 25) {
+                          color = '#1DDA5C'; // Lighter shade for gradient
+                          color2 = '#118036'
+                          color3 = '#17AD49'
+                          
+                      } else if (converted_value <= 75) {
+                          color = '#FFC51A';
+                          color2 = '#E6AC00'; // Lighter shade for gradient
+                          color3 = '#E6AC00'
+                      } else {
+                        color = '#FF5C5C';
+                        color2 = '#DB0000'; // Lighter shade for gradient
+                        color3 = '#F50000'
+                         
+                      }
+
+                      var option = {
+                          series: [
+                              {
+                                  type: 'gauge',
+                                  startAngle: 180,
+                                  endAngle: 0,
+                                  center: ['50%', '100%'],
+                                  radius: '180%',
+                                  min: 0,
+                                  max: 100,
+                                  splitNumber: 12,
+                                  axisLine: {
+                                      lineStyle: {
+                                          width: 15,
+                                      }
+                                  },
+                                  progress: {
+                                      show: true,
+                                      width: 15,
+                                      itemStyle: {
+                                          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                              {offset: 0, color: color},
+                                              {offset: 1, color: color2}
+                                          ])
+                                      }
+                                  },
+                                  pointer: {
+                                     
+                                      show: false
+                                  },
+                                  axisTick: {
+                                      
+                                      distance: -25,
+                                      splitNumber: 5,
+                                      lineStyle: {
+                                        width: 1,
+                                        color: '#999'
+                                      }
+                                  },
+                                  splitLine: {
+                                     
+                                      distance: -30,
+                                      length: 7,
+                                      lineStyle: {
+                                        width: 2,
+                                        color: '#999'
+                                      }
+                                  },
+                                  axisLabel: {
+                                      show: false // Hide the axis labels for Grade A, B, C, and D
+                                
+                                  },
+                                  detail: {
+                                      fontSize: 25,
+                                      offsetCenter: [0, '-7%'],
+                                      valueAnimation: true,
+                                      formatter: '{value}%', 
+                                      color: color3
+                                  },
+                                  data: [
+                                      {
+                                          value: converted_value
+                                      }
+                                  ]
+                              },
+                            
+                          ]
+                      };
+
+                      planned_leave.setOption(option);
+
+                    });
+                  </script>
+                   
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+            
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-4">
+
+              <div class="card info-card customers-card">
+                <div class="card-body">
+                  <h5 class="card-title">Unplanned Leave <span>| Year to Date</span></h5>
+
+                  <div id="unplanned_leave" style="width: 100%; height: 100px;" class="echart"></div>
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+
+                      var unplanned_leave = echarts.init(document.getElementById('unplanned_leave'));
+
+                      var value = {{ unplanned_leave_rate | safe }}; // Assuming you pass the value from the server-side
+                      
+                      var converted_value = (value * 100).toFixed(2)
+                      var color;
+                      var color2;
+
+                      // Define color based on value
+                      if (converted_value <= 25) {
+                          color = '#1DDA5C'; // Lighter shade for gradient
+                          color2 = '#118036'
+                          color3 = '#17AD49'
+                          
+                      } else if (converted_value <= 75) {
+                          color = '#FFC51A';
+                          color2 = '#E6AC00'; // Lighter shade for gradient
+                          color3 = '#E6AC00'
+                      } else {
+                        color = '#FF5C5C';
+                        color2 = '#DB0000'; // Lighter shade for gradient
+                        color3 = '#F50000'
+                         
+                      }
+
+                      var option = {
+                          series: [
+                              {
+                                  type: 'gauge',
+                                  startAngle: 180,
+                                  endAngle: 0,
+                                  center: ['50%', '100%'],
+                                  radius: '180%',
+                                  min: 0,
+                                  max: 100,
+                                  splitNumber: 12,
+                                  axisLine: {
+                                      lineStyle: {
+                                          width: 15,
+                                      }
+                                  },
+                                  progress: {
+                                      show: true,
+                                      width: 15,
+                                      itemStyle: {
+                                          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                              {offset: 0, color: color},
+                                              {offset: 1, color: color2}
+                                          ])
+                                      }
+                                  },
+                                  pointer: {
+                                     
+                                      show: false
+                                  },
+                                  axisTick: {
+                                      
+                                      distance: -25,
+                                      splitNumber: 5,
+                                      lineStyle: {
+                                        width: 1,
+                                        color: '#999'
+                                      }
+                                  },
+                                  splitLine: {
+                                     
+                                      distance: -30,
+                                      length: 7,
+                                      lineStyle: {
+                                        width: 2,
+                                        color: '#999'
+                                      }
+                                  },
+                                  axisLabel: {
+                                      show: false // Hide the axis labels for Grade A, B, C, and D
+                                
+                                  },
+                                  detail: {
+                                      fontSize: 25,
+                                      offsetCenter: [0, '-7%'],
+                                      valueAnimation: true,
+                                      formatter: '{value}%', 
+                                      color: color3
+                                  },
+                                  data: [
+                                      {
+                                          value: converted_value
+                                      }
+                                  ]
+                              },
+                            
+                          ]
+                      };
+
+                      unplanned_leave.setOption(option);
+
+                    });
+                  </script>
+                   
+
+                </div>
+              </div>
+
+            </div>
+            <!-- End Customers Card -->
+
+            
+
+          </div>
+        </div><!-- End Left side columns -->
+
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Attendance Rate <span>| Monthly</span></h5>
+              <div id="monthly_attendance" style="min-height: 350px;" class="echart"></div>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                var dataFromViews = {{ percentage_monthly|safe }};
+                var attendanceRateData = [];
+
+                // Loop through each month and populate the attendance rate data
+                for (var i = 0; i < 12; i++) {
+                  var found = false;
+
+                  // Check if the data exists for the current month
+                  for (var j = 0; j < dataFromViews.length; j++) {
+                    if (dataFromViews[j].month === i + 1) {
+                      attendanceRateData.push(dataFromViews[j].percentage);
+                      found = true;
+                      break;
+                    }
+                  }
+
+                  // If data doesn't exist for the current month, assign zero
+                  if (!found) {
+                    attendanceRateData.push(0);
+                  }
+                }
+        
+                // Create an instance of ECharts
+                var monthly_attendance = echarts.init(document.getElementById('monthly_attendance'));
+        
+                // Chart configuration
+                var options = {
+                  toolbox: {
+                    show: true,
+                    feature: {
+                      dataView: { readOnly: false },
+                      magicType: { type: ['line', 'bar'] },
+                      saveAsImage: {}
+                    }
+                  },
+
+                  tooltip: {
+                    trigger: 'axis',
+                    
+                  },
+                   
+                    xAxis: {
+                        type: 'category',
+                        data: monthNames
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}%'
+                        },
+                         min: 80,
+                        max: 100,
+                        interval: 5
+                    },
+                    series: [{
+                        type: 'line',
+                        data: attendanceRateData.map(function(rate) {
+                          return (rate * 100).toFixed(2);// Convert rate to percentage
+                        }),
+                        label: {
+                            show: true,
+                            formatter: '{c}%'
+                        },
+                        lineStyle: {
+                            color: '#00A3E0' // Set the line color to #00A3E0
+                        },
+                        itemStyle: {
+                            color: '#00A3E0' // Set the item color to #00A3E0
+                        }
+                    }]
+                };
+        
+                // Set the configuration and render the chart
+                monthly_attendance.setOption(options);
+                });
+                
+            </script>
+
+            </div>
+          </div>
+
+        
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Attendance Rate <span> | Last 5 days</span></h5>
+
+              <div id="daily_attendance" style="min-height: 350px;" class="echart"></div>
+
+              <script>
+
+                var daily_attendance = echarts.init(document.getElementById('daily_attendance'));
+                // Sample data for actual rate
+                // var actualData = [99.23, 94.5, 100, 95, 99];
+
+                var actualDataPercentage = [];
+                var xAxisData = [];
+
+                var dataFromViewsDays = {{ percentage_last_five_days|safe }};
+
+                dataFromViewsDays.forEach(function(entry) {
+                  actualDataPercentage.push((entry.percentage * 100).toFixed(2));
+                  
+                  // Convert the date string to a Date object
+                  var dateParts = entry.att_date.split('-');
+                  var dateObject = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]); // Months are 0-based in JavaScript
+                  var formattedDate = dateObject.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                  xAxisData.push(formattedDate);
+                 
+                });
+
+               
+
+                // Calculate the y-axis range based on the actual data
+                var minData = Math.min(...actualDataPercentage);
+                var maxData = Math.max(...actualDataPercentage);
+                var yAxisMin = Math.min(98 - (maxData - 98), minData); // Calculate the minimum value for the y-axis
+                var yAxisMax = Math.max(98 + (98 - minData), maxData); // Calculate the maximum value for the y-axis
+
+                xAxisData.reverse();
+                actualDataPercentage.reverse();
+
+                // Configure the chart options
+                var option = {
+                  toolbox: {
+                    show: true,
+                    feature: {
+                      dataView: { readOnly: false },
+                      // magicType: { type: ['line', 'bar'] },
+                      saveAsImage: {}
+                    }
+                  },
+                  tooltip: {
+                  trigger: 'axis',
+                  formatter: function(params) {
+                    var tooltipContent = params[0].name + '<br/>';
+                    params.forEach(function(item) {
+                      tooltipContent += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + item.color + '"></span>' + item.seriesName + ': ' + item.value + '%<br/>';
+                    });
+                    return tooltipContent;
+                  }
+                },
+                  legend: {
+                    data: ['Target Rate', 'Actual Rate']
+                  },
+                  xAxis: {
+                    type: 'category',
+                    // data: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                    data: xAxisData,
+                    boundaryGap: false
+                  },
+                  yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                      formatter: '{value}%'
+                    },
+                    min: 80, // Set the minimum value of the y-axis
+                    max: 100 // Set the maximum value of the y-axis
+                  },
+                  series: [
+                    {
+                      name: 'Target Rate',
+                      type: 'line',
+                      data: [98, 98, 98, 98, 98, 98, 98],
+                      smooth: true,
+                      lineStyle: {
+                        type: 'dashed',
+                        width: 1,
+                        color: 'green'
+                      },
+                      itemStyle:{
+                        color:'green'
+                      },
+                      emphasis: {
+                        lineStyle: {
+                          width: 3, // Adjust the line width for emphasis
+                          color: 'green'
+                        }
+                      },
+                      
+                    },
+                    {
+                      name: 'Actual Rate',
+                      type: 'line',
+                      data: actualDataPercentage,
+                      smooth: true,
+                      label: {
+                        show: true,
+                        formatter: '{c}%'
+                      },
+                      itemStyle:{
+                          color: '#2A93D5'
+                      }
+                    }
+                  ]
+                };
+                daily_attendance.setOption(option);
+              </script>
+            </div>
+          </div>
+
+        </div>
+        <!-- <style>
+          .col-2-5 {
+            width: 20%;
+          }
+        </style> -->
+        <div class="col-12">
+          <div class="row">
+            <div class="col-xxl-2">
+              <div class="card info-card revenue-card" style="height: 140px;">
+                <div class="card-body">
+                  <h5 class="card-title">Headcount <span> | {{daily_attendance.formatted_current_date}}</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;" >
+                      <i class="bi bi-person-lines-fill" style="font-size: 25px;"></i>
+                    </div>
+                    <div style="margin-left: 20px;"> <!-- Add margin-left for spacing -->
+                      <h6 id="headcountValue">{{ daily_attendance.previous_weekday_count }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Reports -->
+            <div class="col-xxl-2">
+              <div class="card info-card revenue-card" style="height: 140px;">
+                <div class="card-body">
+                  <h5 class="card-title">Scheduled <span> | {{daily_attendance.formatted_current_date}}</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;" >
+                      <i class="bi bi-people-fill" style="font-size: 25px;"></i>
+                    </div>
+                    <div style="margin-left: 20px;"> <!-- Add margin-left for spacing -->
+                      <h6 id = "scheduledheadcountValue">{{ daily_attendance.previous_schedule_hc }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Reports -->
+            <div class="col-xxl-2">
+              <div class="card info-card revenue-card" style="height: 140px;">
+                <div class="card-body">
+                  <h5 class="card-title">Present <span> | {{daily_attendance.formatted_current_date}}</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;" >
+                      <i class="bi bi-person-check-fill" style="font-size: 25px;"></i>
+                    </div>
+                    <div style="margin-left: 20px;"> <!-- Add margin-left for spacing -->
+                      <h6 id="presentValue">{{ daily_attendance.previous_present }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Reports -->
+            <div class="col-xxl-2">
+              <div class="card info-card revenue-card" style="height: 140px;">
+                <div class="card-body">
+                  <h5 class="card-title">Planned <span> | {{daily_attendance.formatted_current_date}}</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;" >
+                      <i class="bi bi-person-heart" style="font-size: 25px;"></i>
+                    </div>
+                    <div style="margin-left: 20px;"> <!-- Add margin-left for spacing -->
+                      <h6 id ="plannedValue">{{ daily_attendance.previous_planned }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Reports -->
+            <div class="col-xxl-2">
+              <div class="card info-card revenue-card" style="height: 140px;">
+                <div class="card-body">
+                  <h5 class="card-title">Unplanned <span> | {{daily_attendance.formatted_current_date}}</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;" >
+                      <i class="bi bi-person-fill-exclamation" style="font-size: 25px;"></i>
+                    </div>
+                    <div style="margin-left: 20px;"> <!-- Add margin-left for spacing -->
+                      <h6 id="unplannedValue">{{ daily_attendance.previous_unplanned }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Reports -->
+            <div class="col-xxl-2">
+              <div class="card info-card info-card revenue-card" style="height: 140px;">
+                <div class="card-body sales-card-body">
+                  <h5 class="card-title">Rest Day <span> | {{daily_attendance.formatted_current_date}}</span></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;" >
+                      <i class="bi bi-person-fill-exclamation" style="font-size: 25px;"></i>
+                    </div>
+                    <div style="margin-left: 20px;"> <!-- Add margin-left for spacing -->
+                      <h6 id="restDayValue">{{ daily_attendance.previous_restday }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Reports -->
+          </div>
+        </div>
+
+
+        <div class="col-12" >
+          <div class="card" >
+            <div class="card-body">
+              <h5 class="card-title">Daily Statistics</h5>
+              <div id="alertContainer"></div>
+              <div class="row">
+                <div class="col-sm-2">
+                  <div class="row mb-3">
+                    <label for="inputDate" class="col-form-label" style="font-size: 12px;font-weight: bold;">Date Range (From - To)</label>
+                    <div class="col-sm-10" >
+                      <input type="date" id="fromDateInput" class="form-control borderless-input" value="{{ default_date_first_day }}" style="font-size: 13px;">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <input type="date" id="toDateInput" class="form-control borderless-input" value="{{ default_date_last_day }}" style="font-size: 13px;">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3" style="width: 315px;">
+                  <div class="row mb-2">
+                    <label class="col-form-label" style="font-size: 12px;font-weight: bold;">Prod. Manager</label>
+                    <div class="col-sm-20">
+                      <select id="prodManagerSelect" name="prod_manager" class="form-select borderless-select" multiple aria-label="multiple select example" style="font-size: 13px;">
+                        {% for prod_manager in unique_prod_managers %}
+                        <option  value="{{ prod_manager }}" selected>{{ prod_manager }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3" style="width: 315px;">
+                  <div class="row mb-2">
+                    <label class="col-form-label" style="font-size: 12px;font-weight: bold;">Assoc. Manager</label>
+                    <div class="col-sm-20">
+                      <select id="assocManagerSelect" class="form-select borderless-select" multiple aria-label="multiple select example" style="font-size: 13px;">
+                        {% for assoc_manager in unique_assoc_managers %}
+                        <option value="{{ assoc_manager }}" selected>{{ assoc_manager }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3" style="width: 315px;">
+                  <div class="row mb-2">
+                    <label class="col-form-label" style="font-size: 12px;font-weight: bold;">Team Lead</label>
+                    <div class="col-sm-20">
+                      <select id="teamLeadSelect" class="form-select borderless-select" multiple aria-label="multiple select example" style="font-size: 13px;">
+                        {% for tlead in unique_tleads %}
+                        <option value="{{ tlead }}" selected>{{ tlead }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+             
+
+                <div class="col-sm-3" style="width: 315px;">
+                  <div class="row mb-2">
+                    <label class="col-form-label" style="font-size: 12px;font-weight: bold;">Team</label>
+                    <div class="col-sm-20">
+                      <select id="teamSelect" class="form-select borderless-select" multiple aria-label="multiple select example" style="font-size: 13px;">
+                        {% for t in team %}
+                        <option value="{{ t }}" selected>{{ t }}</option>
+                        {% endfor %}
+                      </select>
+                      <div style="text-align: right;">
+                        <button type="submit" class="btn btn-primary btn-sm mt-2" id="filterButton" style="font-size: 12px;">Filter</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-hover table-sm styled-table" style="font-size: 12px;">
+                <thead >   
+                  <tr>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Team</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Present</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Planned </th> 
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Unplanned</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Rest Day</th> 
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Scheduled</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Headcount</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Planned Rate</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Unplanned Rate</th>
+                    <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Attendance Rate</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  {% for team_data in team_counts %}
+                    <tr>
+                      <td style="font-size: 12px;">{{ team_data.team }}</td>
+                      <td style="font-size: 12px;">{{ team_data.present_count }}</td>
+                      <td style="font-size: 12px;">{{ team_data.planned_count }}</td>
+                      <td style="font-size: 12px;"> {{ team_data.unplanned_count }}</td>
+                      <td style="font-size: 12px;">{{ team_data.restday_count }}</td>
+                      <td style="font-size: 12px;">{{ team_data.present_count|add:team_data.unplanned_count }}</td>
+                      <td style="font-size: 12px;">{{ team_data.present_count|add:team_data.unplanned_count|add:team_data.planned_count }}</td>
+                      <td style="font-size: 12px;">
+                        {% if team_data.present_count %}
+                          {% with headcount=team_data.present_count|add:team_data.planned_count|add:team_data.unplanned_count %}
+                            {% with planned_rate=team_data.planned_count|divide:headcount %}
+                              {{ planned_rate|multiply:100|floatformat:"2" }}%
+                            {% endwith %}
+                          {% endwith %}
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                      <td style="font-size: 12px;">
+                        {% if team_data.present_count %}
+                          {% with unplanned_count=team_data.present_count|add:team_data.unplanned_count %}
+                            {% with unplanned_rate=team_data.unplanned_count|divide:unplanned_count %}
+                              {{ unplanned_rate|multiply:100|floatformat:"2" }}%
+                            {% endwith %}
+                          {% endwith %}
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                      <td style="font-size: 12px;">
+                        {% if team_data.present_count %}
+                          {% with attendance_count=team_data.present_count|add:team_data.unplanned_count %}
+                            {% with attendance_rate=team_data.present_count|divide:attendance_count %}
+                              {{ attendance_rate|multiply:100|floatformat:"2" }}%
+                            {% endwith %}
+                          {% endwith %}
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                      
+                    </tr style="font-size: 12px;">
+                  {% endfor %}
+
+                  <tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);">
+                    <td style="background-color: rgba(0,163,224,0.01);">Total</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.headcount }}</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.planned_count }}</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.unplanned_count }}</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.restday_count }}</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.scheduled_headcount }}</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.headcount }}</td>              
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.planned_rate|floatformat:"2" }}%</td>
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.unplanned_rate|floatformat:"2" }}%</td>        
+                    <td style="background-color: rgba(0,163,224,0.01);">{{ total_filtered_date_data.attendance_rate|floatformat:"2" }}%</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+           
+           
+
+            <!-- <div class="col-12">
+              <div class="card" >
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+        
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+    
+                <div class="card-body" >
+                  <h5 class="card-title">Attendance Breakdown<span>| Daily</span></h5>
+    
+                  <div id="attendance_breakdown" style="min-height: 450px; margin-top: -60px; margin-bottom: -40px;" class="echart"></div>
+                  <script>
+                    var attendance_breakdown = echarts.init(document.getElementById('attendance_breakdown'));
+                    const gaugeData = [
+                        {
+                          value: 154,
+                          name: 'Headcount',
+                          title: {
+                            offsetCenter: ['0%', '-55%']
+                          },
+                          detail: {
+                            valueAnimation: true,
+                            offsetCenter: ['0%', '-40%'],
+                            formatter: '{value}',
+                            // width: 30,
+                            height: 15,
+                            fontSize: 16,
+                          }
+                        },
+                        {
+                          value: 92.5,
+                          name: 'Attendance Rate',
+                          title: {
+                            offsetCenter: ['0%', '-23%']
+                          },
+                          detail: {
+                            valueAnimation: true,
+                            offsetCenter: ['0%', '-10%'],
+                            formatter: '{value}%'
+                          }
+                        },
+                        {
+                          value: 3.5,
+                          name: 'Planned Leave Rate',
+                          title: {
+                            offsetCenter: ['0%', '10%']
+                          },
+                          detail: {
+                            valueAnimation: true,
+                            offsetCenter: ['0%', '23%'],
+                            formatter: '{value}%'
+                          }
+                        },
+                        {
+                          value: 3.9,
+                          name: 'Unplanned Leave Rate',
+                          title: {
+                            offsetCenter: ['0%', '40%']
+                          },
+                          detail: {
+                            valueAnimation: true,
+                            offsetCenter: ['0%', '53%'],
+                            formatter: '{value}%'
+                          }
+                        }
+                      ];
+
+                     var option = {
+                      
+                        series: [
+                          {
+                            type: 'gauge',
+                            startAngle: 90,
+                            endAngle: -270,
+                            pointer: {
+                              show: false
+                            },
+                            progress: {
+                              show: true,
+                              overlap: false,
+                              roundCap: true,
+                              clip: false,
+                              itemStyle: {
+                                // borderWidth: 1,
+                                // borderColor: '#464646'
+                              }
+                            },
+                            axisLine: {
+                              lineStyle: {
+                                width: 50
+                              }
+                            },
+                            splitLine: {
+                              show: false,
+                              distance: 0,
+                              length: 10
+                            },
+                            axisTick: {
+                              show: false
+                            },
+                            axisLabel: {
+                              show: false,
+                              distance: 50
+                            },
+                            data: gaugeData,
+                            title: {
+                              fontSize: 12
+                            },
+                            detail: {
+                              width: 50,
+                              height: 12,
+                              fontSize: 12,
+                              color: 'inherit',
+                              borderColor: 'inherit',
+                              borderRadius: 20,
+                              borderWidth: 1,
+                              formatter: '{value}%'
+                            }
+                          }
+                        ]
+                      };
+                      attendance_breakdown.setOption(option)
+                  </script>
+
+                </div>
+    
+              </div>
+            </div> -->
+
+            
+
+        </div>
+      </div>
+
+     
+
+        <!-- Left side columns -->
+        <div class="col-lg-4">
+          <!-- <div class="card">
+           
+
+            <div class="card-body">
+              <h5 class="card-title">Attendance Rate<span>| Based on Filtered Date</span></h5>
+             
+              <div id="attendance_rate_daily" style="width: 100%; height: 200px;" class="echart"></div>
+            </div>
+            <script>
+            var attendance_rate_daily = echarts.init(document.getElementById('attendance_rate_daily'));
+            var value_rate = {{ filtered_date_data.attendance_rate }}
+            var option = {
+                series: [
+                  {
+                    type: 'gauge',
+                    radius: '100%',
+                    progress: {
+                      show: true,
+                      width: 10
+                    },
+                    axisLine: {
+                      lineStyle: {
+                        width: 10
+                      }
+                    },
+                    axisTick: {
+                      show: false
+                    },
+                    splitLine: {
+                      length: 5,
+                      lineStyle: {
+                        width: 2,
+                        color: '#999'
+                      }
+                    },
+                    axisLabel: {
+                      distance: 12,
+                      color: '#999',
+                      fontSize: 12
+                    },
+                    anchor: {
+                      show: true,
+                      showAbove: true,
+                      size: 15,
+                      itemStyle: {
+                        borderWidth: 7
+                      }
+                    },
+                    title: {
+                      show: false
+                    },
+                    detail: {
+                      valueAnimation: true,
+                      formatter: '{value}%',
+                      fontSize: 20,
+                      offsetCenter: [0, '70%']
+                    },
+                    data: [
+                      {
+                    
+                        value: value_rate.toFixed(2)
+                      }
+                    ]
+                  }
+                ]
+              };
+              attendance_rate_daily.setOption(option);
+            </script>
+          </div>
+         
+          <div class="card">
+           
+            <div class="card-body">
+              <h5 class="card-title">Planned Leave Rate<span>| Based on Filtered Date</span></h5>
+              
+              <div id="planned_rate_daily" style="width: 100%; height: 200px;" class="echart"></div>
+            </div>
+            <script>
+            var planned_rate_daily = echarts.init(document.getElementById('planned_rate_daily'));
+            var value_rate_planned = {{ filtered_date_data.planned_rate}}
+            
+            var option = {
+                series: [
+                  {
+                    type: 'gauge',
+                    radius: '100%',
+                    color: '#91cc75',
+                    progress: {
+                      show: true,
+                      width: 10
+                    },
+                    axisLine: {
+                      lineStyle: {
+                        width: 10
+                      }
+                    },
+                    axisTick: {
+                      show: false
+                    },
+                    splitLine: {
+                      length: 5,
+                      lineStyle: {
+                        width: 2,
+                        color: '#999'
+                      }
+                    },
+                    axisLabel: {
+                      distance: 12,
+                      color: '#999',
+                      fontSize: 12
+                    },
+                    anchor: {
+                      show: true,
+                      showAbove: true,
+                      size: 15,
+                      itemStyle: {
+                        borderWidth: 7,
+                        borderColor: '#91cc75'
+                      }
+                    },
+                    title: {
+                      show: false
+                    },
+                    detail: {
+                      valueAnimation: true,
+                      formatter: '{value}%',
+                      fontSize: 20,
+                      offsetCenter: [0, '70%']
+                    },
+                    data: [
+                      {
+                        value: value_rate_planned.toFixed(2)
+                      }
+                    ]
+                  }
+                ]
+              };
+              planned_rate_daily.setOption(option);
+            </script>
+          </div>
+        
+          <div class="card">
+          
+
+            <div class="card-body">
+              <h5 class="card-title">Unplanned Leave Rate<span>| Based on Filtered Date</span></h5>
+              
+              <div id="unplanned_rate_daily" style="width: 100%; height: 200px;" class="echart"></div>
+            </div>
+            <script>
+            var unplanned_rate_daily = echarts.init(document.getElementById('unplanned_rate_daily'));
+            var value_unplanned_rate = {{ filtered_date_data.unplanned_rate}}
+            var option = {
+                series: [
+                  {
+                    type: 'gauge',
+                    radius: '100%',
+                    color: '#FF6E76',
+                    progress: {
+                      show: true,
+                      width: 10
+                    },
+                    axisLine: {
+                      lineStyle: {
+                        width: 10
+                      }
+                    },
+                    axisTick: {
+                      show: false
+                    },
+                    splitLine: {
+                      length: 5,
+                      lineStyle: {
+                        width: 2,
+                        color: '#999'
+                      }
+                    },
+                    axisLabel: {
+                      distance: 12,
+                      color: '#999',
+                      fontSize: 12
+                    },
+                    anchor: {
+                      show: true,
+                      showAbove: true,
+                      size: 15,
+                      itemStyle: {
+                        borderWidth: 7,
+                        borderColor: '#FF6E76'
+                      },
+                      
+                    },
+                    title: {
+                      show: false
+                    },
+                    detail: {
+                      valueAnimation: true,
+                      formatter: '{value}%',
+                      fontSize: 20,
+                      offsetCenter: [0, '70%']
+                    },
+                    data: [
+                      {
+                        value: value_unplanned_rate.toFixed(2)
+                      }
+                    ]
+                  }
+                ]
+              };
+              unplanned_rate_daily.setOption(option);
+            </script>
+          </div> -->
+
+        </div>  <!-- Right side columns -->
+     
+
+      </div>
+
+          
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+
+
+ <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script>
+ <!-- <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script> -->
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+
+  <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+ 
+
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+
+{% block title %}MPH Administration{% endblock %}
+
+{% block branding %}
+  <h1 id="site-name">MPH Dashboard Administration</h1>
+{% endblock %}
+
+{% block extrahead %}
+  <link rel="icon" type="image/x-icon" href="{% static 'img/iqvia-favicon.png' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/admin_styles.css' %}">
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

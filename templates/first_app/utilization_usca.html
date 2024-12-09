@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+{% load humanize %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+  <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+ <!-- Vendor CSS Files -->
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+ <!-- <link href="https://cdn.jsdelivr.net/npm/flag-icon-css@3.5.0/css/flag-icon.min.css" rel="stylesheet"> -->
+ <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet"> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+  <!-- <link href="{% static "vendor/css/style.css" %}" rel="stylesheet"> -->
+  
+
+  <style>
+    .sales-card-body::before {
+      content: "";
+      display: block;
+      width: 5px; /* Adjust the width as needed */
+      background-color: #00A3E0; /* Adjust the color as needed */
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .revenue-card-body::before {
+      content: "";
+      display: block;
+      width: 5px; /* Adjust the width as needed */
+      background-color: #58CCED; /* Adjust the color as needed */
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .customer-card-body::before {
+      content: "";
+      display: block;
+      width: 5px; /* Adjust the width as needed */
+      background-color: #A0D1EC; /* Adjust the color as needed */
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+
+
+    .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 12px;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+    .styled-table thead tr {
+        background-color: #00A3E0;
+        color: #ffffff;
+        text-align: left;
+    }
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #00A3E0;
+    }
+
+    .styled-table-2 tbody tr:last-of-type {
+        border-bottom: 2px solid #2eca6a;
+    }
+
+    
+    /* .styled-table tbody tr.active-row {
+        font-weight: bold;
+        color: #00A3E0;
+        background-color: #f0f0f0;
+    } */
+
+    .styled-table tbody tr.active-row td {
+    font-weight: bold;
+    color: #43b02a;
+    background-color: #f0f0f0;
+}
+
+    .tableBody_award tbody tr:last-of-type {
+      border-bottom: 2px solid #9e9e9e81;
+  }
+
+  .highlighted-row {
+    /* background-color: #2eca6a27;  */
+    color: #00A3E0;
+    font-weight: bold;
+  }
+
+  .scrollable-dropdown {
+  max-height: 300px; /* Adjust the maximum height as needed */
+  overflow-y: auto;
+}
+
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'first_app:index' %}" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static "img/profile.jpeg" %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Jericho</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Jericho Barquez</h6>
+              <span>RPS Team</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+      <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+                  <i class="bi bi-pin-map-fill"></i>
+                  <span>Manila Production Hub</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:performance' %}">
+                  <i class="bi bi-grid"></i>
+                  <span>Performance</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#productivy-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="productivy-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='top_management' %}">
+                          <i class="bi bi-circle"></i><span>TM REVIEW</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <!--<li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>C&B Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li>--><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#quality-report-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-truck"></i><span>Service Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-gear"></i><span>Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='usca' %}" class="active">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-gear"></i><span>Rax Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-down"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="users-profile.html">
+                  <i class="bi bi-person"></i>
+                  <span>Profile</span>
+              </a>
+          </li><!-- End Profile Page Nav -->
+
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:pages_contact' %}">
+                  <i class="bi bi-envelope"></i>
+                  <span>Contact</span>
+              </a>
+          </li><!-- End Contact Page Nav -->
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'admin:index' %}" target="_blank">
+                  <i class="bi bi-gear"></i>
+                  <span>Administrator</span>
+              </a>
+          </li><!-- End Login Page Nav -->
+
+
+
+
+      </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>USCA</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'first_app:index' %}"><i class="bi bi-house-door"></i></a></li>
+          <li class="breadcrumb-item">Utilization</li>
+          <li class="breadcrumb-item active">Metrics</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="card-body sales-card-body">
+                  <h5 class="card-title">Utilization <span>| Year to Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cart"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{overall_util_prercentage|floatformat:2}}%</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="card-body revenue-card-body">
+                  <h5 class="card-title">Top Category <span>| Year to Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-hourglass-split"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{highest_hours_by_subtask.0.total_hours|floatformat:0|intcomma }}<span class="text-muted small pt-2 ps-1" style="font-size: 14px;font-weight: bold;">HRS</span></h6>
+                      <span class="text-muted small pt-2 ps-1">{{highest_hours_by_subtask.0.subtask}}</span> 
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+            <script>
+              $(document).ready(function () {
+                  adjustFontSize();
+              });
+          
+              $(window).resize(function () {
+                  adjustFontSize();
+              });
+          
+              function adjustFontSize() {
+                  var container = $(".text-container");
+                  var countryName = $("#countryName");
+          
+                  // Reset font size
+                  countryName.css("font-size", "16px");
+          
+                  // Get the width of the container
+                  var containerWidth = container.width();
+          
+                  // Get the width of the text
+                  var textWidth = countryName.width();
+          
+                  // Adjust font size if necessary
+                  if (textWidth > containerWidth) {
+                      var fontSize = (containerWidth / textWidth) * parseInt(countryName.css("font-size"));
+                      countryName.css("font-size", fontSize + "px");
+                  }
+              }
+          </script>
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-12">
+
+              <div class="card info-card customers-card">
+                <div class="card-body customer-card-body">
+                  <h5 class="card-title">Top Country <span>| Year to Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 class="dynamic-font-size" id="countryName">{{ overall_highest_utilization.country }}</h6>
+                      <span class="text-muted small pt-2 ps-1" style="font-style: italic;">with </span><span class="text-danger small pt-1 fw-bold">{{overall_highest_utilization.overall_utilization_percentage}}% rate</span> 
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            <!-- Reports -->
+            <div class="col-12">
+                <div class="card">
+  
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+  
+                      <li><a class="dropdown-item" href="#">Today</a></li>
+                      <li><a class="dropdown-item" href="#">This Month</a></li>
+                      <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
+                  </div>
+  
+                  <div class="card-body">
+                    <h5 class="card-title">Utilization per Country<span> | Year to Date</span></h5>
+  
+                    <!-- Line Chart -->
+                    <div id="utilization_per_country" style="min-height: 500px;"></div>
+  
+                    <script>
+                      document.addEventListener("DOMContentLoaded", () => {
+                      // Get the utilization data from Django template context
+                      var utilizationData = {{ util_per_country|safe }};
+              
+                      // Flatten the data structure
+                      var flattenedData = utilizationData.map(entry => ({
+                          country: entry.country,
+                          month: entry.month,
+                          utilization_percentage: entry.utilization_percentage,
+                      }));
+
+                      // Extract unique months for the y-axis
+                      var months = [...new Set(flattenedData.map(entry => entry.month))];
+
+                      // Create legend data array for countries
+                      var legendData = [...new Set(flattenedData.map(entry => entry.country))];
+
+                      // Initialize ECharts instance
+                      var utilization_per_country = echarts.init(document.querySelector('#utilization_per_country'));
+                      var maxUtilization = Math.max(...flattenedData.map(entry => entry.utilization_percentage));
+
+                      var colors = ['#072F5F', '#1261A0', '#3895D3', '#58CCED', '#A0D1EC'];
+                      
+
+                      // Define the chart options
+                      var options = {
+                        toolbox: {
+                        show: true,
+                        feature: {
+                          dataView: { readOnly: false },
+                          magicType: { type: ['line', 'bar'] },
+                          restore: {},
+                          saveAsImage: {}
+                        }
+                      },
+                          tooltip: {
+                              trigger: 'axis',
+                              axisPointer: {
+                                  type: 'shadow',
+                              },
+                          },
+                          legend: {
+                              data: legendData,
+                              
+                          },
+                          grid: {
+                              left: '3%',
+                              right: '4%',
+                              bottom: '3%',
+                              containLabel: true,
+                          },
+                          xAxis: {
+                              type: 'category',
+                              data: months.map(month => {
+                                  // Convert month number to Jan, Feb, Mar, ...
+                                  return new Date(2000, month - 1, 1).toLocaleString('default', { month: 'short' });
+                              }),
+                          },
+                          yAxis: {
+                              type: 'value',
+                          },
+                          series: legendData.map((country, index) => {
+                              return {
+                                  name: country,
+                                  type: 'bar',
+                                  barGap: '0%',    
+                                  label: {
+                                      show: true,
+                                      position: 'inside',
+                                      rotate: 90,
+                                      formatter: '{c}%',
+                                  },
+                                  data: flattenedData
+                                      .filter(entry => entry.country === country)
+                                      .map(entry => entry.utilization_percentage),
+                                      color: colors[index % colors.length],
+                              };
+                          }),
+                      };
+
+                      // Set the chart options and render the chart
+                      utilization_per_country.setOption(options);
+                    });
+                  </script>
+                    <!-- End Line Chart -->
+                  </div>
+  
+                </div>
+              </div><!-- End Reports -->
+              
+              <style>
+                .form-control {
+                    border: none;
+                    box-shadow: none;
+                }
+
+                .form-control:focus {
+                    outline: none;
+                    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+                }
+              </style>
+
+            <!-- Reports -->
+            <div class="col-6">
+                <div class="card" >
+                <div class="card-body" style="margin-top: -5px;margin-bottom: -5px;">
+                    <h5 class="card-title" style="font-size: 12px; margin-bottom: -10px;color: #899bbd;">Date Range</h5>
+                    <div class="row">
+                    <div class="col">
+                        <input type="date" id="fromDateInput" class="form-control" style="font-size: 12px;" value="{{ first_date }}">
+                    </div>
+                    <div class="col">
+                        <input type="date" id="toDateInput" class="form-control" style="font-size: 12px;" value="{{ last_date }}">
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- End Reports -->
+            <style>
+              #countrySelect {
+                  appearance: none;
+                  -webkit-appearance: none;
+                  -moz-appearance: none;
+                  border: none;
+                  background-color: transparent;
+                  padding: 5px 10px;
+                  font-size: 12px;
+                  width: 200px;
+                  border-radius: 5px;
+              }
+
+              /* #countrySelect option {
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+                  outline: none;
+              } */
+
+              #teamSelect:focus {
+                  outline: none;
+                  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+              }
+            </style>
+
+            <!-- Reports -->
+            <div class="col-4">
+                <div class="card" >
+                <div class="card-body" style="margin-top: -5px;margin-bottom: -5px;">
+                    <h5 class="card-title" style="font-size: 12px; margin-bottom: -10px;color: #899bbd;">Team</h5>
+                    <div class="row">
+                        <div class="col">
+                        <select id="teamSelect" class="form-select" style="font-size: 12px;width: 200px;" >
+                            <option value="" disabled selected>Select Team</option>
+                            {% for team in available_team %}
+                                {% if team == first_team %}
+                                    <option value="{{ team }}" selected>{{ team }}</option>
+                                {% else %}
+                                    <option value="{{ team }}">{{ team }}</option>
+                                {% endif %}
+                            {% endfor %}
+                          </select>
+                          </div>
+                          <div class="col" style="text-align: right;">
+                            <button id="btn_tam_emea_filter" type="button" class="btn" style="padding-bottom: 3px;padding-top: 0px;background-color: #00A3E0;"><span style="font-size: 12px;color: white;">Filter</span></button>
+                          </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                  var btnChkr = 'false';
+                    // Add event listener to the "Filter" button
+                       $('#btn_tam_emea_filter').click(function (event) {
+                        btnChkr = 'true';
+                        // Get the selected country and date range values
+                        var selectedTeam = $('#teamSelect').val();
+                        var fromDate = $('#fromDateInput').val();
+                        var toDate = $('#toDateInput').val();
+            
+                        // Make the AJAX request to the filtered_tam_emea view
+                        $.ajax({
+                            url: '/mph/fil_utilization/',
+                            type: 'GET',
+                            data: {
+                                'team': selectedTeam,
+                                'from_date': fromDate,
+                                'to_date': toDate,
+                                'region': 'usca'
+                            },
+                            // dataType: 'json',
+                            success: function (data) {
+                                console.log(data)
+                               
+                                // Update the table or other elements using the data received in the response
+                                // Get the <tbody> element in the table
+                                var tableBody = $('#tableBody');
+                                var tableBody_category = $('#tableBody_category');
+                                // Clear any existing rows in the table body
+                                tableBody.empty();
+                                tableBody_category.empty();
+
+                                // Check if the data is empty (no records found)
+                                if (Object.keys(data.grouped_data).length === 0) {
+                                    // Create a row to display the "No record found" message
+                                    var noRecordRow = $('<tr><td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td></tr>');
+
+                                    // Append the "No record found" row to the table body
+                                    tableBody.append(noRecordRow);
+                                } else {
+                                    // Iterate through the grouped data and create rows for each member
+                                    
+                                    $.each(data.grouped_data, function (member, memberData) {
+                                        
+                                        var newRow = $('<tr class="clickable-row" data-member="' + member + '"> </tr>');
+                                        
+                                        // Add cells for each week
+                                        var totalHoursRounded = parseFloat(memberData.total_hours_all_weeks).toFixed(2);
+                                        newRow.append('<td>' + member + '</td>');
+                                        newRow.append('<td>' + floatformatJS(memberData.week_1,2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(memberData.week_2,2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(memberData.week_3,2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(memberData.week_4,2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(totalHoursRounded,2) + '</td>');
+                                        if (memberData.utilization_percentage >= 110.0){
+                                          newRow.append('<td style="color: rgb(206, 2, 2);" data-bs-toggle="tooltip" data-bs-placement="top" title="Over Utilized">' + floatformatJS(memberData.utilization_percentage,2) + '%</td>');
+                                        }
+                                        else if (memberData.utilization_percentage < 99.0){
+                                          newRow.append('<td style="color: rgba(255, 81, 0, 0.788);" data-bs-toggle="tooltip" data-bs-placement="top" title="Under Utilized">' + floatformatJS(memberData.utilization_percentage,2) + '%</td>');
+                                        }
+                                        else{
+                                          newRow.append('<td style="color: rgba(3, 94, 30, 0.788);" data-bs-toggle="tooltip" data-bs-placement="top" title="Adequate Utilization">' + floatformatJS(memberData.utilization_percentage,2) + '%</td>');
+                                        }
+                                        
+                                        // newRow.append('<td>-</td>'); // Add % Productivity data here if needed
+
+                                        // Append the new row to the table body
+                                        tableBody.append(newRow);
+                                    });
+                                    $('[data-bs-toggle="tooltip"]').tooltip();
+
+                                }
+
+                                if (Object.keys(data.week_sums).length > 0) {
+                                        // Add the "Grand Total" row after iterating through the grouped data
+                                        var grandTotalRow = $('<tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);"></tr>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_week_1, 2) + '</td>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_week_2, 2) + '</td>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_week_3, 2) + '</td>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_week_4, 2) + '</td>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_hours, 2) + '</td>');
+                                        grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.average_utilization_percentage, 2) + '%</td>');
+                                        // grandTotalRow.append('<td>-</td>'); 
+
+                                        // Append the "Grand Total" row to the table body
+                                        tableBody.append(grandTotalRow);
+                                }
+
+
+                                if (Object.keys(data.fil_grouped_category).length === 0) {
+                                    // Create a row to display the "No record found" message
+                                    var noRecordRow_cat = $('<tr><td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td></tr>');
+
+                                    // Append the "No record found" row to the table body
+                                    tableBody_category.append(noRecordRow_cat);
+                                } else {
+                                    // console.log('called')
+                                    // Iterate through the grouped data and create rows for each member
+                                    $.each(data.fil_grouped_category, function (cat, catData) {
+                                        var newRow = $('<tr></tr>');
+
+                                        // Add cells for each week
+                                        var totalHoursRounded = parseFloat(catData.total_hours_all_weeks).toFixed(2);
+                                        newRow.append('<td>' + cat + '</td>');
+                                        newRow.append('<td>' + floatformatJS(catData.week_1, 2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(catData.week_2, 2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(catData.week_3, 2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(catData.week_4, 2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(totalHoursRounded, 2) + '</td>');
+                                        newRow.append('<td>' + floatformatJS(catData.total_percentage_hours,2) + '%</td>');
+
+                                        // Append the new row to the table body
+                                        tableBody_category.append(newRow);
+                                    });
+                                }
+                                if (Object.keys(data.week_sums_total).length > 0) {
+
+                                     // Add the "Grand Total" row after iterating through the grouped data
+                                    var grandTotalRow = $('<tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);"></tr>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums_total.week_1, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums_total.week_2, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums_total.week_3, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums_total.week_4, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums_total.total_total_hours, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums_total.total_percentage_hours, 2) + '%</td>');
+
+                                    // Append the "Grand Total" row to the table body
+                                    tableBody_category.append(grandTotalRow);
+                                }
+                                
+
+                                var all_keys_list = data.all_keys
+                                // Get the container where checkboxes will be added
+                                
+                                var checkboxContainer = $('#checkboxContainer');
+                                checkboxContainer.empty();
+
+                                // Create the "Select All" checkbox and label
+                                var selectAllCheckbox = $('<input>', {class: 'form-check-input select-all-checkbox', type: 'checkbox', id: 'selectAll', checked: true});
+                                var selectAllLabel = $('<label>', {class: 'form-check-label', for: 'selectAll', text: 'Select All', style: 'color: rgb(156, 154, 154);'});
+
+                                // Append the "Select All" checkbox and label to the container
+                                checkboxContainer.append($('<div>', {class: 'form-check dropdown-item-new'}).append(selectAllCheckbox).append(selectAllLabel));
+                        
+                                // Loop through the list of keys and create checkboxes dynamically
+                                $.each(all_keys_list, function (index, category) {
+                                    // Create the checkbox and label elements
+                                    var checkbox = $('<input>', {class:'form-check-input', type: 'checkbox', id: 'gridCheck' + index, checked:true});
+                                    var label = $('<label>', {class: 'form-check-label', for: 'gridCheck' + index, text: category});
+                        
+                                    // Append the checkbox and label to the container
+                                    checkboxContainer.append($('<div>', {class: 'form-check dropdown-item-new'}).append(checkbox).append(label));
+                                });
+
+                                // Create a new button element
+                                $('#okayButton').hide();
+                                var newButton = $('<button>', {
+                                    type: 'button',
+                                    class: 'btn',
+                                    text: 'OKAY',
+                                    style: 'width: 200px; background-color: #2eca6a;color: white;font-size: 11px;margin-left: 5px;margin-top:10px;padding-top: 3px;padding-bottom: 3px;'
+                                });
+
+                                // Append the new button to the same container as checkboxContainer
+                                checkboxContainer.append(newButton);
+
+
+
+                                attachCheckboxEventHandlers();
+                                // Bind the event handler for the "change" event of the "Select All" checkbox
+                                $("#selectAll").on("change", function () {
+                                    // Get the state of the "Select All" checkbox
+                                    var selectAllChecked = $(this).prop("checked");
+
+                                    // Set the same state for all checkboxes inside the dropdown menu
+                                    $(".dropdown-item-new .form-check-input").prop("checked", selectAllChecked);
+                                });
+
+
+                                // Attach a click event handler to the new button
+                                newButton.on('click', function () {
+
+                                  var checkedValues = []; // Array to store the values of checked checkboxes
+
+                                  // Loop through the checkboxes and check which ones are checked
+                                  $('.form-check-input').each(function () {
+                                      if (!$(this).hasClass('select-all-checkbox') && $(this).prop('checked')) {
+                                          var label = $('label[for="' + $(this).attr('id') + '"]').text();
+                                          checkedValues.push(label); // Add the label text of the checked checkbox to the array
+                                      }
+                                  });
+
+                                  var categoryParam = checkedValues.join(',');
+                                  var group_cat = JSON.stringify(data.fil_grouped_category);
+                                  // console.log(categoryParam)
+
+                                  $.ajax({
+                                      url: '/mph/category_filter/',  // Replace with the actual URL of your second Django method
+                                      type: 'GET',
+                                      data: {
+                                          'category':categoryParam,
+                                          'group_category':group_cat,
+                                      },
+                                      success: function (response) {
+                                        // console.log('logggggssss')
+                                          // console.log(response);
+                                          var tableBody_category = $('#tableBody_category');
+                                          tableBody_category.empty();
+                                          // Handle the response and update the table or other elements on the page
+                                          // Update the table or other elements using the data received in the response
+                                          if (Object.keys(response.new_group_category).length === 0) {
+                                              // Create a row to display the "No record found" message
+                                              var newnoRecordRow = $('<tr><td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td></tr>');
+                                              // Append the "No record found" row to the table body
+                                              tableBody_category.append(newnoRecordRow);
+                                          } else {
+
+                                              // Iterate through the grouped data and create rows for each member
+                                              $.each(response.new_group_category, function (newcatName, newcatNameData) {
+                                                  var newRowNamecat = $('<tr></tr>');
+
+                                                  // Add cells for each week
+                                                  // var newtotalHoursRounded = parseFloat(newcatNameData.total_hours_all_weeks).toFixed(2);
+                                                  newRowNamecat.append('<td>' + newcatName + '</td>');
+                                                  newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_1,2) + '</td>');
+                                                  newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_2,2) + '</td>');
+                                                  newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_3,2) + '</td>');
+                                                  newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_4,2) + '</td>');
+                                                  newRowNamecat.append('<td>' + floatformatJS(newcatNameData.total_hours_all_weeks,2) + '</td>');
+                                                  newRowNamecat.append('<td>' + floatformatJS(newcatNameData.total_percentage_hours,2) + '%</td>');
+
+                                                  // Append the new row to the table body
+                                                  tableBody_category.append(newRowNamecat);
+                                              });
+                                          }
+
+                                          if (Object.keys(response.new_week_sum).length > 0) {
+                                              // console.log(response.new_week_sum)
+                                              var newgrandTotalRow = $('<tr style="font-weight: bold; background-color: rgba(0,163,224,0.05);"></tr>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_1, 2) + '</td>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_2, 2) + '</td>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_3, 2) + '</td>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_4, 2) + '</td>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.total_hours_all_weeks, 2) + '</td>');
+                                              newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.total_percentage_hours, 2) + '%</td>');
+
+                                              // Append the "Grand Total" row to the table body
+                                              tableBody_category.append(newgrandTotalRow);
+                                          }
+                                      },
+                                      error: function (xhr, status, error) {
+                                          // Handle the error if the second AJAX request fails
+                                          console.error(error);  // For debugging, you can remove this line
+                                      }
+                                  });
+                                });
+
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle the error if the AJAX request fails
+                                console.error(error); // For debugging, you can remove this line
+                            }
+                        });
+                    });
+
+                    function floatformatJS(value, decimalPlaces) {
+                        var parsedValue = parseFloat(value);
+                        if (isNaN(parsedValue)) {
+                            return ""; // Return empty string if value is NaN
+                        }
+                        return parsedValue.toFixed(decimalPlaces);
+                    }
+
+                    function attachCheckboxEventHandlers() {
+                        // Handle the "Select All" checkbox click event
+                        $("#selectAll").on("change", function () {
+                            // Get the state of the "Select All" checkbox
+                            var selectAllChecked = $(this).prop("checked");
+
+                            // Set the same state for all checkboxes inside the dropdown menu
+                            $(".dropdown-item-new .form-check-input").prop("checked", selectAllChecked);
+                        });
+
+                        // Handle individual checkbox click event
+                        $(".dropdown-item-new .form-check-input").on("change", function () {
+                            // Check if all checkboxes are selected, then update the "Select All" checkbox state
+                            var allCheckboxes = $(".dropdown-item-new .form-check-input");
+                            var allChecked = allCheckboxes.length === allCheckboxes.filter(":checked").length;
+                            $("#selectAll").prop("checked", allChecked);
+                        });
+
+                        // Check initial state of "Select All" checkbox based on individual checkboxes
+                        updateSelectAll();
+                    }
+
+                    function updateSelectAll() {
+                        var allCheckboxes = $(".dropdown-item-new .form-check-input");
+                        var allChecked = allCheckboxes.length === allCheckboxes.filter(":checked").length;
+                        $("#selectAll").prop("checked", allChecked);
+                    }
+
+     
+                    // Add event listener to clickable rows
+                    $('#tableBody').on('click', '.clickable-row', function () {
+                      var selectedTeamBtn = '';
+                        if (btnChkr === 'true'){
+                          selectedTeamBtn = $('#teamSelect').val();
+                        }
+                        else{
+                          selectedTeamBtn = '{{ first_team }}';
+                        }
+                        // Get the member value from the data-member attribute
+                        var member = $(this).data('member');
+                        // var selectedCountry = $('#countrySelect').val();
+                        // var selectedCountry = '{{ first_country }}';
+                        
+                        var fromDate = $('#fromDateInput').val();
+                        var toDate = $('#toDateInput').val();
+                        var tableBody_category = $('#tableBody_category');
+                        
+                        $('.clickable-row').removeClass('active-row');
+                        $(this).addClass('active-row');
+                        
+                
+                        // Make the AJAX request to the Django view
+                        $.ajax({
+                            url: '/mph/fil_utilization_cat_member/',  // Replace with the actual URL of your Django view
+                            type: 'GET',
+                            data: {
+                                'member': member,
+                                'team': selectedTeamBtn,
+                                'from_date': fromDate,
+                                'to_date': toDate,
+                                'region':'usca'
+                            },
+                            // Specify the expected data type of the response
+                            success: function (data) {
+
+                                tableBody_category.empty();
+                                // Handle the response and update the table or other elements on the page
+                                // Update the table or other elements using the data received in the response
+                                if (Object.keys(data.grouped_cat_name).length === 0) {
+                                    // Create a row to display the "No record found" message
+                                    var noRecordRow_cat = $('<tr><td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td></tr>');
+                                    // Append the "No record found" row to the table body
+                                    tableBody_category.append(noRecordRow_cat);
+                                } else {
+
+                                    // Iterate through the grouped data and create rows for each member
+                                    $.each(data.grouped_cat_name, function (catName, catNameData) {
+                                        var newRowName = $('<tr></tr>');
+
+                                        // Add cells for each week
+                                        var totalHoursRounded = parseFloat(catNameData.total_hours_all_weeks).toFixed(2);
+                                        newRowName.append('<td>' + catName + '</td>');
+                                        newRowName.append('<td>' + floatformatJS(catNameData.week_1,2) + '</td>');
+                                        newRowName.append('<td>' + floatformatJS(catNameData.week_2,2) + '</td>');
+                                        newRowName.append('<td>' + floatformatJS(catNameData.week_3,2) + '</td>');
+                                        newRowName.append('<td>' + floatformatJS(catNameData.week_4,2) + '</td>');
+                                        newRowName.append('<td>' + floatformatJS(totalHoursRounded,2) + '</td>');
+                                        newRowName.append('<td>' + floatformatJS(catNameData.total_percentage_hours,2) + '%</td>');
+
+                                        // Append the new row to the table body
+                                        tableBody_category.append(newRowName);
+                                    });
+                                }
+                                // Add the "Grand Total" row after iterating through the grouped data
+                                if (Object.keys(data.week_sums).length > 0) {
+                                    var grandTotalRow = $('<tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);"></tr>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.week_1, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.week_2, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.week_3, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.week_4, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_total_hours, 2) + '</td>');
+                                    grandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(data.week_sums.total_percentage_hours, 2) + '%</td>');
+
+                                    // Append the "Grand Total" row to the table body
+                                    tableBody_category.append(grandTotalRow);
+                                }
+                                
+
+                                var all_keys_list = data.all_keys_list
+                                // Get the container where checkboxes will be added
+                            
+                                var checkboxContainer = $('#checkboxContainer');
+                                checkboxContainer.empty();
+
+                                // Create the "Select All" checkbox and label
+                                var selectAllCheckbox = $('<input>', {class: 'form-check-input select-all-checkbox', type: 'checkbox', id: 'selectAll', checked: true});
+                                var selectAllLabel = $('<label>', {class: 'form-check-label', for: 'selectAll', text: 'Select All', style: 'color: rgb(156, 154, 154);'});
+
+                                // Append the "Select All" checkbox and label to the container
+                                checkboxContainer.append($('<div>', {class: 'form-check dropdown-item-new'}).append(selectAllCheckbox).append(selectAllLabel));
+                                // Loop through the list of keys and create checkboxes dynamically
+                                $.each(all_keys_list, function (index, category) {
+                                    // Create the checkbox and label elements
+                                    var checkbox = $('<input>', {class:'form-check-input', type: 'checkbox', id: 'gridCheck' + index, checked:true});
+                                    var label = $('<label>', {class: 'form-check-label', for: 'gridCheck' + index, text: category});
+                        
+                                    // Append the checkbox and label to the container
+                                    checkboxContainer.append($('<div>', {class: 'form-check dropdown-item-new'}).append(checkbox).append(label));
+                                });
+
+                                // Create a new button element
+                                $('#okayButton').hide();
+                                var newButton = $('<button>', {
+                                    type: 'button',
+                                    class: 'btn',
+                                    text: 'OKAY',
+                                    style: 'width: 200px; background-color: #2eca6a;color: white;font-size: 11px;margin-left: 5px;margin-top:10px;padding-top: 3px;padding-bottom: 3px;'
+                                });
+
+                                // Append the new button to the same container as checkboxContainer
+                                checkboxContainer.append(newButton);
+
+                                attachCheckboxEventHandlers();
+                                // Bind the event handler for the "change" event of the "Select All" checkbox
+                                $("#selectAll").on("change", function () {
+                                    // Get the state of the "Select All" checkbox
+                                    var selectAllChecked = $(this).prop("checked");
+
+                                    // Set the same state for all checkboxes inside the dropdown menu
+                                    $(".dropdown-item-new .form-check-input").prop("checked", selectAllChecked);
+                                });
+
+
+
+                                // Attach a click event handler to the new button
+                                newButton.on('click', function () {
+
+                                    var checkedValues = []; // Array to store the values of checked checkboxes
+
+                                    // Loop through the checkboxes and check which ones are checked
+                                    $('.form-check-input').each(function () {
+                                        if (!$(this).hasClass('select-all-checkbox') && $(this).prop('checked')) {
+                                            var label = $('label[for="' + $(this).attr('id') + '"]').text();
+                                            checkedValues.push(label); // Add the label text of the checked checkbox to the array
+                                        }
+                                    });
+
+                                    var categoryParam = checkedValues.join(',');
+                                    var group_cat = JSON.stringify(data.grouped_cat_name);
+                                    // console.log(categoryParam)
+
+                                    $.ajax({
+                                        url: '/mph/category_filter/',  // Replace with the actual URL of your second Django method
+                                        type: 'GET',
+                                        data: {
+                                            'category':categoryParam,
+                                            'group_category':group_cat,
+                                        },
+                                        success: function (response) {
+                                            console.log(response);
+                                            var tableBody_category = $('#tableBody_category');
+                                            tableBody_category.empty();
+                                            // Handle the response and update the table or other elements on the page
+                                            // Update the table or other elements using the data received in the response
+                                            if (Object.keys(response.new_group_category).length === 0) {
+                                                // Create a row to display the "No record found" message
+                                                var newnoRecordRow = $('<tr><td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td></tr>');
+                                                // Append the "No record found" row to the table body
+                                                tableBody_category.append(newnoRecordRow);
+                                            } else {
+
+                                                // Iterate through the grouped data and create rows for each member
+                                                $.each(response.new_group_category, function (newcatName, newcatNameData) {
+                                                    var newRowNamecat = $('<tr></tr>');
+
+                                                    // Add cells for each week
+                                                    // var newtotalHoursRounded = parseFloat(newcatNameData.total_hours_all_weeks).toFixed(2);
+                                                    newRowNamecat.append('<td>' + newcatName + '</td>');
+                                                    newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_1,2) + '</td>');
+                                                    newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_2,2) + '</td>');
+                                                    newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_3,2) + '</td>');
+                                                    newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_4,2) + '</td>');
+                                                    newRowNamecat.append('<td>' + floatformatJS(newcatNameData.total_hours_all_weeks,2) + '</td>');
+                                                    newRowNamecat.append('<td>' + floatformatJS(newcatNameData.total_percentage_hours,2) + '%</td>');
+
+                                                    // Append the new row to the table body
+                                                    tableBody_category.append(newRowNamecat);
+                                                });
+                                            }
+                                            
+                                            if (Object.keys(response.new_week_sum).length > 0) {
+                                                var newgrandTotalRow = $('<tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);"></tr>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_1, 2) + '</td>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_2, 2) + '</td>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_3, 2) + '</td>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_4, 2) + '</td>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.total_hours_all_weeks, 2) + '</td>');
+                                                newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.total_percentage_hours, 2) + '%</td>');
+
+                                                // Append the "Grand Total" row to the table body
+                                                tableBody_category.append(newgrandTotalRow);
+                                            }
+                                        },
+                                        error: function (xhr, status, error) {
+                                            // Handle the error if the second AJAX request fails
+                                            console.error(error);  // For debugging, you can remove this line
+                                        }
+                                    });
+                                });
+
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle the error if the AJAX request fails
+                                console.error(error);  // For debugging, you can remove this line
+                            }
+                        });
+                    });
+
+                    function floatformatJS(value, decimalPlaces) {
+                        var parsedValue = parseFloat(value);
+                        if (isNaN(parsedValue)) {
+                            return ""; // Return empty string if value is NaN
+                        }
+                        return parsedValue.toFixed(decimalPlaces);
+                    }
+
+                    function attachCheckboxEventHandlers() {
+                        // Handle the "Select All" checkbox click event
+                        $("#selectAll").on("change", function () {
+                            // Get the state of the "Select All" checkbox
+                            var selectAllChecked = $(this).prop("checked");
+
+                            // Set the same state for all checkboxes inside the dropdown menu
+                            $(".dropdown-item-new .form-check-input").prop("checked", selectAllChecked);
+                        });
+
+                        // Handle individual checkbox click event
+                        $(".dropdown-item-new .form-check-input").on("change", function () {
+                            // Check if all checkboxes are selected, then update the "Select All" checkbox state
+                            var allCheckboxes = $(".dropdown-item-new .form-check-input");
+                            var allChecked = allCheckboxes.length === allCheckboxes.filter(":checked").length;
+                            $("#selectAll").prop("checked", allChecked);
+                        });
+
+                        // Check initial state of "Select All" checkbox based on individual checkboxes
+                        updateSelectAll();
+                    }
+
+                    function updateSelectAll() {
+                        var allCheckboxes = $(".dropdown-item-new .form-check-input");
+                        var allChecked = allCheckboxes.length === allCheckboxes.filter(":checked").length;
+                        $("#selectAll").prop("checked", allChecked);
+                    }
+
+                });
+                </script>
+            <!-- End Reports -->
+          
+
+            <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Individual Utilization <span>| Based on Filter Date</span></h5>
+                <div class="table-scrollable-individual">
+                <table class="table  table-hover table-sm styled-table" >
+                    <thead>   
+                    <tr>
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Member</th>
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 1</th>
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 2</th> 
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 3</th> 
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 4</th> 
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Total Hours</th>
+                        <th scope="col" style="background-color: #00A3E0; color: #ffffff;">% Utilization</th> 
+                        <!-- <th scope="col">% Productivity</th>  -->
+                        
+                    </tr>
+                    </thead>
+                    <tbody id="tableBody" >
+                        {% if grouped_data %}
+                            {% for member, data in grouped_data.items %}
+                            <tr class="clickable-row" data-member="{{ member }}">
+                                    <td>{{ member }}</td>
+                                    <td>{{ data.week_1|floatformat:2 }}</td>
+                                    <td>{{ data.week_2|floatformat:2 }}</td>
+                                    <td>{{ data.week_3|floatformat:2 }}</td>
+                                    <td>{{ data.week_4|floatformat:2 }}</td>
+                                    <td>{{ data.total_hours_all_weeks|floatformat:2 }}</td>
+                                    {% if data.utilization_percentage >= 110 %}
+                                    <td style="color: rgb(206, 2, 2);" data-bs-toggle="tooltip" data-bs-placement="top" title="Over Utilized">{{ data.utilization_percentage|floatformat:2 }}%</td>
+                                    {% elif data.utilization_percentage < 99 %}
+                                    <td style="color: rgba(255, 81, 0, 0.788);" data-bs-toggle="tooltip" data-bs-placement="top" title="Under Utilized">{{ data.utilization_percentage|floatformat:2 }}%</td>
+                                    {% else %}
+                                    <td style="color: rgba(3, 94, 30, 0.788);" data-bs-toggle="tooltip" data-bs-placement="top" title="Adequate Utilization">{{ data.utilization_percentage|floatformat:2 }}%</td>
+                                    {% endif %}
+                                    <!-- <td>-</td> -->
+                                </tr>
+                            {% endfor %}
+                            <tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);">
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ grand_total.total_week_1|floatformat:2}}</td>
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ grand_total.total_week_2|floatformat:2}}</td>
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ grand_total.total_week_3|floatformat:2}}</td>
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ grand_total.total_week_4|floatformat:2}}</td>
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ grand_total.total_hours|floatformat:2}}</td>              
+                                <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ grand_total.average_utilization_percentage|floatformat:2}}%</td>
+                                
+                                <!-- <td>-</td> -->
+                            </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                    
+                </table>
+              </div>
+                </div>
+            </div>
+            </div>
+            <!-- End Reports -->
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="filter-new" id="filter_new" >
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" >
+                          <li class="dropdown-header-new text-start">
+                            <h6>Filter</h6>
+                          </li>
+                            <div id="checkboxContainer">
+                                <div class="form-check dropdown-item-new">
+                                    <input class="form-check-input select-all-checkbox" type="checkbox" id="selectAll" checked>
+                                    <label class="form-check-label" for="selectAll" style="color: rgb(156, 154, 154);">
+                                        Select All
+                                    </label>
+                                </div>
+                            </div>
+
+                            <script>
+                                var all_keys_list = {{ all_keys|safe }}
+                            
+                                $(document).ready(function () {
+                                    // Get the container where checkboxes will be added
+                                    var checkboxContainer = $('#checkboxContainer');
+                            
+                                    // Loop through the list of keys and create checkboxes dynamically
+                                    $.each(all_keys_list, function (index, category) {
+                                        // Create the checkbox and label elements
+                                        var checkbox = $('<input>', {class:'form-check-input', type: 'checkbox', id: 'gridCheck' + index, checked:true});
+                                        var label = $('<label>', {class: 'form-check-label', for: 'gridCheck' + index, text: category});
+                            
+                                        // Append the checkbox and label to the container
+                                        checkboxContainer.append($('<div>', {class: 'form-check dropdown-item-new'}).append(checkbox).append(label));
+                                    });
+
+
+                                    attachCheckboxEventHandlers();
+                                    // Bind the event handler for the "change" event of the "Select All" checkbox
+                                    $("#selectAll").on("change", function () {
+                                        // Get the state of the "Select All" checkbox
+                                        var selectAllChecked = $(this).prop("checked");
+
+                                        // Set the same state for all checkboxes inside the dropdown menu
+                                        $(".dropdown-item-new .form-check-input").prop("checked", selectAllChecked);
+                                    });
+
+                                    $('#okayButton').on('click', function () {
+                                        var checkedValues = []; // Array to store the values of checked checkboxes
+
+                                        // Loop through the checkboxes and check which ones are checked
+                                        $('.form-check-input').each(function () {
+                                            if (!$(this).hasClass('select-all-checkbox') && $(this).prop('checked')) {
+                                                var label = $('label[for="' + $(this).attr('id') + '"]').text();
+                                                checkedValues.push(label); // Add the label text of the checked checkbox to the array
+                                            }
+                                        });
+
+                                        var categoryParam = checkedValues.join(',');
+                                        var group_cat = {{ grouped_category|safe }};
+
+
+                                        $.ajax({
+                                            type: 'GET', // Change the request type to POST or GET based on your server-side implementation
+                                            url: '/mph/category_filter/', // Replace with the URL of your server endpoint
+                                            data: {
+                                              'category': categoryParam,
+                                              'group_category': JSON.stringify(group_cat),
+                                            },
+                                            success: function (response) {
+                                                // Handle the response from the server if needed
+                                                // console.log('Success:');
+                                                // console.log('Success:', response);
+                                                // console.log('Success:', response);
+                                                var tableBody_category = $('#tableBody_category');
+                                                tableBody_category.empty();
+                                                // Handle the response and update the table or other elements on the page
+                                                // Update the table or other elements using the data received in the response
+                                                if (Object.keys(response.new_group_category).length === 0) {
+                                                    // Create a row to display the "No record found" message
+                                                    var newnoRecordRow = $('<tr><td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td></tr>');
+                                                    // Append the "No record found" row to the table body
+                                                    tableBody_category.append(newnoRecordRow);
+                                                } else {
+
+                                                    // Iterate through the grouped data and create rows for each member
+                                                    $.each(response.new_group_category, function (newcatName, newcatNameData) {
+                                                        var newRowNamecat = $('<tr></tr>');
+
+                                                        // Add cells for each week
+                                                        // var newtotalHoursRounded = parseFloat(newcatNameData.total_hours_all_weeks).toFixed(2);
+                                                        newRowNamecat.append('<td>' + newcatName + '</td>');
+                                                        newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_1,2) + '</td>');
+                                                        newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_2,2) + '</td>');
+                                                        newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_3,2) + '</td>');
+                                                        newRowNamecat.append('<td>' + floatformatJS(newcatNameData.week_4,2) + '</td>');
+                                                        newRowNamecat.append('<td>' + floatformatJS(newcatNameData.total_hours_all_weeks,2) + '</td>');
+                                                        newRowNamecat.append('<td>' + floatformatJS(newcatNameData.total_percentage_hours,2) + '%</td>');
+
+                                                        // Append the new row to the table body
+                                                        tableBody_category.append(newRowNamecat);
+                                                    });
+                                                }
+
+                                                if (Object.keys(response.new_week_sum).length > 0) {
+                                                    var newgrandTotalRow = $('<tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);"></tr>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_1, 2) + '</td>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_2, 2) + '</td>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_3, 2) + '</td>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.week_4, 2) + '</td>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.total_hours_all_weeks, 2) + '</td>');
+                                                    newgrandTotalRow.append('<td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">' + floatformatJS(response.new_week_sum.total_percentage_hours, 2) + '%</td>');
+
+                                                    // Append the "Grand Total" row to the table body
+                                                    tableBody_category.append(newgrandTotalRow);
+                                                }
+
+                                            },
+                                            error: function (xhr, status, error) {
+                                                // Handle the error if the AJAX request fails
+                                                console.log('Error:', status, error);
+                                            }
+                                        });
+                                
+                                    });
+
+                                    function floatformatJS(value, decimalPlaces) {
+                                          var parsedValue = parseFloat(value);
+                                          if (isNaN(parsedValue)) {
+                                              return ""; // Return empty string if value is NaN
+                                          }
+                                          return parsedValue.toFixed(decimalPlaces);
+                                      }
+
+
+                                      function attachCheckboxEventHandlers() {
+                                        // Handle the "Select All" checkbox click event
+                                        $("#selectAll").on("change", function () {
+                                            // Get the state of the "Select All" checkbox
+                                            var selectAllChecked = $(this).prop("checked");
+
+                                            // Set the same state for all checkboxes inside the dropdown menu
+                                            $(".dropdown-item-new .form-check-input").prop("checked", selectAllChecked);
+                                        });
+
+                                        // Handle individual checkbox click event
+                                        $(".dropdown-item-new .form-check-input").on("change", function () {
+                                            // Check if all checkboxes are selected, then update the "Select All" checkbox state
+                                            var allCheckboxes = $(".dropdown-item-new .form-check-input");
+                                            var allChecked = allCheckboxes.length === allCheckboxes.filter(":checked").length;
+                                            $("#selectAll").prop("checked", allChecked);
+                                        });
+
+                                        // Check initial state of "Select All" checkbox based on individual checkboxes
+                                        updateSelectAll();
+                                    }
+
+                                    function updateSelectAll() {
+                                        var allCheckboxes = $(".dropdown-item-new .form-check-input");
+                                        var allChecked = allCheckboxes.length === allCheckboxes.filter(":checked").length;
+                                        $("#selectAll").prop("checked", allChecked);
+                                    }
+                                });
+                            </script>
+                            <button type="button" id="okayButton" class="btn" style="width: 200px;    background-color: #2eca6a;color: white;font-size: 11px;margin-left: 5px;margin-top:10px;padding-top: 3px;padding-bottom: 3px;">OKAY</button>
+
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                    <h5 class="card-title">By Category <span>| Based on Filter</span></h5>
+                    
+                   <div class="table-scrollable-individual">
+                    <table class="table  table-hover table-sm styled-table" >
+                        <thead>   
+                        <tr>
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Category</th>
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 1</th>
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 2</th> 
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 3</th> 
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Week 4</th> 
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Total Processing Hours</th>
+                            <th scope="col" style="background-color: #00A3E0; color: #ffffff;">% over Total Processing Time</th> 
+                        </tr>
+                        </thead>
+                        <tbody id="tableBody_category">
+                            {% if grouped_category %}
+                                {% for cat, data_cat in grouped_category.items %}
+                                    <tr >
+                                        <td>{{ cat }}</td>
+                                        <td>{{ data_cat.week_1|floatformat:2 }}</td>
+                                        <td>{{ data_cat.week_2|floatformat:2 }}</td>
+                                        <td>{{ data_cat.week_3|floatformat:2 }}</td>
+                                        <td>{{ data_cat.week_4|floatformat:2 }}</td>
+                                        <td>{{ data_cat.total_hours_all_weeks|floatformat:2 }}</td>
+                                        <td>{{ data_cat.total_percentage_hours|floatformat:2 }}%</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr style="font-weight: bold; background-color: rgba(0,163,224,0.04);">
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">Grand Total</td>
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ week_sums_category.week_1|floatformat:2 }}</td>
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ week_sums_category.week_2|floatformat:2 }}</td>
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ week_sums_category.week_3|floatformat:2 }}</td>
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ week_sums_category.week_4|floatformat:2 }}</td>
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ week_sums_category.total_total_hours|floatformat:2 }}</td>
+                                    <td style="font-weight: bold; background-color: rgba(0,163,224,0.01);">{{ week_sums_category.total_percentage_hours|floatformat:2 }}%</td>
+                                </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="8" style="color: red;">No record found for the current month or no record from the used filter. Please try a different filter.</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                        
+                    </table>
+                  </div>
+                    </div>
+                </div>
+              </div>
+
+              
+               <!-- End Reports -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+          <!-- <div class="row">
+            <div class="col-md-6">
+                <div class="card info-card overtime-card" style="color: #797979;">
+                    <div class="card-body" >
+                      <h5 style="margin-top:20px;"></h5>
+
+                      <div class="d-flex align-items-center" style="margin-top: 25px;">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background: #c4c3c350;width: 75px; height: 75px;">
+                          <i class="bi bi-hourglass-split" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="ps-3" style="margin-top: 0px;">
+                          <h6 style="font-size: 40px;font-weight: bolder; margin-bottom: -10px;color: #797979;">1.5</h6>
+                          <span class="text-muted" style="font-size: 15px;margin-left: 28px;">HRS</span>
+                        </div>
+                      </div>
+                      <span class="text-muted small pt-2 ps-1" style="margin-left: 20px; margin-top: 1px;display: block;">Avg overtime per Month</span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card info-card overtime-card" style="color: #797979;">
+                <div class="card-body" >
+                  <h5 style="margin-top:20px;"></h5>
+
+                  <div class="d-flex align-items-center" style="margin-top: 25px;">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background: #c4c3c350;width: 75px; height: 75px;">
+                      <i class="ri-timer-line" style="font-size: 40px;"></i>
+                    </div>
+                    <div class="ps-3" style="margin-top: 0px;">
+                      <h6 style="font-size: 40px;font-weight: bolder; margin-bottom: -10px;color: #797979;">12%</h6>
+                      
+                    </div>
+                  </div>
+                  <span class="text-muted small pt-2 ps-1" style="margin-left: 35px; margin-top: 1px;display: block;">Overtime this Year</span>
+
+                </div>
+            </div>
+            </div>
+        </div> -->
+          <!-- end Overtime -->
+
+           <!-- Overtime by age group -->
+           <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Avg Overtime Hours by Age Group <span>| This Year</span></h5>
+
+              <div id="overtime" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var chartDom = document.getElementById('overtime');
+                  var myChart = echarts.init(chartDom);
+                  var option;
+
+                  option = {
+                    xAxis: {
+                      type: 'category',
+                      data: ['<25', '26-35', '36-45', '46-54', '>55']
+                    },
+                    yAxis: {
+                      type: 'value',
+                      name: 'hours',
+                      nameLocation: 'center',
+                      axisTick: {
+                          show: false, // Hide Y-axis tick marks
+                      },
+                      axisLabel: {
+                          show: false, // Hide Y-axis numeric labels
+                      },
+                      
+                     
+                    },
+                    series: [
+                    {
+                        data: [1.9, 2.5, 2.3, 1.0, 0.8],
+                        type: 'bar',
+                        label: {
+                            show: true, // Display labels
+                            position: 'top', // Place labels at the top of the bars
+                            color: '#000', // Label text color (optional)
+                        },
+                        itemStyle: {
+                            color: '#00A3E0', // Set the color of the bars
+                        },
+                    }
+                ]
+                  };
+
+                  option && myChart.setOption(option);
+                  
+                });
+              </script>
+
+            </div>
+          </div> -->
+          <style>
+            .table-scrollable {
+                max-height: 300px; /* Set the maximum height for the scrollable area */
+                overflow-y: auto;
+                
+            }
+            .table-scrollable-individual {
+                max-height: 600px; /* Set the maximum height for the scrollable area */
+                overflow-y: auto;
+                
+            }
+          </style>
+
+         
+          <!-- Over Utilized Teams -->
+          <div class="card top-selling">
+            <div class="card-body">
+                <h5 class="card-title">Over Utilized Teams<span> | Last month</span></h5>
+                <div class="table-scrollable">
+                    <table class="table table-striped styled-table styled-table-2">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="background-color: #2eca6a;color: #ffffff;">Team</th>
+                                <th scope="col" style="background-color: #2eca6a;color: #ffffff;">Utilization Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if highest_util|has_utilization %}
+                                {% for country, utilization in highest_util.items %}
+                                    {% if utilization > 0 %}
+                                        <tr>
+                                            <td style="text-align: left;font-size: 12px;">{{ country }}</td>
+                                            <td class="fw-bold" style="text-align: center;font-size: 12px;">{{ utilization }}%</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if not highest_util|has_utilization %}
+                                    <tr>
+                                        <td colspan="2" style="text-align: center;">
+                                            No data is available from the last 30 days
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">
+                                        No data is available from the last 30 days
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div><!-- End Over Utilized Teams -->
+
+          <!-- Under Utilized Teams -->
+          <div class="card top-selling">
+            <div class="card-body">
+              <h5 class="card-title">Under Utilized Teams<span> | Last month</span></h5>
+              <div class="table-scrollable">
+              <table class="table table-striped styled-table styled-table-2">
+                <thead>
+                    <tr>
+                      <th scope="col" style="background-color: #00A3E0;color: #ffffff;">Team</th>
+                      <th scope="col" style="background-color: #00A3E0;color: #ffffff;">Utilization Rate</th>
+                      <tbody>
+                        {% if lowest_util|has_utilization %}
+                            {% for country, utilization in lowest_util.items %}
+                                {% if utilization > 0 %}
+                                    <tr>
+                                        
+                                        <td style="text-align: left;font-size: 12px;">{{ country }}</td>
+                                        <td class="fw-bold" style="text-align: center;font-size: 12px;">{{ utilization }}%</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if not lowest_util|has_utilization %}
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">
+                                        No data is available from the last 30 days
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    No data is available from the last 30 days
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                    </tr>
+                  </thead>
+              </table>
+            </div>
+            </div>
+          </div><!-- End Top 5 -->
+
+          <!-- Top 5 -->
+          <!-- <div class="card top-selling overflow-auto">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Top 5 Countries - Productivity <span>| Last 30 days</span></h5>
+              <table class="table table-borderless">
+                <thead>
+                    <tr>
+                      <th scope="col" style="background-color: rgba(0,163,224,0.1);">Country</th>
+                      <th scope="col" style="background-color: rgba(0,163,224,0.1);">Overall Productivity</th>
+                      <tbody>
+                        <tr>
+                            <th scope="row"><img src="{% static "img/france.svg" %}" alt="France" width="30" height="20"> France</th>
+                            <td class="fw-bold" style="text-align: center;">95.7%</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><img src="{% static "img/de.svg" %}" alt="Germany" width="30" height="20"> Germany</th>
+                            <td class="fw-bold" style="text-align: center;">90.1%</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><img src="{% static "img/mx.svg" %}" alt="Mexico" width="30" height="20"> Mexico</th>
+                            <td class="fw-bold" style="text-align: center;">94.2%</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><img src="{% static "img/ph.svg" %}" alt="Philippines" width="30" height="20"> Philippines</th>
+                            <td class="fw-bold" style="text-align: center;">89.8%</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><img src="{% static "img/switzerland.svg" %}" alt="Switzerland" width="30" height="20"> Switzerland</th>
+                            <td class="fw-bold" style="text-align: center;">99.9%</td>
+                        </tr>
+                      </tbody>
+                    </tr>
+                  </thead>
+              </table>
+            </div>
+          </div> -->
+          <!-- End Top 5 -->
+
+          <!-- Website Traffic -->
+          <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow scrollable-dropdown">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+                
+                {% for team in available_team %}
+                  <li><a class="dropdown-item team-item" data-team="{{ team }}" style="font-size: 12px; cursor: pointer;">{{ team }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Utilization per Category <span>| Last Month</span></h5>
+
+              <div id="trafficChart" style="min-height: 600px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const chartData = [];
+
+
+            
+                    {% for cat, data_cat in grouped_category.items %}
+                        chartData.push({
+                            value: {{ data_cat.total_percentage_hours|floatformat:2 }},
+                            name: '{{ cat }}',
+                            totalHours: {{ data_cat.total_hours_all_weeks|floatformat:2 }} // Add this line to store total hours
+                        });
+                    {% endfor %}
+           
+                    const trafficChart = echarts.init(document.querySelector("#trafficChart"));
+                    var f_country = '{{ first_team }}';
+                    var tempElement = document.createElement("div");
+                    tempElement.innerHTML = f_country;
+
+                    // Retrieve the decoded text from the DOM element
+                    var decodedText = tempElement.textContent || tempElement.innerText;
+
+                    const chartOption = {
+                      title: {
+                            text: decodedText,
+                            top: 10,
+                            left: 'center',
+                            textStyle: {
+                                fontSize: 18,
+                                fontWeight: 'regular'
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: function (param) {
+                                return param.name + ': ' + param.data.totalHours + ' hours';
+                            }
+                        },
+                        legend: {
+                            bottom: '3%',
+                            left: 'center',
+                        },
+                        toolbox: {
+                        show: true,
+                        feature: {
+                          mark: { show: true },
+                          dataView: { show: true, readOnly: false },
+                          saveAsImage: { show: true }
+                        }
+                      },
+                        series: [{
+                            name: 'Utilization',
+                            type: 'pie',
+                            radius: ['30%', '55%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 3,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true,
+                                formatter: function (param) {
+                                    // return param.name + '\n (' + param.percent + '%)';
+                                    return param.percent + '%';
+                                },
+                                
+                            },
+                            bottom: '20%',
+                            data: chartData,
+                            color: ['#072F5F', '#1261A0', '#3895D3', '#80B2D3', '#A0D1EC', '#BAE0F3', '#EDF2FB']
+                        }]
+                    };
+
+                    trafficChart.setOption(chartOption);
+                    // const chartData = [];
+                    function updateChartWithData(newData, selectedTeam) {
+                        chartOption.title.text = selectedTeam;
+                        chartData.length = 0; 
+
+                        for (const cat in newData) {
+                            if (newData.hasOwnProperty(cat)) {
+                                chartData.push({
+                                    value: newData[cat].total_percentage_hours.toFixed(2),
+                                    name: cat,
+                                    totalHours: newData[cat].total_hours_all_weeks.toFixed(2)
+                                });
+                            }
+                        }
+
+                        chartOption.series[0].data = chartData;
+                        trafficChart.setOption(chartOption);
+                    }
+                    
+                    $('.team-item').on('click', function (event) {
+                        event.preventDefault();
+                        const selectedTeam = $(this).data('team');
+                        console.log(selectedTeam)
+
+                        // Make an AJAX call to the Django view
+                        $.ajax({
+                            type: 'GET',
+                            url: '/mph/monthly_util_with_team/',
+                            data: {
+                                'team': selectedTeam,
+                                'region': 'usca'
+                            },
+                            success: function (response) {
+                              console.log(response)
+                                // Update the chart data using the response
+                                const newGroupedTeamUtil = response.grouped_team_util;
+                                updateChartWithData(newGroupedTeamUtil, selectedTeam);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                });
+            </script>
+
+            </div>
+          </div>
+          <!-- End Website Traffic -->
+
+
+          <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow scrollable-dropdown">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+                
+                {% for country in available_team %}
+                  <li><a class="dropdown-item country-item" data-country="{{ country }}" style="font-size: 12px; cursor: pointer;">{{ country }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+            
+      
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Team's Weekly Utilization <span>| Last Month</span></h5>
+
+              <div id="percentage_week" style="min-height: 420px;" class="echart"></div>
+
+              <script>
+                $(document).ready(function () {
+                    let originalData = null;
+                    let selectedCountryData = null;
+            
+                    const weeklySumData = {{ weekly_sum_data|safe }};
+                    let drilldownData = {{ drilldown_data|safe }};
+                    var f_country = '{{ first_team }}';
+                    var tempElement = document.createElement("div");
+                    tempElement.innerHTML = f_country;
+
+                    // Retrieve the decoded text from the DOM element
+                    var decodedText = tempElement.textContent || tempElement.innerText;
+            
+                    const option = {
+                        title: {
+                            text: decodedText,
+                            top: 10,
+                            left: 'center',
+                            textStyle: {
+                                fontSize: 18,
+                                fontWeight: 'regular'
+                            }
+                        },
+                        toolbox: {
+                        show: true,
+                        feature: {
+                          mark: { show: true },
+                          dataView: { show: true, readOnly: false },
+                          restore: { show: true },
+                          saveAsImage: { show: true }
+                        }
+                      },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: { type: 'shadow' },
+                            formatter: function (params) {
+                                return params[0].axisValue + ': ' + params[0].value.toFixed(2) + ' Hours';
+                            }
+                        },
+                        xAxis: {
+                            data: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                show: false
+                            }
+                        },
+                        dataGroupId: '',
+                        animationDurationUpdate: 500,
+                        series: {
+                            type: 'bar',
+                            id: 'sales',
+                            itemStyle: {
+                                  color: '#00A3E0',  // Set the bar color to #00A3E0
+                              },
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: function (params) {
+                                    return params.value.toFixed(2) + ' hrs';
+                                }
+                            },
+                            data: weeklySumData,
+                            universalTransition: {
+                                enabled: true,
+                                divideShape: 'clone'
+                            }
+                        }
+                    };
+            
+                    const percentage_week = echarts.init(document.querySelector("#percentage_week"));
+                    percentage_week.setOption(option);
+            
+                    
+            
+                    $('.country-item').on('click', function (event) {
+                        event.preventDefault();
+            
+                        const selectedCountry = $(this).data('country');
+                        
+                        // Make an AJAX call to the Django view
+                        $.ajax({
+                            type: 'GET',
+                            url: '/mph/weekly_util_with_country/',
+                            data: {
+                                'country': selectedCountry,
+                                'region': 'usca'
+                            },
+                            success: function (response) {
+                                // Update the chart data using the response
+                                const newWeeklySumData = response.weekly_sum_data_country;
+                                const newDrilldownData = response.drilldown_data_country;
+                                const newTitle = selectedCountry;
+                                
+            
+                                selectedCountryData = newWeeklySumData;
+                                
+                                // Set new data and refresh the chart
+                                percentage_week.setOption({
+                                    title: {
+                                        text: newTitle,
+                                        top: 10,
+                                        left: 'center',
+                                        textStyle: {
+                                            fontSize: 12,
+                                            fontWeight: 'regular'
+                                        }
+                                    },
+                                    xAxis: {
+                                        data: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], // Update x-axis data
+                                    },
+                                    series: {
+                                        data: newWeeklySumData
+                                    }
+                                    
+                                });
+          
+                                drilldownData = newDrilldownData;
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                    percentage_week.on('click', function (event) {
+                        if (event.data) {
+                            var subData = drilldownData.find(function (data) {
+                                return data.dataGroupId === event.data.groupId;
+                            });
+                            if (!subData) {
+                                return;
+                            }
+                            percentage_week.setOption({
+                                xAxis: {
+                                    data: subData.data.map(function (item) {
+                                        return item[0];
+                                    }),
+                                    axisLabel: {
+                                        interval: 0,
+                                        rotate: 20 // Rotate labels by 20 degrees
+                                    }
+                                },
+                                series: {
+                                    type: 'bar',
+                                    id: 'sales',
+                                    itemStyle: {
+                                          color: '#00A3E0',  // Set the bar color to #00A3E0
+                                      },
+                                    dataGroupId: subData.dataGroupId,
+                                    data: subData.data.map(function (item) {
+                                        return item[1];
+                                    }),
+                                    universalTransition: {
+                                        enabled: true,
+                                        divideShape: 'clone'
+                                    }
+                                },
+                                graphic: [
+                                    {
+                                        type: 'text',
+                                        right: 15,
+                                        top: 40,
+                                        style: {
+                                            text: 'Back',
+                                            fontSize: 12
+                                            
+                                        },
+                                        onclick: function () {
+                                            // Restore to the previous drilldown state or selected country's data
+                                            if (selectedCountryData) {
+                                                percentage_week.setOption({
+                                                    series: {
+                                                        data: selectedCountryData
+                                                    },
+                                                    xAxis: {
+                                                        data: ['Week 1', 'Week 2', 'Week 3', 'Week 4'] // Restore original xAxis labels
+                                                    }
+                                                }); 
+                                            } 
+                                            else {
+                                              console.log("else")
+                                                percentage_week.setOption(option);
+                                            }
+                                        }
+                                    }
+                                ]
+
+                            });
+                        }
+                    });
+                });
+            </script>
+
+            </div>
+          </div>
+          
+          <style>
+            .card-new {
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+            position: relative; /* Add this for positioning the icon */
+        }
+
+        .card-new::before {
+            content: '\F5E7';
+            font-family: 'bootstrap-icons';
+            font-size: 70px; /* Adjust the icon size as needed */
+            position: absolute;
+            top: 5px; /* Adjust the top position of the icon */
+            left: 25px; /* Adjust the left position of the icon */
+            color: rgba(143, 42, 42, 0.747); /* Set the icon color */
+        }
+
+        .card-body-new {
+            padding: 20px; /* Adjust as needed */
+        }
+          </style>
+          <div class="card-new">
+            <div class="card-body-new">
+                <div class="ps-3">
+                  <h5 style="text-align: center; margin-top: 10px; font-weight: bold; font-size: 25px;margin-bottom: 2px;color: #797878; ">
+                    {% if top_five_util %}
+                        {{ top_five_util.0.name }}
+                    {% else %}
+                    <p style="text-align: center; font-size: 14px; color: #797878;">No data has been uploaded yet</p>
+                    {% endif %}
+                  </h5>
+                  <h5 style="text-align: center; color: rgba(143, 42, 42, 1); font-size: 14px;"> Last Month Top Utilizer</h5>
+                </div>             
+            </div>
+          </div>
+          
+          
+          
+
+          <div class="card" style="margin-top: -15px;">
+            <div class="top-section" style="background-color: #00A3E0; padding: 10px;">
+              <i class="bi bi-star me-1" style="margin-left: 130px;color: white;"></i><span style="color: white;margin-left: 30px;">Top 5 Members</span><i class="bi bi-star me-1" style="color: white;margin-left: 37px;"></i>
+            </div>
+            <div class="card-body">
+
+                   
+            <table class="table  table-hover table-sm styled-table tableBody_award" >
+                <thead>   
+                <tr style="background-color:#9e9e9e81;color: black;">
+                    <th scope="col">Name</th>
+                    <th scope="col">Total Hours</th>
+                    <th scope="col">Utilization Rate</th> 
+                   
+                </tr>
+                </thead>
+                <tbody class="tableBody_award">
+                  {% if top_five_util %}
+                  {% for record in top_five_util %}
+                  <tr>
+                      <td>{{ record.name }}</td>
+                      <td>{{ record.total_duration|floatformat:2 }}</td>
+                      <td>{{ record.utilization_percentage|floatformat:2 }}%</td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td>
+                      Data not yet available!
+                    </td>
+                  </tr>
+
+                  {% endif %}
+              </tbody>
+                
+            </table>
+            </div>
+        </div>
+
+
+        <div class="card"> 
+          <div class="card-body pb-0">
+            <h5 class="card-title">Break Adherence <span>| Last Month</span></h5>
+
+              <div id="break_adherence" style="min-height: 500px;" class="echart"></div>
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                var break_adherence = echarts.init(document.querySelector('#break_adherence'));
+
+                // Sample data for the horizontal bar chart
+                var break_adherence_data = {{ break_adherence|safe }};
+                var data = [];
+                break_adherence_data.forEach(function (team) {
+                   var formattedPercentage = parseFloat(team['break_adherence_percentage']).toFixed(2);
+                    data.push({
+                        name: truncateText(team['team_name'], 15),
+                        value: formattedPercentage, // Use break adherence percentage as value
+                        fullTeamName: team['team_name'],
+                    });
+                });
+
+                // Define a color function to set custom colors
+                function getBarColor(value) {
+                    return value > 100 ? '#EE6666' : '#2eca6a';
+                }
+
+                function truncateText(text, maxLength) {
+                    if (text.length > maxLength) {
+                        return text.substring(0, maxLength) + '...'; // Truncate and add ellipsis
+                    }
+                    return text;
+                }
+
+                // Define the chart options
+                var break_option = {
+                    grid: {
+                        left: '2%',
+                        right: '10%',
+                        bottom: '10%',
+                        containLabel: true,
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(params) {
+                          // console.log("params 1")
+                          console.log(params)
+                            // Retrieve the full team name from the custom attribute
+                            var fullTeamName = params.data.fullTeamName;
+                            return fullTeamName + ': ' + params.value + '%';
+                        },
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                          mark: { show: true },
+                          dataView: { show: true, readOnly: false },
+                          restore: { show: true },
+                          saveAsImage: { show: true },
+                          
+                          
+                        }
+                      },
+                    xAxis: {
+                        type: 'value',
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: data.map(item => item.name),
+                    },
+                    series: [
+                        {
+                            type: 'bar',
+                            data: data,
+                            label: {
+                                show: true,
+                                position: 'inside',
+                                formatter: '{c}%',
+                                color: 'white',
+                            },
+                            barGap: '20%',
+                            barCategoryGap: '15%',
+                            itemStyle: {
+                              color: function(params) {
+                                  return getBarColor(params.data.value);
+                              },
+                          },
+                        },
+                        
+                    ],
+                    dataZoom: [{
+                    type: 'slider',
+                    start: 100,
+                    end: 50,
+                    orient: 'vertical',
+                  }],
+                };
+
+                // Set the chart options and render the chart
+                break_adherence.setOption(break_option);
+
+                break_adherence.on('click', function(params) {
+                    // Retrieve the full team name from the custom attribute
+                    var fullTeamName = params.data.fullTeamName;
+                    // console.log(fullTeamName);
+
+                    // You can now trigger your AJAX call here using the fullTeamName or other data
+                    $.ajax({
+                        url: '/mph/get_break_adherence_drilldown/',  // Replace with the actual URL of your second Django method
+                        type: 'GET',
+                        data: {
+                            'team':fullTeamName,
+                            'region':'usca'
+                        },
+                        success: function (response) {
+                          // console.log(response);
+                          var newData = response.map(function(team) {
+                          var formattedPercentage = parseFloat(team.break_adherence_percentage).toFixed(2);
+                          return {
+                              // name: truncateText(team.employee_name, 15),
+                              value: formattedPercentage, // Use break adherence percentage as value
+                              fullTeamName: team.employee_name,
+                          };
+                      });
+
+                      // Update the chart with the new data
+                      updateChartBreakAdherence(break_adherence, newData);
+                          
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle the error if the second AJAX request fails
+                            console.error(error);  // For debugging, you can remove this line
+                        }
+                    });
+                });
+
+                function updateChartBreakAdherence(chart, newData) {
+                      // Extract the names and percentages from the newData array
+                      var names = [];
+                      var percentages = [];
+
+                      // Extract the names and percentages from the newData array
+                      for (var i = 0; i < newData.length; i++) {
+                          names.push(newData[i].fullTeamName);
+                          percentages.push(newData[i].value);
+                      }
+                      // Update the chart option with the new data
+                      chart.setOption({
+                        tooltip: {
+                          // show: false,
+                              trigger: 'item',
+                              formatter: function(params) {
+                                  var fullTeamName = params.name;
+                                  // return fullTeamName + ': ' + params.value + '%';
+                                  return fullTeamName + ': ' + params.value + '%';
+                              },
+                          },
+                          yAxis: {
+                              type: 'category',
+                              data: names, // Update y-axis labels with employee names
+                          },
+                          series: [
+                              {
+                                  type: 'bar',
+                                  data: percentages, // Update bar values with break adherence percentages
+                                  label: {
+                                      show: true,
+                                      position: 'inside',
+                                      formatter: '{c}%', // Display percentage value
+                                      color: 'white',
+                                  },
+                                  barGap: '20%',
+                                  barCategoryGap: '15%',
+                                  itemStyle: {
+                                      color: function(params) {
+                                          return getBarColor(params.data);
+                                      },
+                                  },
+                              },
+                          ],
+                      });
+                  }
+             });
+            </script>
+
+          </div>
+        </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+ <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script>
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script>
+ <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script>
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+
+ <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+
+
+</body>
+
+</html>

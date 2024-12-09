@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+  <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+ <!-- Vendor CSS Files -->
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ 
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'first_app:index' %}" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static "img/profile.jpeg" %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Jericho</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Jericho Barquez</h6>
+              <span>RPS Team</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav>
+
+  
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+      <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+                  <i class="bi bi-pin-map-fill"></i>
+                  <span>Manila Production Hub</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'first_app:performance' %}">
+                  <i class="bi bi-grid"></i>
+                  <span>Performance</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#productivity-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="productivity-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='top_management' %}">
+                          <i class="bi bi-circle"></i><span>TM REVIEW</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <!--<li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>C&B Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li>--><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#quality-report-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-truck"></i><span>Service Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <!--<li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-gear"></i><span>Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+              </ul>
+          </li>-->
+     <!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-gear"></i><span>Rax Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-down"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="users-profile.html">
+                  <i class="bi bi-person"></i>
+                  <span>Profile</span>
+              </a>
+          </li><!-- End Profile Page Nav -->
+
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:pages_contact' %}">
+                  <i class="bi bi-envelope"></i>
+                  <span>Contact</span>
+              </a>
+          </li><!-- End Contact Page Nav -->
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'admin:index' %}" target="_blank">
+                  <i class="bi bi-gear"></i>
+                  <span>Administrator</span>
+              </a>
+          </li><!-- End Login Page Nav -->
+
+
+
+
+      </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Overall Performance </h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'first_app:index' %}"><i class="bi bi-house-door"></i></a></li>
+          <li class="breadcrumb-item">Overall</li>
+          <li class="breadcrumb-item active">Metrics</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <!-- <div class="row"> -->
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+            
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0%;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Productivity <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-graph-up" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <!-- <h6 style="font-size: 20px;">98.9%</h6> -->
+                      <!-- <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">12%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Quality <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-bar-chart-line" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">{{overall_avg_value}}%</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">0.22%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Service Dlvry <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-truck" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">{{overall_average_percentage_service}}%</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <!-- <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Annualized Attrition <span style="font-size: 12px;color: #899bbd;font-weight: 400;"></span></div> -->
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Total Attrition <span style="font-size: 12px;color: #899bbd;font-weight: 400;"></span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-graph-down" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">133</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">1%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Headcount <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-person-plus" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">{{overall_count}}</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">2.6%</span>  -->
+                      <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">Total Headcount</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Utilization <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-hourglass-bottom" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <!-- <h6 style="font-size: 20px;">{{overall_utilization_whole_year}}%</h6> -->
+                      
+                      <h6 style="font-size: 20px;">95.6%</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">1.5%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-6">
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item" href="#">Today</a></li>
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">Service Delivery <span>| Monthly</span></h5>
+
+                <!-- Line Chart -->
+                <div id="service_delivery" style="min-height: 380px;" class="echart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+
+                    var data = {{ overall_percentage_service_delivery|safe }};
+                    console.log(data)
+
+                      // Colors for each region
+                      var colors = ['#125488', '#2A93D5', '#37CAEC'];
+
+                      // Prepare data for ECharts
+                      var xAxisData = data.map(item => item.month);
+                      console.log(xAxisData)
+                      var seriesData = ['APAC', 'EMEA', 'USCA'].map((region, index) => ({
+                          name: region,
+                          type: 'line',
+                          barGap: '0%',  
+                          smooth: true,  // Set smooth to true for curved lines
+                          label: {
+                              show: true,
+                              position: 'top',
+                              formatter: '{c}%',
+                          },
+                          emphasis: {
+                              focus: 'series',
+                          },
+                          lineStyle: {
+                            color: colors[index],
+                              shadowColor: 'rgba(0,0,0,0.3)',
+                              shadowBlur: 6,
+                              shadowOffsetY: 8,
+                            },
+                            itemStyle: {  // Set the color of data points
+                                color: colors[index],
+                            },
+                          data: data.map(item => item[region]),
+                      }));
+
+                      // ECharts configuration
+                      var option = {
+                          tooltip: {
+                              trigger: 'axis',
+                              axisPointer: {
+                                  type: 'line',
+                                  lineStyle: {
+                                      color: '#2A93D5', 
+                                  },                          
+                              },
+                              
+                          },
+                          toolbox: {
+                            show: true,
+                            feature: {
+                              mark: { show: true },
+                              dataView: { show: true, readOnly: false },
+                              magicType: { type: ['line', 'bar'] },
+                              restore: { show: true },
+                              saveAsImage: { show: true }
+                            }
+                          },
+                          legend: {
+                              data: ['APAC', 'EMEA', 'USCA'],
+                          
+                          },
+                          grid: {
+                              left: '3%',
+                              right: '4%',
+                              bottom: '3%',
+                              containLabel: true,
+                          },
+                          xAxis: {
+                              type: 'category',
+                              data: xAxisData,
+                          },
+                          yAxis: {
+                              type: 'value',
+                              min: 50,
+                              max: 100,
+                          },
+                          series: seriesData,
+                      };
+
+                      // Initialize ECharts instance
+                      var service_delivery = echarts.init(document.getElementById('service_delivery'));
+
+                      // Set the chart configuration
+                      service_delivery.setOption(option);
+                  });
+                </script>
+                <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+           
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item region-filter" data-region="APAC" href="#">APAC</a></li>
+                  <li><a class="dropdown-item region-filter" data-region="EMEA" href="#">EMEA</a></li>
+                  <li><a class="dropdown-item region-filter" data-region="USCA" href="#">USCA</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">Utilization <span>| Monthly</span></h5>
+
+                <!-- Line Chart -->
+                <div id="utilization" style="min-height: 380px;" class="echart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                        const chart = echarts.init(document.getElementById("utilization"));
+                        let options = {
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: { show: true },
+                                    dataView: { show: true, readOnly: false },
+                                    magicType: { type: ['line', 'bar'] },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true },
+                                },
+                            },
+                            legend: {
+                                data: [],
+                                top: "bottom"
+                            },
+                            tooltip: {
+                                trigger: "axis"
+                            },
+                            xAxis: {
+                                type: "category",
+                                data: [] // Initialize with empty data
+                            },
+                            yAxis: [
+                                {
+                                    type: "value",
+                                    name: "Utilization in Hour",
+                                },
+                            ],
+                            series: []
+                        };
+
+                        function updateChart(regionData) {
+                            const months = regionData.map(entry => entry.month);
+                            const activeData = regionData.map(entry => parseFloat(entry.active));
+                            console.log(months)
+                            console.log(activeData)
+
+                            options.series = [{
+                                name: "Utilization",
+                                type: "line",
+                                data: activeData,
+                                yAxisIndex: 0,
+                                itemStyle: {
+                                    color: '#2A93D5'
+                                },
+                                lineStyle: {
+                                    shadowColor: 'rgba(0,0,0,0.3)',
+                                    shadowBlur: 6,
+                                    shadowOffsetY: 8
+                                },
+                                label: {
+                                    show: true,
+                                    position: 'top',
+                                    formatter: '{c}'
+                                },
+                            }];
+                            options.legend.data = options.series.map(series => series.name);
+                            options.xAxis.data = months;
+                            chart.setOption(options);
+                        }
+                        
+                        updateChart({{ rax_data_util | safe }});
+                        console.log({{ rax_data_util | safe }})
+
+                        // Event listener for region filter clicks
+                        document.querySelectorAll('.region-filter').forEach(item => {
+                            item.addEventListener('click', function(event) {
+                                event.preventDefault();
+                                const region = this.getAttribute('data-region');
+                                console.log(region)
+                                // Fetch data for the selected region
+                                $.ajax({
+                                    url: "/mph/overall_rax_utilization_per_team/",
+                                    method: "GET",
+                                    data: {
+                                        "region": region
+                                    },
+                                    success: function(data) {
+                                        updateChart(data.rax_util_per_region);
+                                    },
+                                    error: function(error) {
+                                        console.error("Error fetching data:", error);
+                                    }
+                                });
+                            });
+                        });
+
+                    });
+              </script>
+                <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item" href="#">Today</a></li>
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">Attrition <span>| Monthly</span></h5>
+
+                <!-- Line Chart -->
+                <div id="attrition" style="min-height: 380px;" class="echart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+
+                    var data = [
+                    { month: 'Jan', APAC: 0, EMEA: 2, USCA: 1 },
+                    { month: 'Feb', APAC: 1, EMEA: 0, USCA: 9 },
+                    { month: 'Mar', APAC: 1, EMEA: 2, USCA: 8 },
+                    { month: 'Apr', APAC: 4, EMEA: 5, USCA: 10 },
+                    { month: 'May', APAC: 2, EMEA: 2, USCA: 7 },
+                    { month: 'Jun', APAC: 1, EMEA: 3, USCA: 3 },
+                    { month: 'Jul', APAC: 2, EMEA: 1, USCA: 13 },
+                    { month: 'Aug', APAC: 7, EMEA: 1, USCA: 11 },
+                    { month: 'Sep', APAC: 2, EMEA: 1, USCA: 11 },
+                    { month: 'Oct', APAC: 2, EMEA: 2, USCA: 5 },
+                    { month: 'Nov', APAC: 1, EMEA: 0, USCA: 6 },
+                    { month: 'Dec', APAC: 1, EMEA: 2, USCA: 4 },
+                ];
+
+                // Colors for each region
+                var colors = ['#125488', '#2A93D5', '#37CAEC'];
+
+                // Prepare data for ECharts
+                var xAxisData = data.map(item => item.month);
+                var seriesData = ['APAC', 'EMEA', 'USCA'].map((region, index) => ({
+                    name: region,
+                    type: 'bar',  // Change the type to 'bar'
+                    barGap: '0%',  // Adjust the gap between bars
+                    label: {
+                        show: true,
+                        position: 'top',
+                        // formatter: '{c}%',
+                    },
+                    emphasis: {
+                        focus: 'series',
+                    },
+                    itemStyle: {
+                        color: colors[index],
+                    },
+                    data: data.map(item => item[region]),
+                }));
+
+                // ECharts configuration
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow',
+                        },
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: { show: true },
+                            dataView: { show: true, readOnly: false },
+                            magicType: { type: ['line', 'bar'] },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    legend: {
+                        data: ['APAC', 'EMEA', 'USCA'],
+                        
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true,
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: xAxisData,
+                        
+                    },
+                    yAxis: {
+                        type: 'value',
+                        
+                        // min: 95,
+                        // max: 100,
+                    },
+                    series: seriesData,
+                };
+                      // Initialize ECharts instance
+                      var attrition = echarts.init(document.getElementById('attrition'));
+
+                      // Set the chart configuration
+                      attrition.setOption(option);
+  
+                    
+                  });
+                </script>
+                <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+
+        
+
+          </div>
+
+          <div class="col-lg-6">
+
+            <!-- <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item" href="#">Today</a></li>
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">Quality <span>| Monthly</span></h5>
+
+                
+                <div id="quality" style="min-height: 380px;" class="echart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                      var colors = ['#125488', '#2A93D5', '#37CAEC'];
+                      var overall_quality_metrics = {{ overall_quality_metrics|safe }};
+
+                      console.log(overall_quality_metrics);
+              
+                      // Prepare data for ECharts
+                      var xAxisData = overall_quality_metrics.map(item => item.month);
+                      var seriesData = ['APAC', 'EMEA', 'USCA'].map((region, index) => ({
+                          name: region,
+                          type: 'bar',
+                          barGap: '0%',
+                          label: {
+                              show: true,
+                              position: 'inside',
+                              rotate: 90,
+                              formatter: '{c}%',
+                          },
+                          emphasis: {
+                              focus: 'series',
+                          },
+                          itemStyle: {
+                              color: colors[index],
+                          },
+                          data: overall_quality_metrics.map(item => item[region]),
+                      }));
+              
+                      // Calculate and prepare data for the line graph (average percentage of the month)
+                      var overallPercentageData = {
+                          name: 'Overall',
+                          type: 'line',
+                          // smooth: true,
+                          data: overall_quality_metrics.map(item => ((item['APAC'] + item['EMEA'] + item['USCA']) / 3).toFixed(2)), // Calculate average and format to 2 decimal places
+                          itemStyle: {
+                              color: '#43b02a',
+                          },
+                          lineStyle: {
+                              // width: 3,
+                              shadowColor: 'rgba(0,0,0,0.3)',
+                              shadowBlur: 6,
+                              shadowOffsetY: 8
+                            },
+                          label: {
+                              show: true,
+                              formatter: '{c}%',
+                          },
+                      };
+              
+                      // ECharts configuration
+                      var option = {
+                          tooltip: {
+                              trigger: 'axis',
+                              axisPointer: {
+                                  type: 'shadow',
+                              },
+                          },
+                          toolbox: {
+                              show: true,
+                              feature: {
+                                  mark: { show: true },
+                                  dataView: { show: true, readOnly: false },
+                                  // magicType: { type: ['line', 'bar'] },
+                                  restore: { show: true },
+                                  saveAsImage: { show: true },
+                              },
+                          },
+                          legend: {
+                              data: ['APAC', 'EMEA', 'USCA', 'Overall'],
+                          },
+                          grid: {
+                              left: '3%',
+                              right: '4%',
+                              bottom: '3%',
+                              containLabel: true,
+                          },
+                          xAxis: {
+                              type: 'category',
+                              data: xAxisData,
+                          },
+                          yAxis: {
+                              type: 'value',
+                              min: 80,
+                              max: 100,
+                              axisLabel: {
+                                  formatter: '{value}%', // Format yAxis labels to display percentage symbol
+                              },
+                          },
+                          series: [...seriesData, overallPercentageData],
+                      };
+              
+                      // Initialize ECharts instance
+                      var quality = echarts.init(document.getElementById('quality'));
+              
+                      // Set the chart configuration
+                      quality.setOption(option);
+ 
+                  });
+              </script>
+              
+              
+           
+
+              </div>
+
+            </div> -->
+
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item" href="#">Today</a></li>
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">Quality <span>| Monthly</span></h5>
+
+                <!-- Line Chart -->
+                <div id="quality_accuracy" style="min-height: 380px;" class="echart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                      var colors = ['#125488', '#2A93D5', '#37CAEC'];
+                      var overall_quality_metrics = {{ overall_avg_accuracy_per_region|safe }};
+                      var overall_avg_percentage_per_month_accuracy = {{ overall_avg_percentage_per_month_accuracy|safe }};
+              
+                      // Convert overall_avg_percentage_per_month_accuracy values to numbers and format as needed
+                      var overallPercentagePerMonth = Object.values(overall_avg_percentage_per_month_accuracy).map(value => parseFloat(value));
+              
+                      var overallPercentageData = {
+                          name: 'Overall',
+                          type: 'line', // Use line chart for overall percentage
+                          symbolSize: 10,
+                          smooth: true,
+                          data: overallPercentagePerMonth,
+                          itemStyle: {
+                              color: '#43b02a', // Green color for overall percentage
+                          },
+                      };
+              
+                      // Prepare data for ECharts
+                      var xAxisData = Object.keys(overall_quality_metrics['APAC']); // Assuming all regions have the same months
+                      var seriesData = ['APAC', 'EMEA', 'USCA'].map((region, index) => ({
+                          name: region,
+                          type: 'bar',
+                          barGap: '0%',
+                          label: {
+                              show: true,
+                              position: 'inside',
+                              rotate: 90,
+                              formatter: '{c}%',
+                          },
+                          emphasis: {
+                              focus: 'series',
+                          },
+                          itemStyle: {
+                              color: colors[index],
+                          },
+                          data: Object.values(overall_quality_metrics[region]).map(accuracy => parseFloat(accuracy)),
+                      }));
+              
+                      // ECharts configuration
+                      var option = {
+                          tooltip: {
+                              trigger: 'axis',
+                              axisPointer: {
+                                  type: 'shadow',
+                              },
+                          },
+                          toolbox: {
+                              show: true,
+                              feature: {
+                                  mark: { show: true },
+                                  dataView: { show: true, readOnly: false },
+                                  restore: { show: true },
+                                  saveAsImage: { show: true },
+                              },
+                          },
+                          legend: {
+                              data: ['APAC', 'EMEA', 'USCA', 'Overall'],
+                          },
+                          grid: {
+                              left: '3%',
+                              right: '4%',
+                              bottom: '3%',
+                              containLabel: true,
+                          },
+                          xAxis: {
+                              type: 'category',
+                              data: xAxisData,
+                          },
+                          yAxis: {
+                              type: 'value',
+                              min: 80,
+                              max: 100,
+                              axisLabel: {
+                                  formatter: '{value}%', // Format yAxis labels to display percentage symbol
+                              },
+                          },
+                          series: [...seriesData, overallPercentageData],
+                      };
+              
+                      // Initialize ECharts instance
+                      var quality_accuracy = echarts.init(document.getElementById('quality_accuracy'));
+              
+                      // Set the chart configuration
+                      quality_accuracy.setOption(option);
+                  });
+              </script>
+            
+                <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+            
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                   <li><a class="dropdown-item" href="#">Top Management</a></li>
+                  <li><a class="dropdown-item" href="#">Local Management</a></li>
+                 
+                </ul>
+              </div>
+
+              <div class="card-body">
+                  <h5 class="card-title">Productivity <span>| Monthly</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="productivity" style="min-height: 356px" ; class="echart"></div>
+
+
+                  <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    // Get the productivity data from Django template context
+                    var prodperregiondata = {{ prod_rate_local_management_data | safe }};
+                    console.log(prodperregiondata);
+
+                    // Create a mapping of full month names to abbreviated names
+                    var monthMapping = {
+                      'january': 'Jan',
+                      'february': 'Feb',
+                      'march': 'Mar',
+                      'april': 'Apr',
+                      'may': 'May',
+                      'june': 'Jun',
+                      'july': 'Jul',
+                      'august': 'Aug',
+                      'september': 'Sep',
+                      'october': 'Oct',
+                      'november': 'Nov',
+                      'december': 'Dec'
+                    };
+
+                    var months = Object.values(monthMapping);
+                    var regions = ['APAC', 'EMEA', 'USCA']; // The regions to handle the 3 bars per month
+                    var colors = ['#125488', '#2A93D5', '#37CAEC']; // Color array for regions
+
+                    // Function to update the chart for each function in the data
+                    function updateProdRateRegionCharts(selectedFunction) {
+                      // Initialize data containers
+                      var targetProdRateData = {
+                        APAC: [],
+                        EMEA: [],
+                        USCA: []
+                      };
+                      var actualProdRateData = {
+                        APAC: [],
+                        EMEA: [],
+                        USCA: []
+                      };
+
+                      // Process each month and region to fill the data arrays
+                      months.forEach(month => {
+                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                        regions.forEach((region, index) => {
+                          var found = prodperregiondata.find(item => item.function === selectedFunction && item.lower_month === fullMonthName && item.region === region);
+
+                          // Push the avg_target_prod_rate_hour value or 0 if not found
+                          targetProdRateData[region].push(found ? found.avg_target_prod_rate_hour : 0);
+                          // Push the avg_actual_prod_rate_hr value or 0 if not found
+                          actualProdRateData[region].push(found ? found.avg_actual_prod_rate_hr : 0);
+                        });
+                      });
+
+                      // Initialize the chart
+                      var myChart_prod_region = echarts.init(document.getElementById('productivity'));
+
+                      // Specify chart configuration
+                      var options = {
+                        //title: {
+                        //  text: selectedFunction,
+                        //  left: 'center',
+                        //  textStyle: {
+                        //    fontSize: 12
+                        //  }
+                        //},
+                        toolbox: {
+                          show: true,
+                          feature: {
+                            dataView: { readOnly: false },
+                            saveAsImage: {}
+                          }
+                        },
+                        barGap: '0%',
+                        tooltip: {
+                          trigger: 'axis',
+                          axisPointer: {
+                            type: 'shadow'
+                          }
+                        },
+                        legend: {
+                          data: [
+                            'Target - APAC', 'Actual - APAC',
+                            'Target - EMEA', 'Actual - EMEA',
+                            'Target - USCA', 'Actual - USCA'
+                            ],
+
+                            bottom: '1%',
+                            left: '2%',    // Adjust the left margin for the legend
+                            right: '2%',   // Adjust the right margin for the legend
+                            //itemGap: 10,
+                            width: '100%',
+                            textStyle: {
+                                fontSize: 11  // Reduce the font size of the legend text
+                            }
+                        },
+                        xAxis: {
+                          type: 'category',
+                          data: months
+                        },
+                        yAxis: {
+                          type: 'value',
+                          splitLine: {
+                            show: true
+                          }
+                          },
+                          grid: {
+                              left: '2%',    // Reduce the left margin
+                              right: '2%',   // Reduce the right margin
+                              bottom: '13%',
+                              top: '10%',
+                              containLabel: true
+                          },
+                        series: []
+                      };
+
+                      // Add series data for each region
+                      regions.forEach((region, index) => {
+                        options.series.push(
+                          {
+                            name: `Target - ${region}`,
+                            type: 'line',
+                            data: targetProdRateData[region],
+                            itemStyle: { color: colors[index] }, // Use the color from the array
+                            lineStyle: { type: 'dashed' },
+                            label: { show: true, position: 'bottom', formatter: '{c}', color: colors[index] },
+                            smooth: true
+                          },
+                          {
+                            name: `Actual - ${region}`,
+                            type: 'bar',
+                            data: actualProdRateData[region],
+                            itemStyle: { color: colors[index] }, // Use the color from the array
+                            label: {
+                              show: true,
+                              position: 'insideBottom',
+                              formatter: function (params) {
+                                return `${params.value}`;
+                              },
+                              color: '#fff',
+                              distance: 15,
+                              align: 'left',
+                              verticalAlign: 'middle',
+                              rotate: 90
+                            }
+                          }
+                        );
+                      });
+
+                      // Set the options for the chart
+                      myChart_prod_region.setOption(options);
+                    }
+
+                    // Create a dropdown to select the function
+                    var functionSelect = document.createElement('select');
+                    functionSelect.id = 'functionSelect';
+
+                    // Add options for functions
+                     var functions = {{ prod_unique_functions | safe }} // List of functions to select from
+                     functions.forEach(func => {
+                      var option = document.createElement('option');
+                      option.value = func;
+                      option.textContent = func;
+                      functionSelect.appendChild(option);
+                     });
+
+                      functionSelect.value = 'C&B';
+                      // Style the dropdown
+                      functionSelect.style.fontSize = '12px'; // Set font size for the dropdown
+                      functionSelect.style.border = 'none'; // Make the dropdown borderless
+                      /*functionSelect.style.padding = '5px'; // Add some padding for better aesthetics*/
+                      functionSelect.style.backgroundColor = 'transparent'; // Set background to transparent
+
+
+                      // Add an event listener to call the function when the selection changes
+                      functionSelect.addEventListener('change', (event) => {
+                          var selectedFunction = event.target.value;
+                          updateProdRateRegionCharts(selectedFunction);
+                      });
+
+                      // Add the dropdown to the DOM in the title area
+                      var titleContainer = document.createElement('div');
+                      titleContainer.style.textAlign = 'center'; // Center align the title
+                      titleContainer.appendChild(functionSelect);
+
+                      // Add title and dropdown to your chart container
+                      var productivityContainer = document.getElementById('productivity');
+                      productivityContainer.parentNode.insertBefore(titleContainer, productivityContainer);
+
+
+                    // Call the function to load charts for the default function
+                    updateProdRateRegionCharts('C&B');
+                  });
+                  </script>
+
+                  <style>
+                      #functionSelect {
+                          border: none;
+                          background-color: transparent;
+                          font-size: 12px;
+                      }
+
+                          #functionSelect:focus {
+                              outline: none; /* Removes the focus outline */
+                              border: none; /* Keeps the dropdown borderless */
+                          }
+                  </style>
+
+
+
+
+                  <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+
+
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+    
+                  <!-- <li><a class="dropdown-item" href="#">Today</a></li> -->
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+    
+              <div class="card-body pb-0">
+                <h5 class="card-title">Headcount </h5>
+    
+                <div id="department_chart" style="min-height: 400px;" class="echart"></div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                  var department_chart = echarts.init(document.getElementById('department_chart'));
+    
+                  // Set pie chart options
+                  var option = {
+                    
+                    tooltip: {
+                      trigger: 'item',
+                      formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                      top: '2%',
+                      left: 'center',
+                      data: [
+                        {% for region in regions_count %}
+                          '{{ region.region }}',
+                        {% endfor %}
+                      ]
+                    },
+                    toolbox: {
+                      show: true,
+                      feature: {
+                        mark: { show: true },
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                      }
+                    },
+                    series: [
+                      {
+                        name: 'Department',
+                        type: 'pie',
+                        // radius: ['35%', '65%'],
+                        radius: ['35%', '65%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                          show: false,
+                          position: 'center'
+                        },
+                        data: [
+                          {% for region in regions_count %}
+                            {
+                              value: {{ region.count }}, 
+                            name: '{{ region.region }}',
+                            itemStyle: {
+                              normal: {
+                                color: {% if region.region == 'APAC' %}'#125488'{% elif region.region == 'EMEA' %}'#2A93D5'{% elif region.region == 'USCA' %}'#37CAEC'{% elif region.region == 'USCA - Sef' %}'#37CAEC'{% endif %}
+                              }
+                            }
+                          },
+    
+                            
+                        
+                          {% endfor %}
+                        ],
+                        itemStyle: {
+                          emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                          },
+                          normal: {
+                            label: {
+                              show: true,
+                              formatter: '{b}: {c} '
+                            }
+                          }
+                        },
+                        emphasis: {
+                          label: {
+                            show: true,
+                            fontSize: '12',
+                            fontWeight: 'bold'
+                          }
+                        },
+                      }
+                    ]
+                  };
+    
+                  // Set options and render chart
+                  department_chart.setOption(option);
+                });
+                 
+                </script>
+    
+              </div>
+            </div><!-- End Budget Report -->
+
+          </div>
+
+          <div class="col-lg-6 mx-auto">
+
+            <div class="card">
+
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item" href="#">Today</a></li>
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">Attendance Rate <span>| Monthly</span></h5>
+
+                <!-- Line Chart -->
+                <div id="monthly_attendance" style="min-height: 380px;" class="echart"></div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                        var dataFromViews = {{ overall_percentage_monthly|safe }};
+                        var attendanceRateData = [];
+                
+                        console.log(dataFromViews);
+                
+                        var regionNames = [...new Set(dataFromViews.map(item => item.region))];
+                        var colors = ['#125488', '#2A93D5', '#37CAEC'];
+                        var uniqueMonths = [...new Set(dataFromViews.map(item => item.month))];
+                        
+                        // Dynamically generate month names based on the unique months in the data
+                        var monthNames = uniqueMonths.map(month => month.substring(0, 3));
+                
+                        // Create an array to hold series objects
+                        var seriesData = [];
+                
+                        // Loop through each region and populate the seriesData array
+                        regionNames.forEach((regionName, index) => {
+                            var series = {
+                                name: regionName,
+                                type: 'bar',
+                                barGap: '0%',
+                                data: [],
+                                label: {
+                                    show: true,
+                                    position: 'inside',
+                                    rotate: 90,
+                                    formatter: '{c}%',
+                                },
+                                itemStyle: {
+                                    color: colors[index % colors.length]
+                                }
+                            };
+                
+                            // Populate the series data based on the region
+                            for (var i = 0; i < uniqueMonths.length; i++) {
+                                var found = false;
+                
+                                // Find the data for the current month and region
+                                for (var j = 0; j < dataFromViews.length; j++) {
+                                    if (dataFromViews[j].month === uniqueMonths[i] && dataFromViews[j].region === regionName) {
+                                        series.data.push((dataFromViews[j].percentage * 100).toFixed(2));
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                
+                                // If data doesn't exist for the current month and region, assign zero
+                                if (!found) {
+                                    series.data.push(0);
+                                }
+                            }
+                
+                            seriesData.push(series);
+                        });
+                
+                        // Calculate Overall data
+                        var overallSeries = {
+                            name: 'Overall',
+                            type: 'line',
+                            smooth: true,
+                            data: [],
+                            itemStyle: {
+                                color: '#43b02a'
+                            },
+                            lineStyle: {
+                              // width: 3,
+                              shadowColor: 'rgba(0,0,0,0.3)',
+                              shadowBlur: 6,
+                              shadowOffsetY: 8
+                            },
+                            label: {
+                                show: true,
+                                formatter: '{c}%',
+                            },
+                        };
+                
+                        for (var i = 0; i < uniqueMonths.length; i++) {
+                            var total = 0;
+                
+                            // Sum the values for each region
+                            for (var j = 0; j < seriesData.length; j++) {
+                                total += parseFloat(seriesData[j].data[i]);
+                            }
+                
+                            // Calculate the average and push to the Overall series
+                            overallSeries.data.push((total / regionNames.length).toFixed(2));
+                        }
+                
+                        // Add the Overall series to the existing seriesData
+                        seriesData.push(overallSeries);
+                
+                        // Initialize ECharts instance
+                        var monthly_attendance = echarts.init(document.getElementById('monthly_attendance'));
+                
+                        // Set ECharts options
+                        var options = {
+                          // grid: {
+                          //       left: '20%',  
+                          //       right: '20%',
+                          //       containLabel: true
+                          //   },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'shadow'
+                                },
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    dataView: { readOnly: false },
+                                    saveAsImage: {}
+                                }
+                            },
+                            legend: {
+                                data: [...regionNames, 'Overall']
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: monthNames,
+                                // boundaryGap: false
+                            },
+                            yAxis: {
+                                type: 'value',
+                                min: 80,
+                                max: 100,
+                                axisLabel: {
+                                    formatter: '{value}%'
+                                },
+                            },
+                            series: seriesData
+                        };
+                
+                        // Set the options and render the chart
+                        monthly_attendance.setOption(options);
+                    });
+                </script>
+                <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+         <!-- Left side columns -->
+         
+
+         
+
+       
+      <!-- </div> -->
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+ <!-- <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script> -->
+ 
+ <!-- Template Main JS File -->
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script>
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script>
+ <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script>
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+
+ <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+
+ 
+
+ 
+ 
+
+</body>
+
+</html>

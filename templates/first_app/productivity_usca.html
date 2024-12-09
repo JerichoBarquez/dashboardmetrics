@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+{% load humanize %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+  <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+ <!-- Vendor CSS Files -->
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+  
+
+  <style>
+   
+
+
+
+    .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 12px;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+    .styled-table thead tr {
+        background-color: #00A3E0;
+        color: #ffffff;
+        text-align: left;
+    }
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #00A3E0;
+    }
+
+    .styled-table-2 tbody tr:last-of-type {
+        border-bottom: 2px solid #2eca6a;
+    }
+
+    
+    /* .styled-table tbody tr.active-row {
+        font-weight: bold;
+        color: #00A3E0;
+        background-color: #f0f0f0;
+    } */
+
+    .styled-table tbody tr.active-row td {
+    font-weight: bold;
+    color: #43b02a;
+    background-color: #f0f0f0;
+}
+
+    .tableBody_award tbody tr:last-of-type {
+      border-bottom: 2px solid #9e9e9e81;
+  }
+
+  .highlighted-row {
+    /* background-color: #2eca6a27;  */
+    color: #00A3E0;
+    font-weight: bold;
+  }
+
+  .scrollable-dropdown {
+  max-height: 300px; /* Adjust the maximum height as needed */
+  overflow-y: auto;
+}
+
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'first_app:index' %}" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        
+
+        
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static "img/profile.jpeg" %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Jericho</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Jericho Barquez</h6>
+              <span>RPS Team</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+      <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+                  <i class="bi bi-pin-map-fill"></i>
+                  <span>Manila Production Hub</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:performance' %}">
+                  <i class="bi bi-grid"></i>
+                  <span>Performance</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link" data-bs-target="#productivy-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="productivy-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='top_management' %}">
+                          <i class="bi bi-circle"></i><span>TM REVIEW</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='usca' %}" class="active">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <!--<li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-bar-chart-line"></i><span>C&B Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="quality-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="{% url 'first_app:quality' region='apac' %}">
+                    <i class="bi bi-circle"></i><span>APAC</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'first_app:quality' region='emea' %}">
+                    <i class="bi bi-circle"></i><span>EMEA</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'first_app:quality' region='usca' %}">
+                    <i class="bi bi-circle"></i><span>USCA</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>-->
+          <!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#quality-report-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-truck"></i><span>Service Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <!--<li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-gear"></i><span>Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="{% url 'first_app:utilization' region='apac' %}">
+                    <i class="bi bi-circle"></i><span>APAC</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'first_app:utilization' region='emea' %}">
+                    <i class="bi bi-circle"></i><span>EMEA</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'first_app:utilization' region='usca' %}">
+                    <i class="bi bi-circle"></i><span>USCA</span>
+                </a>
+            </li>
+        </ul>
+    </li>-->
+          <!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-down"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="users-profile.html">
+                  <i class="bi bi-person"></i>
+                  <span>Profile</span>
+              </a>
+          </li><!-- End Profile Page Nav -->
+
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:pages_contact' %}">
+                  <i class="bi bi-envelope"></i>
+                  <span>Contact</span>
+              </a>
+          </li><!-- End Contact Page Nav -->
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'admin:index' %}" target="_blank">
+                  <i class="bi bi-gear"></i>
+                  <span>Administrator</span>
+              </a>
+          </li><!-- End Login Page Nav -->
+
+      </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>USCA</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'first_app:index' %}"><i class="bi bi-house-door"></i></a></li>
+          <li class="breadcrumb-item">Productivity</li>
+          <li class="breadcrumb-item active">Metrics</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <!-- <div class="row"> -->
+        <!-- Left side columns -->
+        <!-- Reports -->
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+
+                            {% for function in volFunctions %}
+                            <li>
+                                <a class="dropdown-item actual-vol-filter" href="#" data-function="{{ function }}">{{ function }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Actual Volume of Tasks Processed<span> | Year to Date</span></h5>
+
+                        <!-- Line Chart -->
+                        <div id="actual_vol_task_chart" style="min-height: 380px;" class="echart"></div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                // Get the utilization data from Django template context
+                                var actual_volume = {{ dataVolume | safe }};
+
+                                // Create a mapping of full month names to abbreviated names
+                                var monthMapping = {
+                                    'january': 'Jan',
+                                    'february': 'Feb',
+                                    'march': 'Mar',
+                                    'april': 'Apr',
+                                    'may': 'May',
+                                    'june': 'Jun',
+                                    'july': 'Jul',
+                                    'august': 'Aug',
+                                    'september': 'Sep',
+                                    'october': 'Oct',
+                                    'november': 'Nov',
+                                    'december': 'Dec'
+                                };
+
+                                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                                // Function to update the chart based on selected function
+                                function updateChart(selectedFunction) {
+                                    var yAxisData = [];
+                                    var fteData = [];
+
+                                    months.forEach(month => {
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                        var found = actual_volume.find(item => item.function === selectedFunction && item.lower_month === fullMonthName);
+
+                                        // Push the total_task_processed value or 0 if not found
+                                        yAxisData.push(found ? found.total_task_processed : 0);
+                                        // Push the total_fte_allocation value or 0 if not found
+                                        fteData.push(found ? found.total_fte_allocation : 0);
+                                    });
+
+                                    // Initialize or update ECharts instance
+                                    var myChart = echarts.init(document.getElementById('actual_vol_task_chart'));
+
+                                    // Specify chart configuration
+                                    var options = {
+                                        title: {
+                                            text: selectedFunction,
+                                            left: 'center',
+                                            textStyle: {
+                                                fontSize: 12
+                                            }
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow'
+                                            }
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                mark: { show: true },
+                                                dataView: { show: true, readOnly: false },
+                                                //magicType: { type: ['line', 'bar'] },
+                                                //restore: { show: true },
+                                                saveAsImage: { show: true }
+                                            }
+                                        },
+                                        legend: {
+                                            data: ['Volume/Task Processed', 'Total FTE Allocation'],
+                                            bottom: '1%'
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            data: months
+                                        },
+                                        yAxis: [
+                                            {
+                                                type: 'value',
+                                                name: 'Millions',
+                                                nameTextStyle: {
+                                                    align: 'center'
+                                                },
+                                                nameLocation: 'middle',
+                                                nameGap: 50,
+                                                splitLine: {
+                                                    show: true
+                                                }
+                                            },
+                                            {
+                                                type: 'value',
+                                                position: 'right',
+                                                splitLine: {
+                                                    show: false
+                                                }
+                                            }
+                                        ],
+                                        series: [
+                                            {
+                                                name: 'Volume/Task Processed',
+                                                type: 'bar',
+                                                data: yAxisData,
+                                                itemStyle: {
+                                                    color: '#2A93D5'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'inside',
+                                                    formatter: '{c}',
+                                                    color: '#fff'
+                                                },
+                                                yAxisIndex: 0
+                                            },
+                                            {
+                                                name: 'Total FTE Allocation',
+                                                type: 'line',
+                                                symbolSize: 10,
+                                                data: fteData,
+                                                itemStyle: {
+                                                    color: '#43B02A'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'top',
+                                                    formatter: '{c}',
+                                                    color: '#43B02A'
+                                                },
+                                                smooth: true,
+                                                yAxisIndex: 1
+                                            }
+                                        ]
+                                    };
+
+                                    // Set chart configuration and render
+                                    myChart.setOption(options);
+                                }
+
+                                // Initial chart load for "C&B"
+                                updateChart("Overall");
+
+                                // Event listener for dropdown selection
+                                document.querySelectorAll('.actual-vol-filter').forEach(item => {
+                                    item.addEventListener('click', function (event) {
+                                        event.preventDefault();
+                                        var selectedFunction = this.getAttribute('data-function');
+                                        updateChart(selectedFunction);
+                                    });
+                                });
+                            });
+                        </script>
+                        <!-- End Line Chart -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+
+                            {% for volUniqFunc in volUniqFunction %}
+                            <li>
+                                <a class="dropdown-item actual-vol-filter-function" href="#" data-vol-uni-func="{{ volUniqFunc }}">{{ volUniqFunc }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Actual Processed Volumes per Task<span> | Year to Date</span></h5>
+
+                        <!-- Line Chart -->
+                        <div id="actual_pro_vols_chart" style="min-height: 346px;" class="echart"></div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                // Get the utilization data from Django template context
+                                var actual_volume_tasks = {{ dataVolTasks | safe }}; // Data for chart update
+                                var functions = {{ volTasks | safe }}; // List of unique tasks to select from
+                                var selectedFunction = 'C&B'; // Default function
+
+                                var monthMapping = {
+                                    'january': 'Jan',
+                                    'february': 'Feb',
+                                    'march': 'Mar',
+                                    'april': 'Apr',
+                                    'may': 'May',
+                                    'june': 'Jun',
+                                    'july': 'Jul',
+                                    'august': 'Aug',
+                                    'september': 'Sep',
+                                    'october': 'Oct',
+                                    'november': 'Nov',
+                                    'december': 'Dec'
+                                };
+
+                                // Create the task dropdown element dynamically
+                                var taskSelect = document.createElement('select');
+                                taskSelect.id = 'taskSelect';
+
+                                // Style the dropdown
+                                taskSelect.style.fontSize = '12px';
+                                taskSelect.style.border = 'none';
+                                taskSelect.style.backgroundColor = 'transparent';
+                                taskSelect.style.marginLeft = '10px';
+
+                                // Add an event listener for changes to the task select
+                                taskSelect.addEventListener('change', (event) => {
+                                    var selectedTask = event.target.value;
+                                    updateChartVol(selectedTask, selectedFunction); // Pass selectedFunction as well
+                                });
+
+                                // Add the dropdown to the DOM directly
+                                var chartContainer = document.getElementById('actual_pro_vols_chart');
+                                var titleContainer = document.createElement('div');
+                                titleContainer.style.textAlign = 'center'; // Center align the title
+                                titleContainer.style.marginBottom = '10px'; // Add some spacing to improve appearance
+                                titleContainer.appendChild(taskSelect);
+
+                                // Insert title and dropdown above the chart container
+                                chartContainer.parentNode.insertBefore(titleContainer, chartContainer);
+
+                                // Function to update the tasks dropdown based on the selected function
+                                function updateTaskDropdown() {
+                                    taskSelect.innerHTML = ''; // Clear existing tasks
+
+                                    var filteredTasks = actual_volume_tasks.filter(item => item.function === selectedFunction);
+                                    var uniqueTasks = [...new Set(filteredTasks.map(item => item.tasks))];
+
+                                    // Add options for each unique task
+                                    uniqueTasks.forEach(task => {
+                                        var option = document.createElement('option');
+                                        option.value = task;
+                                        option.textContent = task;
+                                        taskSelect.appendChild(option);
+                                    });
+
+                                    if (uniqueTasks.length > 0) {
+                                        taskSelect.value = uniqueTasks[0]; // Select the first task by default
+                                    }
+
+                                    // Load the chart for the default task
+                                    updateChartVol(taskSelect.value, selectedFunction);
+                                }
+
+                                // Function to update the chart based on the selected task and function
+                                function updateChartVol(selectedTask, selectedFunction) {
+                                    var yAxisData = [];
+                                    var fteData = [];
+                                    var months = [];
+
+                                    actual_volume_tasks.forEach(item => {
+                                        if (item.tasks === selectedTask && item.function === selectedFunction) {
+                                            var monthName = monthMapping[item.lower_month];
+                                            if (months.indexOf(monthName) === -1) {
+                                                months.push(monthName);
+                                                yAxisData.push(item.total_fte_allocation);
+                                                fteData.push(Math.floor(item.avg_fte_allocation * 10) / 10);
+                                            }
+                                        }
+                                    });
+
+                                    // Sort months based on the order in the monthMapping object
+                                    months.sort((a, b) => {
+                                        return Object.keys(monthMapping).indexOf(Object.keys(monthMapping).find(key => monthMapping[key] === a.toLowerCase())) -
+                                            Object.keys(monthMapping).indexOf(Object.keys(monthMapping).find(key => monthMapping[key] === b.toLowerCase()));
+                                    });
+
+                                    // Initialize or update ECharts instance
+                                    var myChartVol = echarts.init(document.getElementById('actual_pro_vols_chart'));
+
+                                    // Specify chart configuration
+                                    var options = {
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow'
+                                            }
+                                        },
+                                        legend: {
+                                            data: ['Actual Processed Volumes', 'FTE Allocation'],
+                                            bottom: '1%'
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                mark: { show: true },
+                                                dataView: { show: true, readOnly: false },
+                                                //magicType: { type: ['line', 'bar'] },
+                                                //restore: { show: true },
+                                                saveAsImage: { show: true }
+                                            }
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            data: months
+                                        },
+                                        yAxis: [
+                                            {
+                                                type: 'value',
+                                                name: 'Millions',
+                                                nameTextStyle: {
+                                                    align: 'center'
+                                                },
+                                                nameLocation: 'middle',
+                                                nameGap: 50,
+                                                splitLine: {
+                                                    show: true
+                                                }
+                                            },
+                                            {
+                                                type: 'value',
+                                                position: 'right',
+                                                splitLine: {
+                                                    show: false
+                                                }
+                                            }
+                                        ],
+                                        grid: {
+                                            //left: '2%',    // Reduce the left margin
+                                            //right: '2%',   // Reduce the right margin
+                                            bottom: '13%',
+                                            top: '10%',
+                                            containLabel: true
+                                        },
+
+                                        series: [
+                                            {
+                                                name: 'Actual Processed Volumes',
+                                                type: 'bar',
+                                                data: yAxisData,
+                                                itemStyle: {
+                                                    color: '#2A93D5'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'inside',
+                                                    formatter: '{c}',
+                                                    color: '#fff'
+                                                },
+                                                yAxisIndex: 0
+                                            },
+                                            {
+                                                name: 'FTE Allocation',
+                                                type: 'line',
+                                                symbolSize: 10,
+                                                data: fteData,
+                                                itemStyle: {
+                                                    color: '#43B02A'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'top',
+                                                    formatter: '{c}',
+                                                    color: '#43B02A'
+                                                },
+                                                smooth: true,
+                                                yAxisIndex: 1
+                                            }
+                                        ]
+                                    };
+
+                                    // Set chart configuration and render
+                                    myChartVol.setOption(options);
+                                }
+
+                                // Initial dropdown load and chart for default task
+                                updateTaskDropdown();
+
+                                // Add event listeners for function filter
+                                document.querySelectorAll('.actual-vol-filter-function').forEach(function (item) {
+                                    item.addEventListener('click', (event) => {
+                                        event.preventDefault();
+                                        selectedFunction = event.currentTarget.getAttribute('data-vol-uni-func'); // Get the selected function
+                                        updateTaskDropdown(); // Update the task dropdown based on the new function
+                                    });
+                                });
+                            });
+                        </script>
+
+                        <style>
+                            /* Style for the unique tasks dropdown */
+                            #taskSelect {
+                                border: none;
+                                background-color: transparent;
+                                font-size: 12px;
+                            }
+
+                                #taskSelect:focus {
+                                    outline: none; /* Removes the focus outline */
+                                    border: none; /* Keeps the dropdown borderless */
+                                }
+                        </style>
+
+
+
+
+
+                        <!-- End Line Chart -->
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+            <div class="col-6">
+                <div class="card">
+
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+
+                            {% for funct in prodFunctions %}
+                            <li>
+
+                                <a class="dropdown-item actual-prod-filter-function" href="#" data-function="{{ funct }}">{{ funct }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Productivity Rate Comparison<span> | Year to Date</span></h5>
+
+                        <!-- Line Chart -->
+                        <div id="prod_rate_comp_chart" style="min-height: 380px;" class="echart"></div>
+
+                        <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                        // Get the productivity data from Django template context
+                        var productivityData = {{ prodData | safe }};
+
+                        // Create a mapping of full month names to abbreviated names
+                        var monthMapping = {
+                            'january': 'Jan',
+                            'february': 'Feb',
+                            'march': 'Mar',
+                            'april': 'Apr',
+                            'may': 'May',
+                            'june': 'Jun',
+                            'july': 'Jul',
+                            'august': 'Aug',
+                            'september': 'Sep',
+                            'october': 'Oct',
+                            'november': 'Nov',
+                            'december': 'Dec'
+                        };
+
+                        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                        // Function to update the chart based on selected function
+                        function updateProdRateChart(selectedFunction) {
+                                console.log(selectedFunction)
+                                var targetProdRateData = [];
+                                var actualProdRateData = [];
+
+                                months.forEach(month => {
+                                    var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                    var found = productivityData.find(item => item.function === selectedFunction && item.lower_month === fullMonthName);
+
+                                    // Push the avg_target_prod_rate_hour value or 0 if not found
+                                    targetProdRateData.push(found ? found.avg_target_prod_rate_hour : 0);
+                                    // Push the avg_actual_prod_rate_hr value or 0 if not found
+                                    actualProdRateData.push(found ? found.avg_actual_prod_rate_hr : 0);
+                                });
+
+                                // Initialize or update ECharts instance
+                                var myChart_prod = echarts.init(document.getElementById('prod_rate_comp_chart'));
+
+                                // Specify chart configuration
+                                var options = {
+                                    title: {
+                                        text: selectedFunction,
+                                        left: 'center',
+                                        textStyle: {
+                                            fontSize: 12
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {
+                                            type: 'line'
+                                        }
+                                    },
+                                    toolbox: {
+                                        show: true,
+                                        feature: {
+                                            mark: { show: true },
+                                            dataView: { show: true, readOnly: false },
+                                            //magicType: { type: ['line', 'bar'] },
+                                            //restore: { show: true },
+                                            saveAsImage: { show: true }
+                                        }
+                                    },
+                                    legend: {
+                                        data: ['Target Productivity', 'Actual Productivity'],
+                                        bottom: '1%'
+                                    },
+                                    xAxis: {
+                                        type: 'category',
+                                        data: months
+                                    },
+                                    yAxis: {
+                                        type: 'value',
+                                        //name: 'Prod Rate/Hour',
+                                        splitLine: {
+                                            show: true
+                                        }
+                                    },
+                                    series: [
+                                        {
+                                            name: 'Target Productivity',
+                                            type: 'line',
+                                            data: targetProdRateData,
+                                            itemStyle: {
+                                                color: '#43B02A'
+                                            },
+                                            lineStyle: {
+                                                type: 'dashed' // Dashed line for target prod rate
+                                            },
+                                            label: {
+                                                show: true,
+                                                position: 'bottom',
+                                                formatter: '{c}',
+                                                color: '#43B02A'
+                                            },
+                                            smooth: true
+                                        },
+                                        {
+                                            name: 'Actual Productivity',
+                                            type: 'line',
+                                            data: actualProdRateData,
+                                            itemStyle: {
+                                                color: '#2A93D5'
+                                            },
+                                            lineStyle: {
+                                                type: 'solid' // Solid line for actual prod rate
+                                            },
+                                            label: {
+                                                show: true,
+                                                position: 'top',
+                                                formatter: '{c}',
+                                                color: '#2A93D5'
+                                            },
+                                            //smooth: true
+                                        }
+                                    ]
+                                };
+
+                                // Set chart configuration and render
+                                myChart_prod.setOption(options);
+                            }
+
+                            // Initial chart load for "C&B"
+                            updateProdRateChart("Overall");
+
+                            // Event listener for dropdown selection
+                            document.querySelectorAll('.actual-prod-filter-function').forEach(item => {
+                                item.addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    var selectedFunction = this.getAttribute('data-function');
+                                    console.log(selectedFunction);
+                                    updateProdRateChart(selectedFunction);
+                                });
+                            });
+                        });
+                        </script>
+
+
+                        <!-- End Line Chart -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+
+                            <!-- Dynamically generate dropdown items based on prodTaskFunction -->
+                            {% for task in prodTaskFunction %}
+                            <li>
+                                <a class="dropdown-item actual-prod-filter-task" href="#" data-prod-task="{{ task }}">{{ task }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Actual Productivity Rate per Task<span> | Year to Date</span></h5>
+
+                        <!-- Line Chart -->
+                        <div id="prod_rate_per_task_chart" style="min-height: 346px;" class="echart"></div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                // Get the productivity data for tasks from Django template context
+                                var apacDataProdTasksData = {{ dataProdTasks | safe }};
+
+
+                                // Month mapping
+                                var monthMapping = {
+                                    'january': 'Jan',
+                                    'february': 'Feb',
+                                    'march': 'Mar',
+                                    'april': 'Apr',
+                                    'may': 'May',
+                                    'june': 'Jun',
+                                    'july': 'Jul',
+                                    'august': 'Aug',
+                                    'september': 'Sep',
+                                    'october': 'Oct',
+                                    'november': 'Nov',
+                                    'december': 'Dec'
+                                };
+
+                                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                                var selectedFunction = 'C&B'; // Updated default function
+
+                                // Create the task dropdown element dynamically
+                                var taskSelect = document.createElement('select');
+                                taskSelect.id = 'taskSelect';
+                                taskSelect.style.fontSize = '12px';
+                                taskSelect.style.border = 'none';
+                                taskSelect.style.backgroundColor = 'transparent';
+                                taskSelect.style.marginLeft = '10px';
+
+                                // Add an event listener for changes to the task select
+                                taskSelect.addEventListener('change', (event) => {
+                                    var selectedTask = event.target.value;
+                                    //console.log(selectedTask)
+                                    updateProdRateChart(selectedTask); // Pass selected task
+                                });
+
+                                // Add the dropdown to the DOM
+                                var chartContainer = document.getElementById('prod_rate_per_task_chart');
+                                var titleContainer = document.createElement('div');
+                                titleContainer.style.textAlign = 'center';
+                                titleContainer.style.marginBottom = '10px';
+                                titleContainer.appendChild(taskSelect);
+
+                                // Insert title and dropdown above the chart container
+                                chartContainer.parentNode.insertBefore(titleContainer, chartContainer);
+
+                                // Function to update the tasks dropdown based on the selected function
+                                function updateTaskDropdown() {
+                                    taskSelect.innerHTML = ''; // Clear existing tasks
+
+                                    var uniqueTasks = [...new Set(apacDataProdTasksData.filter(item => item.function === selectedFunction).map(item => item.tasks))];
+
+                                    // Add options for each unique task
+                                    uniqueTasks.forEach(task => {
+                                        var option = document.createElement('option');
+                                        option.value = task;
+                                        option.textContent = task;
+                                        taskSelect.appendChild(option);
+                                    });
+
+                                    if (uniqueTasks.length > 0) {
+                                        taskSelect.value = uniqueTasks[0]; // Select the first task by default
+                                    }
+
+                                    // Load the chart for the default task
+                                    updateProdRateChart(taskSelect.value);
+                                }
+
+                                // Function to update the radar chart based on the selected task
+                                function updateProdRateChart(selectedTask) {
+                                    //console.log(selectedTask)
+                                    var targetProdRateData = [];
+                                    var actualProdRateData = [];
+
+                                    // Filter available months based on the selected task
+                                    var availableMonths = months.filter(month => {
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                        return apacDataProdTasksData.some(item => item.tasks === selectedTask && item.lower_month === fullMonthName && item.function === selectedFunction);
+                                    });
+
+                                    // Update the data arrays for the chart
+                                    availableMonths.forEach(month => {
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                        var found = apacDataProdTasksData.find(item => item.tasks === selectedTask && item.lower_month === fullMonthName && item.function === selectedFunction);
+
+                                        targetProdRateData.push(found ? found.avg_target_prod_rate_hour || 0 : 0);
+                                        actualProdRateData.push(found ? found.avg_actual_prod_rate_hr || 0 : 0);
+                                    });
+
+                                    // Prevent rendering if there's no data
+                                    if (targetProdRateData.length === 0 || actualProdRateData.length === 0) {
+                                        console.error("No data available for the selected task: ", selectedTask);
+                                        return; // Exit the function early
+                                    }
+
+                                    // Initialize the chart only once
+                                    var myChart_prod = echarts.init(document.getElementById('prod_rate_per_task_chart'));
+
+                                    // Specify the radar chart configuration
+                                    var options = {
+                                        tooltip: {
+                                            trigger: 'item'
+                                        },
+                                        legend: {
+                                            data: ['Target Productivity', 'Actual Productivity'],
+                                            bottom: '1%',
+                                            top: '80%', // Adjust the vertical position
+                                            right: '0%', // Adjust the horizontal position
+                                            orient: 'vertical',
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                mark: { show: true },
+                                                dataView: { show: true, readOnly: false },
+                                                //magicType: { type: ['line', 'bar'] },
+                                                //restore: { show: true },
+                                                saveAsImage: { show: true }
+                                            }
+                                        },
+                                        radar: {
+                                            radius: '85%',
+                                            indicator: availableMonths.map(month => ({
+                                                name: month,
+                                                max: Math.max(...targetProdRateData, ...actualProdRateData) || 1 // Ensure max is at least 1
+                                            }))
+                                        },
+                                        series: [
+                                            {
+                                                name: 'Productivity',
+                                                type: 'radar',
+                                                data: [
+                                                    {
+                                                        value: targetProdRateData,
+                                                        name: 'Target Productivity',
+                                                        itemStyle: {
+                                                            color: '#43B02A'
+                                                        },
+                                                        label: {
+                                                            show: true,
+                                                            position: 'top',
+                                                            formatter: '{c}'
+                                                        }
+                                                    },
+                                                    {
+                                                        value: actualProdRateData,
+                                                        name: 'Actual Productivity',
+                                                        itemStyle: {
+                                                            color: '#2A93D5'
+                                                        },
+                                                        label: {
+                                                            show: true,
+                                                            position: 'bottom',
+                                                            formatter: '{c}'
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    };
+
+                                    // Set the chart options and render the chart
+                                    myChart_prod.setOption(options);
+                                }
+
+                                // Initial dropdown load and chart for default task
+                                updateTaskDropdown();
+
+                                // Add event listeners for function filter
+                                document.querySelectorAll('.actual-prod-filter-task').forEach(item => {
+                                    item.addEventListener('click', function (event) {
+                                        event.preventDefault();
+                                        selectedFunction = this.getAttribute('data-prod-task'); // Get the selected function
+                                        updateTaskDropdown(); // Update the task dropdown based on the new function
+                                    });
+                                });
+                            });
+                        </script>
+
+                        <style>
+                            /* Style for the unique tasks dropdown */
+                            #taskSelect {
+                                border: none;
+                                background-color: transparent;
+                                font-size: 12px;
+                            }
+
+                                #taskSelect:focus {
+                                    outline: none; /* Removes the focus outline */
+                                    border: none; /* Keeps the dropdown borderless */
+                                }
+                        </style>
+
+                        <!-- End Line Chart -->
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+                            {% for task in volManager %}
+                            <li>
+                                <a class="dropdown-item actual-vol-filter-manager" href="#" data-vol-manager="{{ task }}">{{ task }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Actual Processed Volumes per Manager<span> | Year to Date</span></h5>
+
+                        <!-- Line Chart -->
+                        <div id="volume_manager_chart" style="min-height: 346px;" class="echart"></div>
+
+
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                var volManager = {{ volManager | safe }};
+                                var managerFullName = volManager[0] || 'Manager'; // Get the manager's full name or default to "Manager"
+                                var managerFirstName = managerFullName.split(' ')[0]; // Get the first name of the manager
+
+                                var volManagerData = {{ volManagerData | safe }};
+                                var functions = [...new Set(volManagerData.map(item => item.function))]; // Extract unique functions
+                                var selectedFunction = 'Overall'; // Default function
+
+                                var monthMapping = {
+                                    'january': 'Jan',
+                                    'february': 'Feb',
+                                    'march': 'Mar',
+                                    'april': 'Apr',
+                                    'may': 'May',
+                                    'june': 'Jun',
+                                    'july': 'Jul',
+                                    'august': 'Aug',
+                                    'september': 'Sep',
+                                    'october': 'Oct',
+                                    'november': 'Nov',
+                                    'december': 'Dec'
+                                };
+
+                                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                                // Create the function dropdown element dynamically
+                                var functionSelect = document.createElement('select');
+                                functionSelect.id = 'functionSelect';
+
+                                functionSelect.style.fontSize = '12px';
+                                functionSelect.style.border = 'none';
+                                functionSelect.style.backgroundColor = 'transparent';
+                                functionSelect.style.marginLeft = '10px';
+
+                                // Add "Overall" as the first option only if it's not already in the functions list
+                                var overallOption = document.createElement('option');
+                                overallOption.value = 'Overall';
+                                overallOption.textContent = 'Overall';
+                                functionSelect.appendChild(overallOption);
+
+                                // Populate the dropdown with function options
+                                functions.forEach(func => {
+                                    if (func !== 'Overall') {  // Prevent duplicating "Overall"
+                                        var option = document.createElement('option');
+                                        option.value = func;
+                                        option.textContent = func;
+                                        functionSelect.appendChild(option);
+                                    }
+                                });
+
+                                // Set "Overall" as the default selected function
+                                functionSelect.value = 'Overall';
+
+                                // Create the title container dynamically based on manager's name and function
+                                function updateTitleContainer() {
+                                    var chartContainer = document.getElementById('volume_manager_chart');
+
+                                    // Remove any existing title container to avoid duplicates
+                                    var existingTitleContainer = document.getElementById('titleContainer');
+                                    if (existingTitleContainer) {
+                                        existingTitleContainer.remove();
+                                    }
+
+                                    // Create a new title container and update it with the new manager's name and function
+                                    var titleContainer = document.createElement('div');
+                                    titleContainer.id = 'titleContainer'; // Give it an ID to ensure uniqueness
+                                    titleContainer.style.textAlign = 'center';
+                                    titleContainer.style.marginBottom = '10px';
+                                    titleContainer.style.fontSize = '12px';
+
+                                    // Update the title text dynamically
+                                    titleContainer.textContent = `Team ${managerFirstName}: `;
+                                    titleContainer.appendChild(functionSelect);
+
+                                    // Insert the title and dropdown above the chart container
+                                    chartContainer.parentNode.insertBefore(titleContainer, chartContainer);
+                                }
+
+                                // Call the updateTitleContainer initially
+                                updateTitleContainer();
+
+                                // Event listener for changes in function selection
+                                functionSelect.addEventListener('change', (event) => {
+                                    selectedFunction = event.target.value;
+                                    updateTitleContainer();  // Update the title container dynamically
+                                    updateChart(selectedFunction);
+                                });
+
+                                var activeManagerName = managerFullName;  // Default manager name
+                                document.querySelectorAll('.actual-vol-filter-manager').forEach(item => {
+                                    item.addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        var selectedManager = e.target.getAttribute('data-vol-manager');
+
+                                        // Store the full manager name and extract the first name
+                                        activeManagerName = selectedManager;
+                                        managerFirstName = selectedManager.split(' ')[0]; // Get the first name
+
+                                        updateTitleContainer();  // Update the title container dynamically
+                                        updateChartByManager(selectedManager);  // Update the chart based on manager
+                                    });
+                                });
+
+                                // Declare `myChart` in the global scope, so it can be used both in `updateChart` and `myChart.on('click')`
+                                var myChart = echarts.init(document.getElementById('volume_manager_chart'));
+
+                                // Function to update the chart based on selected function
+                                function updateChart(selectedFunction) {
+                                    var yAxisData = [];
+                                    var fteData = [];
+
+                                    months.forEach(month => {
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                        var found = volManagerData.find(item => item.function === selectedFunction && item.lower_month === fullMonthName);
+
+                                        yAxisData.push(found ? found.total_task_processed : 0);
+                                        fteData.push(found ? found.total_fte_allocation : 0);
+                                    });
+
+                                    var options = {
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow'
+                                            }
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                mark: { show: true },
+                                                dataView: { show: true, readOnly: false },
+                                                //restore: {},
+                                                saveAsImage: { show: true }
+                                            }
+                                        },
+                                        legend: {
+                                            data: ['Volume/Task Processed', 'Total FTE Allocation'],
+                                            bottom: '1%'
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            data: months
+                                        },
+                                        yAxis: [
+                                            {
+                                                type: 'value',
+                                                name: 'Millions',
+                                                nameTextStyle: {
+                                                    align: 'center'
+                                                },
+                                                nameLocation: 'middle',
+                                                nameGap: 50,
+                                                splitLine: {
+                                                    show: true
+                                                }
+                                            },
+                                            {
+                                                type: 'value',
+                                                position: 'right',
+                                                splitLine: {
+                                                    show: false
+                                                }
+                                            }
+                                        ],
+                                        series: [
+                                            {
+                                                name: 'Volume/Task Processed',
+                                                type: 'bar',
+                                                data: yAxisData,
+                                                itemStyle: {
+                                                    color: '#2A93D5'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'inside',
+                                                    formatter: '{c}',
+                                                    color: '#fff'
+                                                },
+                                                yAxisIndex: 0
+                                            },
+                                            {
+                                                name: 'Total FTE Allocation',
+                                                type: 'line',
+                                                symbolSize: 10,
+                                                data: fteData,
+                                                itemStyle: {
+                                                    color: '#43B02A'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'top',
+                                                    formatter: '{c}',
+                                                    color: '#43B02A'
+                                                },
+                                                smooth: true,
+                                                yAxisIndex: 1
+                                            }
+                                        ]
+                                    };
+
+                                    myChart.setOption(options);
+                                }
+
+                                // Initial chart load for the default function ("Overall")
+                                updateChart(selectedFunction);
+
+                                // Function to handle AJAX call to update chart data based on the selected manager
+                                function updateChartByManager(manager) {
+                                    var chartContainer = document.getElementById('volume_manager_chart');
+                                    chartContainer.style.height = '346px';
+
+                                    myChart.setOption({
+                                        title: {
+                                            text: ''
+                                        }
+                                    });
+
+                                    $.ajax({
+                                        url: '/mph/local_management_per_manager_volume_click/',
+                                        type: 'GET',
+                                        data: {
+                                            manager: manager,
+                                            region: 'usca'  // Adjust based on actual region data if needed
+                                        },
+                                        success: function (response) {
+
+
+                                            volManagerData = response.vol_manager_data_click;  // Update volManagerData with new data
+                                            functions = response.unique_function;  // Update unique functions list
+                                            updateTitleContainer();  // Update the title container with new manager's name and function
+
+
+
+                                            updateChart(selectedFunction);  // Update the chart with the new data
+                                        },
+                                        error: function (xhr, status, error) {
+                                            console.error("Error fetching data:", error);
+                                        }
+                                    });
+                                }
+
+
+                                //function formatTeamLeadName(fullName) {
+                                //    // Split the full name into parts (first name(s) and last name)
+                                //    var nameParts = fullName.split(' ');
+
+                                //    // Capitalize each part of the first name (excluding the last name)
+                                //    var firstName = nameParts.slice(0, -1).map(function (part) {
+                                //        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+                                //    }).join(' '); // Join first names with a space between them
+
+                                //    // If there are no parts other than the last name, just return the first name part
+                                //    var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1].toUpperCase() : '';
+
+                                //    // Return only the first name (formatted)
+                                //    return firstName;
+                                //}
+
+                                  function formatTeamLeadName(fullName) {
+                                      return fullName
+                                          .split(' ')
+                                          .map(function (word) {
+                                              return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                                          })
+                                          .join(' ');
+                                  }
+
+
+                                // Now you can safely bind the click event for `myChart`
+                                myChart.on('click', function (params) {
+                                    var chartContainer = document.getElementById('volume_manager_chart');
+                                    chartContainer.style.height = '376px';
+                                    // Use the activeManagerName variable to get the manager's name
+                                    var managerFullName = activeManagerName || 'Manager'; // If no manager is selected, default to "Manager"
+                                    var selectedFunction = document.getElementById('functionSelect').value;
+
+                                    if (params.seriesName === 'Volume/Task Processed') {
+                                        var selectedMonth = params.name; // Get the month (e.g., "Jan", "Feb", etc.)
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === selectedMonth); // Convert to full month name
+                                        fullMonthName = fullMonthName.charAt(0).toUpperCase() + fullMonthName.slice(1);
+
+                                        var previousOptions = myChart.getOption();
+
+                                        $.ajax({
+                                            url: '/mph/local_management_per_manager_volume_click_drilldown/', // Update this URL as needed
+                                            type: 'GET',
+                                            data: {
+                                                manager: managerFullName,   // Pass the manager's full name
+                                                month: fullMonthName,       // Pass the full month name
+                                                function: selectedFunction, // Pass the selected function
+                                                region: 'usca'              // Pass the region as 'apac'
+                                            },
+                                            success: function (response) {
+
+                                                var titleContainer = document.getElementById('titleContainer');
+                                                if (titleContainer) {
+                                                    titleContainer.style.display = 'none'; // Hide the title container
+                                                }
+
+                                                volManagerData = response.vol_manager_data_click;
+
+
+                                                // Prepare data for the chart
+                                                let teamLeads = [];
+                                                let totalFteAllocation = [];
+                                                let totalTaskProcessed = [];
+
+                                                volManagerData.forEach(item => {
+                                                    if (item.team_name && item.team_name !== "nan") {
+                                                        teamLeads.push(item.team_name);
+                                                        totalFteAllocation.push(item.total_fte_allocation);
+                                                        totalTaskProcessed.push(item.total_task_processed);
+                                                    }
+                                                });
+
+                                                // Format all team lead names
+                                                var formattedTeamLeads = teamLeads.map(function (name) {
+                                                    return formatTeamLeadName(name);
+                                                });
+
+                                                // Initialize ECharts
+                                                var volManagerChart = echarts.init(document.getElementById('volume_manager_chart'));
+
+                                                // Set up chart options
+                                                var options = {
+                                                    title: {
+                                                        text: selectedFunction + ' ' + managerFullName + ' - ' + fullMonthName,
+                                                        left: 'center',
+                                                        top: 10,
+                                                        textStyle: {
+                                                            fontSize: 11,
+                                                            color: '#333'
+                                                        }
+                                                    },
+                                                    tooltip: {
+                                                        trigger: 'axis',
+                                                        axisPointer: {
+                                                            type: 'shadow'
+                                                        }
+                                                    },
+                                                    toolbox: {
+                                                        show: true,
+                                                        feature: {
+                                                            mark: { show: true },
+                                                            dataView: { show: true, readOnly: false },
+                                                            //restore: {},
+                                                            saveAsImage: { show: true }
+                                                        }
+                                                    },
+                                                    legend: {
+                                                        data: ['Total Task Processed (in millions)', 'Total FTE Allocation'],
+                                                        bottom: '1%'
+                                                    },
+                                                    xAxis: {
+                                                        type: 'category',
+                                                        data: formattedTeamLeads, // Team leads as X-axis
+                                                        axisLabel: {
+                                                            rotate: 20,
+                                                            fontSize: 12
+                                                        }
+                                                    },
+                                                    yAxis: [
+                                                        {
+                                                            type: 'value',
+                                                            name: 'Millions',
+                                                            nameTextStyle: {
+                                                                align: 'center'
+                                                            },
+                                                            nameLocation: 'middle',
+                                                            nameGap: 50,
+                                                            splitLine: {
+                                                                show: true
+                                                            }
+                                                        },
+                                                        {
+                                                            type: 'value',
+                                                            position: 'right',
+                                                            splitLine: {
+                                                                show: false
+                                                            }
+                                                        }
+                                                    ],
+                                                    series: [
+                                                        {
+                                                            name: 'Total Task Processed (in millions)',
+                                                            type: 'bar',
+                                                            data: totalTaskProcessed,
+                                                            itemStyle: {
+                                                                color: '#2A93D5' // Blue color for task processed
+                                                            },
+                                                            label: {
+                                                                show: true,
+                                                                position: 'inside',
+                                                                formatter: '{c}',
+                                                                color: '#fff'
+                                                            },
+                                                            yAxisIndex: 0
+                                                        },
+                                                        {
+                                                            name: 'Total FTE Allocation',
+                                                            type: 'line',
+                                                            symbolSize: 10,
+                                                            data: totalFteAllocation,
+                                                            itemStyle: {
+                                                                color: '#43B02A' // Green color for FTE allocation
+                                                            },
+                                                            label: {
+                                                                show: true,
+                                                                position: 'top',
+                                                                formatter: '{c}',
+                                                                color: '#43B02A'
+                                                            },
+                                                            smooth: true,
+                                                            yAxisIndex: 1
+                                                        }
+                                                    ],
+
+                                                };
+
+                                                // Set the chart options
+                                                volManagerChart.setOption(options);
+
+
+
+
+
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error("Error fetching data:", error); // Handle any errors
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+
+
+
+
+
+
+                        <style>
+                            /* Style for the function dropdown */
+                            #functionSelect {
+                                border: none;
+                                background-color: transparent;
+                                font-size: 12px;
+                            }
+
+                                #functionSelect:focus {
+                                    outline: none; /* Removes the focus outline */
+                                    border: none; /* Keeps the dropdown borderless */
+                                }
+                        </style>
+
+
+
+
+                        <!-- End Line Chart -->
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+
+                            <!-- Dynamically generate dropdown items based on prodTaskFunction -->
+                            {% for task in prodManager %}
+                            <li>
+                                <a class="dropdown-item actual-prod-filter-manager" href="#" data-prod-manager="{{ task }}">{{ task }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Actual Productivity Rate per Manager<span> | Year to Date</span></h5>
+
+                        <!-- Line Chart -->
+                        <div id="productivity_manager_chart" style="min-height: 346px;" class="echart"></div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                var prodManager = {{ prodManager | safe }};
+                                var managerFullName = prodManager[0] || 'Manager'; // Get the manager's full name or default to "Manager"
+                                var managerFirstName = managerFullName.split(' ')[0]; // Get the first name of the manager
+
+                                var prodManagerData = {{ prodManagerData | safe }};
+                                var functions = [...new Set(prodManagerData.map(item => item.function))]; // Extract unique functions
+                                var selectedFunction = 'Overall'; // Default function
+
+                                var monthMapping = {
+                                    'january': 'Jan',
+                                    'february': 'Feb',
+                                    'march': 'Mar',
+                                    'april': 'Apr',
+                                    'may': 'May',
+                                    'june': 'Jun',
+                                    'july': 'Jul',
+                                    'august': 'Aug',
+                                    'september': 'Sep',
+                                    'october': 'Oct',
+                                    'november': 'Nov',
+                                    'december': 'Dec'
+                                };
+
+                                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                                // Create the function dropdown element dynamically
+                                var functionSelectProd = document.createElement('select');
+                                functionSelectProd.id = 'functionSelectProd';
+
+                                functionSelectProd.style.fontSize = '12px';
+                                functionSelectProd.style.border = 'none';
+                                functionSelectProd.style.backgroundColor = 'transparent';
+                                functionSelectProd.style.marginLeft = '10px';
+
+                                // Add "Overall" as the first option only if it's not already in the functions list
+                                var overallOption = document.createElement('option');
+                                overallOption.value = 'Overall';
+                                overallOption.textContent = 'Overall';
+                                functionSelectProd.appendChild(overallOption);
+
+                                // Populate the dropdown with function options
+                                functions.forEach(func => {
+                                    if (func !== 'Overall') {  // Prevent duplicating "Overall"
+                                        var option = document.createElement('option');
+                                        option.value = func;
+                                        option.textContent = func;
+                                        functionSelectProd.appendChild(option);
+                                    }
+                                });
+
+                                // Set "Overall" as the default selected function
+                                functionSelectProd.value = 'Overall';
+
+                                // Create the title container dynamically based on manager's name and function
+                                function updatetitleContainerProd() {
+                                    var chartContainer = document.getElementById('productivity_manager_chart');
+
+                                    var existingTitleContainer = document.getElementById('titleContainerProd');
+                                    if (existingTitleContainer) {
+                                        existingTitleContainer.remove();
+                                    }
+
+                                    var titleContainerProd = document.createElement('div');
+                                    titleContainerProd.id = 'titleContainerProd';
+                                    titleContainerProd.style.textAlign = 'center';
+                                    titleContainerProd.style.marginBottom = '10px';
+                                    titleContainerProd.style.fontSize = '12px';
+
+                                    titleContainerProd.textContent = `Team ${managerFirstName}: `;
+                                    titleContainerProd.appendChild(functionSelectProd);
+
+                                    chartContainer.parentNode.insertBefore(titleContainerProd, chartContainer);
+                                }
+
+                                // Call the updateTitleContainer initially
+                                updatetitleContainerProd();
+
+                                // Event listener for changes in function selection
+                                functionSelectProd.addEventListener('change', (event) => {
+                                    selectedFunction = event.target.value;
+                                    updatetitleContainerProd();  // Update the title container dynamically
+                                    updateChart(selectedFunction);
+                                });
+
+                                var activeManagerName = managerFullName;  // Default manager name
+                                document.querySelectorAll('.actual-prod-filter-manager').forEach(item => {
+                                    item.addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        var selectedManager = e.target.getAttribute('data-prod-manager');
+                                        activeManagerName = selectedManager;
+                                        managerFirstName = selectedManager.split(' ')[0]; // Get the first name
+
+                                        updatetitleContainerProd();
+                                        console.log(selectedManager)
+                                        updateChartByManagerProd(selectedManager);
+                                    });
+                                });
+
+                                // Declare `myChart` in the global scope, so it can be used both in `updateChart` and `myChart.on('click')`
+                                var myChart = echarts.init(document.getElementById('productivity_manager_chart'));
+
+                                // Function to update the chart based on selected function
+                                function updateChart(selectedFunction) {
+                                    var yAxisData = [];
+                                    var fteData = [];
+
+                                    months.forEach(month => {
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === month);
+                                        var found = prodManagerData.find(item => item.function === selectedFunction && item.lower_month === fullMonthName);
+
+                                        yAxisData.push(found ? found.avg_target_prod_rate_hour : 0);
+                                        fteData.push(found ? found.avg_actual_prod_rate_hr : 0);
+                                    });
+
+                                    var options = {
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow'
+                                            }
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                mark: { show: true },
+                                                dataView: { show: true, readOnly: false },
+                                                //restore: {},
+                                                saveAsImage: { show: true }
+                                            }
+                                        },
+                                        legend: {
+                                            data: ['Target Productivity', 'Actual Productivity'],
+                                            bottom: '1%'
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            data: months
+                                        },
+                                        yAxis: [
+                                            {
+                                                type: 'value',
+                                                //name: 'Millions',
+                                                nameTextStyle: {
+                                                    align: 'center'
+                                                },
+                                                nameLocation: 'middle',
+                                                nameGap: 50,
+                                                splitLine: {
+                                                    show: true
+                                                }
+                                            },
+                                            {
+                                                type: 'value',
+                                                position: 'right',
+                                                splitLine: {
+                                                    show: false
+                                                }
+                                            }
+                                        ],
+                                        series: [
+                                            {
+                                                name: 'Target Productivity',
+                                                type: 'bar',
+                                                data: yAxisData,
+                                                itemStyle: {
+                                                    color: '#2A93D5'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'inside',
+                                                    formatter: '{c}',
+                                                    color: '#fff'
+                                                },
+                                                yAxisIndex: 0
+                                            },
+                                            {
+                                                name: 'Actual Productivity',
+                                                type: 'line',
+                                                symbolSize: 10,
+                                                data: fteData,
+                                                itemStyle: {
+                                                    color: '#43B02A'
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    position: 'top',
+                                                    formatter: '{c}',
+                                                    color: '#43B02A'
+                                                },
+                                                smooth: true,
+                                                yAxisIndex: 1
+                                            }
+                                        ]
+                                    };
+
+                                    myChart.setOption(options);
+                                }
+
+                                // Initial chart load for the default function ("Overall")
+                                updateChart(selectedFunction);
+
+                                // Function to handle AJAX call to update chart data based on the selected manager
+                            function updateChartByManagerProd(manager) {
+                                var chartContainer = document.getElementById('productivity_manager_chart');
+                                chartContainer.style.minHeight = '346px';
+                                    myChart.setOption({
+                                        title: {
+                                            text: ''
+                                        }
+                                    });
+
+                                    $.ajax({
+                                        url: '/mph/local_management_per_manager_productivity_click/',
+                                        type: 'GET',
+                                        data: {
+                                            manager: manager,
+                                            region: 'usca'  // Adjust based on actual region data if needed
+                                        },
+                                        success: function (response) {
+                                            prodManagerData = response.prod_manager_data_click;  // Update volManagerData with new data
+                                            functions = response.unique_function;  // Update unique functions list
+                                            updatetitleContainerProd();
+                                            updateChart(selectedFunction);  // Update the chart with the new data
+                                        },
+                                        error: function (xhr, status, error) {
+                                            console.error("Error fetching data:", error);
+                                        }
+                                    });
+                                }
+
+
+                                function formatTeamLeadName(fullName) {
+                                    // Split the full name into parts (first name(s) and last name)
+                                    var nameParts = fullName.split(' ');
+
+                                    // Capitalize each part of the first name (excluding the last name)
+                                    var firstName = nameParts.slice(0, -1).map(function (part) {
+                                        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+                                    }).join(' '); // Join first names with a space between them
+
+                                    // If there are no parts other than the last name, just return the first name part
+                                    var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1].toUpperCase() : '';
+
+                                    // Return only the first name (formatted)
+                                    return firstName;
+                                }
+
+
+
+                                // Now you can safely bind the click event for `myChart`
+                                myChart.on('click', function (params) {
+                                    var chartContainer = document.getElementById('productivity_manager_chart');
+                                    chartContainer.style.minHeight = '376px';
+                                    // Use the activeManagerName variable to get the manager's name
+                                    var managerFullName = activeManagerName || 'Manager'; // If no manager is selected, default to "Manager"
+                                    var selectedFunction = document.getElementById('functionSelect').value;
+
+                                    if (params.seriesName === 'Target Productivity') {
+                                        var selectedMonth = params.name; // Get the month (e.g., "Jan", "Feb", etc.)
+                                        var fullMonthName = Object.keys(monthMapping).find(key => monthMapping[key] === selectedMonth); // Convert to full month name
+                                        fullMonthName = fullMonthName.charAt(0).toUpperCase() + fullMonthName.slice(1);
+
+                                        var previousOptions = myChart.getOption();
+
+                                        $.ajax({
+                                            url: '/mph/local_management_per_manager_productivity_click_drilldown/', // Update this URL as needed
+                                            type: 'GET',
+                                            data: {
+                                                manager: managerFullName,   // Pass the manager's full name
+                                                month: fullMonthName,       // Pass the full month name
+                                                function: selectedFunction, // Pass the selected function
+                                                region: 'usca'              // Pass the region as 'apac'
+                                            },
+                                            success: function (response) {
+
+                                                var titleContainerProd = document.getElementById('titleContainerProd');
+                                                if (titleContainerProd) {
+                                                    titleContainerProd.style.display = 'none'; // Hide the title container
+                                                }
+
+                                                prodManagerData = response.prod_manager_data_click_drill;
+
+
+                                                // Prepare data for the chart
+                                                let teamLeads = [];
+                                                let avgTargetProdRateHour = [];
+                                                let avgActualProdRateHr = [];
+
+                                                prodManagerData.forEach(item => {
+                                                    if (item.team_lead && item.team_lead !== "nan") {
+                                                        teamLeads.push(item.team_lead);
+                                                        avgTargetProdRateHour.push(item.avg_target_prod_rate_hour);
+                                                        avgActualProdRateHr.push(item.avg_actual_prod_rate_hr);
+                                                    }
+                                                });
+
+                                                // Format all team lead names
+                                                var formattedTeamLeads = teamLeads.map(function (name) {
+                                                    return formatTeamLeadName(name);
+                                                });
+
+                                                // Initialize ECharts
+                                                var prodManagerChart = echarts.init(document.getElementById('productivity_manager_chart'));
+
+                                                // Set up chart options
+                                                var options = {
+                                                    title: {
+                                                        text: selectedFunction + ' ' + managerFullName + ' - ' + fullMonthName,
+                                                        left: 'center',
+                                                        top: 10,
+                                                        textStyle: {
+                                                            fontSize: 11,
+                                                            color: '#333'
+                                                        }
+                                                    },
+                                                    tooltip: {
+                                                        trigger: 'axis',
+                                                        axisPointer: {
+                                                            type: 'shadow'
+                                                        }
+                                                    },
+                                                    toolbox: {
+                                                        show: true,
+                                                        feature: {
+                                                            mark: { show: true },
+                                                            dataView: { show: true, readOnly: false },
+                                                            //restore: {},
+                                                            saveAsImage: { show: true }
+                                                        }
+                                                    },
+                                                    legend: {
+                                                        data: ['Target Productivity', 'Actual Productivity'],
+                                                        bottom: '1%'
+                                                    },
+                                                    xAxis: {
+                                                        type: 'category',
+                                                        data: formattedTeamLeads, // Team leads as X-axis
+                                                        axisLabel: {
+                                                            rotate: 20,
+                                                            fontSize: 12
+                                                        }
+                                                    },
+                                                    yAxis: [
+                                                        {
+                                                            type: 'value',
+                                                            //name: 'Millions',
+                                                            nameTextStyle: {
+                                                                align: 'center'
+                                                            },
+                                                            nameLocation: 'middle',
+                                                            nameGap: 50,
+                                                            splitLine: {
+                                                                show: true
+                                                            }
+                                                        },
+                                                        {
+                                                            type: 'value',
+                                                            position: 'right',
+                                                            splitLine: {
+                                                                show: false
+                                                            }
+                                                        }
+                                                    ],
+                                                    series: [
+                                                        {
+                                                            name: 'Target Productivity',
+                                                            type: 'bar',
+                                                            data: avgTargetProdRateHour,
+                                                            itemStyle: {
+                                                                color: '#2A93D5' // Blue color for task processed
+                                                            },
+                                                            label: {
+                                                                show: true,
+                                                                position: 'inside',
+                                                                formatter: '{c}',
+                                                                color: '#fff'
+                                                            },
+                                                            yAxisIndex: 0
+                                                        },
+                                                        {
+                                                            name: 'Actual Productivity',
+                                                            type: 'line',
+                                                            symbolSize: 10,
+                                                            data: avgActualProdRateHr,
+                                                            itemStyle: {
+                                                                color: '#43B02A' // Green color for FTE allocation
+                                                            },
+                                                            label: {
+                                                                show: true,
+                                                                position: 'top',
+                                                                formatter: '{c}',
+                                                                color: '#43B02A'
+                                                            },
+                                                            smooth: true,
+                                                            yAxisIndex: 1
+                                                        }
+                                                    ],
+
+                                                };
+
+                                                // Set the chart options
+                                                prodManagerChart.setOption(options);
+
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error("Error fetching data:", error); // Handle any errors
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+
+
+                        <style>
+                            /* Style for the function dropdown */
+                            #functionSelectProd {
+                                border: none;
+                                background-color: transparent;
+                                font-size: 12px;
+                            }
+
+                                #functionSelectProd:focus {
+                                    outline: none; /* Removes the focus outline */
+                                    border: none; /* Keeps the dropdown borderless */
+                                }
+                        </style>
+
+
+                        <!-- End Line Chart -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+ <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script>
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script>
+ <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script>
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+
+ <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+
+
+</body>
+
+</html>

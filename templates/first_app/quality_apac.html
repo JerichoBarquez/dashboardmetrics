@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+  <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+ <!-- Vendor CSS Files -->
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+ <!-- <link href="https://cdn.jsdelivr.net/npm/flag-icon-css@3.5.0/css/flag-icon.min.css" rel="stylesheet"> -->
+ <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet"> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+  <link href="{% static "vendor/css/style.css" %}" rel="stylesheet">
+  
+
+  <style>
+   
+
+
+    .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 12px;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+    .styled-table thead tr {
+        background-color: #00A3E0;
+        color: #ffffff;
+        text-align: left;
+    }
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #00A3E0;
+    }
+
+    .styled-table-2 tbody tr:last-of-type {
+        border-bottom: 2px solid #2eca6a;
+    }
+
+    
+    /* .styled-table tbody tr.active-row {
+        font-weight: bold;
+        color: #00A3E0;
+        background-color: #f0f0f0;
+    } */
+
+    .styled-table tbody tr.active-row td {
+    font-weight: bold;
+    color: #43b02a;
+    background-color: #f0f0f0;
+}
+
+    .tableBody_award tbody tr:last-of-type {
+      border-bottom: 2px solid #9e9e9e81;
+  }
+
+  .highlighted-row {
+    /* background-color: #2eca6a27;  */
+    color: #00A3E0;
+    font-weight: bold;
+  }
+
+  .scrollable-dropdown {
+  max-height: 300px; /* Adjust the maximum height as needed */
+  overflow-y: auto;
+}
+
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'first_app:index' %}" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static "img/profile.jpeg" %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Jericho</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Jericho Barquez</h6>
+              <span>RPS Team</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+      <ul class="sidebar-nav" id="sidebar-nav">
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+                  <i class="bi bi-pin-map-fill"></i>
+                  <span>Manila Production Hub</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:performance' %}">
+                  <i class="bi bi-grid"></i>
+                  <span>Performance</span>
+              </a>
+          </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#productivy-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="productivy-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='top_management' %}">
+                          <i class="bi bi-circle"></i><span>TM REVIEW</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:productivity' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <!--<li class="nav-item">
+              <a class="nav-link" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>C&B Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality' region='apac' %}" class="active">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li>--><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#quality-report-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="quality-report-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:quality_report' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-truck"></i><span>Service Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:service_delivery' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <!--<li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-gear"></i><span>Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:utilization' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+              </ul>
+          </li>-->
+    <!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-gear"></i><span>Rax Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:rax_utilization' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-graph-down"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attrition' region='usca' %}">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a href="{% url 'first_app:headcount' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Tables Nav -->
+          <li class="nav-item">
+              <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='apac' %}">
+                          <i class="bi bi-circle"></i><span>APAC</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'first_app:attendance' region='emea' %}">
+                          <i class="bi bi-circle"></i><span>EMEA</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="bi bi-circle"></i><span>USCA</span>
+                      </a>
+                  </li>
+
+              </ul>
+          </li><!-- End Forms Nav -->
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="users-profile.html">
+                  <i class="bi bi-person"></i>
+                  <span>Profile</span>
+              </a>
+          </li><!-- End Profile Page Nav -->
+
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'first_app:pages_contact' %}">
+                  <i class="bi bi-envelope"></i>
+                  <span>Contact</span>
+              </a>
+          </li><!-- End Contact Page Nav -->
+
+
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'admin:index' %}" target="_blank">
+                  <i class="bi bi-gear"></i>
+                  <span>Administrator</span>
+              </a>
+          </li><!-- End Login Page Nav -->
+
+
+
+
+      </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>APAC</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'first_app:index' %}"><i class="bi bi-house-door"></i></a></li>
+          <li class="breadcrumb-item">Quality</li>
+          <li class="breadcrumb-item active">Metrics</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <!-- <div class="col-lg-8">
+          <div class="row"> -->
+
+            <!-- Sales Card -->
+            <div class="col-xxl-3 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="card-body sales-card-body">
+                  <h5 class="card-title">Overall Quality<span>| Year To Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-database-gear"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{overall_percentage}}</h6>
+                      <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-3 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="card-body sales-card-body">
+                  <h5 class="card-title">Quality Bridging<span>| Year To Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-receipt-cutoff"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{overall_percentage_data.overall_percentage_bridging}}</h6>
+                      
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+            <!-- Customers Card -->
+            <div class="col-xxl-3 col-xl-12">
+
+              <div class="card info-card sales-card">
+                <div class="card-body sales-card-body">
+                  <h5 class="card-title">Quality Coding<span>| Year To Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-receipt-cutoff"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{overall_percentage_data.overall_percentage_coding}}</h6>
+                      
+                      <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            <!-- Customers Card -->
+            <div class="col-xxl-3 col-xl-12">
+
+              <div class="card info-card sales-card">
+                <div class="card-body sales-card-body">
+                  <h5 class="card-title">Quality Reference<span>| Year To Date</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-receipt-cutoff"></i>
+                    </div>
+                    <div class="ps-3">
+                      
+                      <h6>{{overall_percentage_data.overall_percentage_reference_modification}}</h6>
+                      <!-- <h6>No Reference</h6> -->
+                      <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            
+
+            <div class="col-lg-9">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" id="countryDropdownPercentage" style="max-height: 400px; overflow-y: auto;">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    {% for country in unique_countries %}
+                        <li><a class="dropdown-item" href="#" data-country="{{ country }}">{{ country|title }}</a></li>
+                    {% endfor %}
+
+                    
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Quality Rate <span> | Year to Date</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="sample_quality_chart" style="min-height: 520px;" class="echart"></div>
+
+                  <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                    var chartData = {{ quality_records_with_percentage|safe }};
+                    var firstCountry = chartData[0].id_country;
+
+                    var months = Array.from(new Set(chartData.map(entry => entry.id_calendar_period)));
+                    var colorMapping = {
+                          'Coding Rate': '#125488',
+                          'Bridging Rate': '#2A93D5',
+                          'Reference Rate': '#0c7bc0',
+                          'Coding Error': '#A41726',
+                          'Bridging Error': '#A41726',
+                          'Reference Error': '#A41726',
+                      };
+
+                    var seriesData = [];
+
+                    // Create series data for each category and month
+                    ['Bridging', 'Reference', 'Coding'].forEach(category => {
+                        ['Error', 'Rate'].forEach(type => {
+                            var seriesItem = {
+                                name: category + ' ' + type,
+                                type: 'bar',
+                                stack: category,
+                                barGap: '0%',
+                                label: {
+                                    show: true,
+                                    // position: type === 'Error' ? 'top' : 'inside',
+                                    formatter: '{c}%',
+                                    rotate: 90,
+                                    // offset: [15, 0]
+                                },
+                                data: [],
+                                itemStyle: {
+                                    color: colorMapping[category + ' ' + type],
+                                },
+                            };
+
+                            months.forEach(month => {
+                                var monthData = chartData.find(entry => entry.id_calendar_period === month);
+
+                                // Check if the category and type exist in percentages
+                                if (monthData && monthData.percentages[category.toLowerCase()] && monthData.percentages[category.toLowerCase()][type.toLowerCase()]) {
+                                    var value = monthData.percentages[category.toLowerCase()][type.toLowerCase()] || 0;
+                                    seriesItem.data.push(value);
+                                } else {
+                                    seriesItem.data.push(0);
+                                }
+                            });
+
+                            // Check if any data is present for the series item, don't add empty series
+                            if (seriesItem.data.some(value => value !== 0)) {
+                                seriesData.push(seriesItem);
+                            }
+                        });
+                    });
+
+                    var lineSeries = {
+                        name: 'Overall Percentage',
+                        type: 'line',
+                        smooth: true,
+                        // yAxisIndex: 1, 
+                        symbol: 'circle',
+                        symbolSize: 12,
+                        
+                        data: chartData.map(entry => {
+                            var bridgingRate = entry.percentages.bridging && entry.percentages.bridging.rate;
+                            var referenceRate = entry.percentages.reference && entry.percentages.reference.rate;
+                            var codingRate = entry.percentages.coding && entry.percentages.coding.rate;
+
+                            var validRates = [bridgingRate, referenceRate, codingRate]
+                                .map(rate => parseFloat(rate))
+                                .filter(rate => !isNaN(rate));
+
+                            var average = validRates.length > 0 ? parseFloat((validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length).toFixed(2)) : null;
+                            // console.log(average)
+                            return average;
+                        }),
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: function (params) {
+                                return params.value !== null ? params.value.toFixed(2) + '%' : 'N/A';
+                            },
+                        },
+                        itemStyle: {
+                            color: '#43B02A', 
+                        },
+                    };
+
+                    seriesData.push(lineSeries);
+
+
+                    var option = {
+                      toolbox: {
+                          show: true,
+                          feature: {
+                            dataView: { readOnly: false },
+                            restore: { show: true },
+                            saveAsImage: {}
+                          }
+                        },
+                        title: {
+                            text: firstCountry, // Your title here
+                            left: 'center',
+                        },
+                        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                        legend: {
+                            data: ['Bridging Error', 'Bridging Rate', 'Reference Error', 'Reference Rate', 'Coding Error', 'Coding Rate'],
+                            bottom: 0,
+                        },
+                        grid: {
+                                top: '13%',
+                                left: '3%',
+                                right: '4%',
+                                bottom: '10%',
+                                containLabel: true,
+                            },
+                        xAxis: { 
+                          type: 'category', 
+                          data: months,
+                          axisLabel: {
+                            margin: 25 // Adjust the margin to move labels closer to the bars
+                        },
+                       },
+                        yAxis: { type: 'value' },
+                        series: seriesData
+                    };
+
+                    // Create the stacked bar chart
+                    let barChart = echarts.init(document.getElementById('sample_quality_chart'));
+                    barChart.setOption(option);
+
+                    function updateChartWithData(newData, selectedCountry) {
+                     
+                      barChart.clear();
+                      
+                      var months = Array.from(new Set(newData.map(entry => entry.id_calendar_period)));
+                      var seriesData = [];
+
+                      // Create series data for each category and month
+                      ['Bridging', 'Reference', 'Coding'].forEach(category => {
+                          ['Error', 'Rate'].forEach(type => {
+                              var seriesItem = {
+                                  name: category + ' ' + type,
+                                  type: 'bar',
+                                  stack: category,
+                                  barGap: '0%',
+                                  label: {
+                                      show: true,
+                                      // position: type === 'Error' ? 'top' : 'inside',
+                                      formatter: '{c}%',
+                                      rotate: 90
+                                  },
+                                  data: [],
+                                  itemStyle: {
+                                      // Apply color mapping
+                                      color: colorMapping[category + ' ' + type],
+                                  },
+                              };
+
+                              months.forEach(month => {
+                                var monthData = newData.find(entry => entry.id_calendar_period === month);
+
+                                // Check if the category and type exist in percentages
+                                if (monthData && monthData.percentages[category.toLowerCase()] && monthData.percentages[category.toLowerCase()][type.toLowerCase()]) {
+                                    var value = monthData.percentages[category.toLowerCase()][type.toLowerCase()] || 0;
+                                    seriesItem.data.push(value);
+                                } else {
+                                    seriesItem.data.push(0);
+                                }
+                            });
+
+                              // Check if any data is present for the series item, don't add empty series
+                              if (seriesItem.data.some(value => value !== 0)) {
+                                seriesData.push(seriesItem);
+                            }
+                          });
+                      });
+
+                      var lineSeries = {
+                        name: 'Overall Percentage',
+                        type: 'line',
+                        smooth: true,
+                        // yAxisIndex: 1, 
+                        symbol: 'circle',
+                        symbolSize: 12,
+                        
+                        data: newData.map(entry => {
+                            var bridgingRate = entry.percentages.bridging && entry.percentages.bridging.rate;
+                            var referenceRate = entry.percentages.reference && entry.percentages.reference.rate;
+                            var codingRate = entry.percentages.coding && entry.percentages.coding.rate;
+
+                            var validRates = [bridgingRate, referenceRate, codingRate]
+                                .map(rate => parseFloat(rate))
+                                .filter(rate => !isNaN(rate));
+
+                            var average = validRates.length > 0 ? parseFloat((validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length).toFixed(2)) : null;
+                            return average;
+                        }),
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: function (params) {
+                                return params.value !== null ? params.value.toFixed(2) + '%' : 'N/A';
+                            },
+                        },
+                        itemStyle: {
+                            color: '#43B02A', 
+                        },
+                    };
+
+                    seriesData.push(lineSeries);
+
+                      var option = {
+                        title: {
+                            text: selectedCountry, // Your title here
+                            left: 'center',
+                        },
+                          tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                          legend: {
+                              data: ['Bridging Error', 'Bridging Rate', 'Reference Error', 'Reference Rate', 'Coding Error', 'Coding Rate'],
+                              bottom: 0,
+                          },
+                          grid: {
+                              top: '15%', // Adjusted top position for title
+                              left: '3%',
+                              right: '4%',
+                              bottom: '15%',
+                              containLabel: true,
+                          },
+                          xAxis: { type: 'category', data: months,
+                          axisLabel: {
+                            margin: 25 // Adjust the margin to move labels closer to the bars
+                          },
+                         },
+                          yAxis: { type: 'value' },
+                          series: seriesData,
+                      };
+
+                      // Update the stacked bar chart with the new data
+                      barChart.setOption(option);
+                  }
+
+
+                    $('#countryDropdownPercentage').on('click', 'a[data-country]', function (e) {
+                        e.preventDefault();
+                        var selectedCountry = $(this).data('country');
+
+                        // Make an AJAX request to the quality_percentage_country endpoint
+                        $.ajax({
+                            type: 'GET',
+                            url: '/mph/quality_percentage_country/',
+                            data: {
+                                'country': selectedCountry,
+                                'region': 'apac'
+                            },
+                            success: function (data) {
+                                // Update the chart with the received data
+                                updateChartWithData(data, selectedCountry);
+                            },
+                            error: function (error) {
+                                // Handle errors
+                                console.error('Error loading data for ' + selectedCountry, error);
+                            }
+                        });
+                    });
+                });
+                </script>
+
+                </div>
+
+              </div>
+            </div>
+            <!-- End Reports -->
+
+            <!-- Right side columns -->
+        <div class="col-lg-3">
+
+          <!-- Recent Activity -->
+          <div class="card">
+            
+
+            <div class="card-body">
+              <h5 class="card-title">Quality per Country <span>| Year to Date</span></h5>
+
+              <!-- <div id="barChart" style="width: 600px; height: 400px;"></div> -->
+              <div id="barChart" style="min-height: 520px;" class="echart"></div>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                
+                  var overall_percentage_per_country = {{ overall_percentage_per_country|safe }};
+                  // console.log(overall_percentage_per_country)
+
+                  const countries = overall_percentage_per_country.map(data => data.id_country);
+                  const values = overall_percentage_per_country.map(data => parseFloat(data.overall_percentage.toFixed(2))); 
+
+                  // Initialize ECharts
+                  const chart = echarts.init(document.getElementById('barChart'));
+
+                  // Set up the options for the bar chart
+                  const options = {
+                    toolbox: {
+                    show: true,
+                    feature: {
+                      dataView: { readOnly: false },
+                      restore: { show: true },
+                      saveAsImage: {}
+                    }
+                  },
+                    tooltip: {
+                      trigger: 'axis',
+                      axisPointer: {
+                        type: 'shadow' // Display the tooltip shadow as a box
+                      }
+                    },
+                    grid: {
+                      left: '1%',
+                      right: '5%',
+                      bottom: '15%',
+                      containLabel: true
+                    },
+                    xAxis: {
+                      type: 'value',
+                      max: 100,
+                      axisLabel: {
+                        formatter: '{value}%',
+                      },
+                      interval: 25
+                    },
+                    yAxis: {
+                      type: 'category',
+                      data: countries,
+                      axisLabel: {
+                        
+                        // rotate: 35 // Rotate labels by 30 degrees
+                      },
+                    },
+                    series: [
+                      {
+                        type: 'bar',
+                        barWidth: '60%',
+                        data: values,
+                        label: {
+                          show: true,
+                          position: 'insideRight',
+                          formatter: '{c}%',
+                        },
+                        itemStyle: {
+                          color: '#0c7bc0',
+                          barBorderRadius: [0, 20, 20, 0] // Set the top-right corner to be rounded
+                        },
+                        emphasis: { // Highlight style when clicked
+                          itemStyle: {
+                            color: '#00A3E0',
+                            barBorderRadius: [0, 20, 20, 0], // Set the top-right corner to be rounded
+                          }
+                        }
+
+                      }
+                    ]
+                  };
+
+                  // Set the options to the chart
+                  chart.setOption(options);
+
+                  // Add a click event listener to the chart series
+                  chart.on('click', function (params) {
+                    // Get the clicked country and its corresponding value
+                    const clickedCountry = params.name;
+                    const clickedValue = params.value;
+
+                    // Make an AJAX call or perform any action with the clicked data
+                    makeAjaxCall(clickedCountry);
+                    
+                  });
+
+                  // Function to make an AJAX call
+                  function makeAjaxCall(country) {
+                    // Your AJAX logic here
+                    // console.log('Clicked Country:', country);
+
+                    $.ajax({
+                            type: 'GET',
+                            url: '/mph/quality_percentage_per_country_bcr/',
+                            data: {
+                                'country': country,
+                                'region': 'apac'
+                            },
+                            success: function (newData) {
+                              updateChart(newData);
+                                
+                            },
+                            error: function (error) {
+                                // Handle errors
+                                console.error('Error loading data for ' + country, error);
+                            }
+                        });
+                  }
+
+                  function updateChart(newData) {
+                    // console.log(newData)
+                    const newValues = [
+                      newData[0].bridging_percentage,
+                      newData[0].reference_percentage,
+                      newData[0].coding_percentage
+                    ];
+                    // Set up options for the updated chart
+                    const updatedOptions = {
+                      title: {
+                            text: newData[0].id_country, // Your title here
+                            left: 'center',
+                            textStyle: {
+                              // fontWeight: 'normal', 
+                              fontSize: 14, // Adjust the font size as needed
+                            },
+                        },
+                      xAxis: {
+                        type: 'value',
+                        max: 100,
+                        axisLabel: {
+                          formatter: '{value}%'
+                        },
+                        interval: 25
+                      },
+                      yAxis: {
+                        type: 'category',
+                        data: ['Bridging Rate', 'Reference Rate', 'Coding Rate'],
+                        // axisLabel: {
+                        //   rotate: 35
+                        // },
+                      },
+                      series: [
+                        {
+                          type: 'bar',
+                          
+                          // barWidth: '50%',
+                          data: newValues,
+                          label: {
+                            show: true,
+                            formatter: '{c}%',
+                          },
+                          itemStyle: {
+                            color: '#43B02A',
+                          },
+                          
+                        }
+                      ]
+                      
+                    };
+
+                    chart.setOption(updatedOptions);
+                    }
+
+                });
+              </script>
+
+            
+            </div>
+          </div><!-- End Recent Activity -->
+          </div>
+            
+        <div class="col-lg-12">
+          <div class="card">
+              <div class="card-body">
+              <h5 class="card-title">Quality Data <span>| Year to Date</span></h5>
+              <table class="table  table-sm styled-table" >
+                  <thead>   
+                  <tr>
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Country</th>
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Metrics</th>
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">January</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">February</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">March</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">April</th>
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">May</th>
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">June</th>
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">July</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">August</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">September</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">October</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">November</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">December</th> 
+                      <th scope="col" style="background-color: #00A3E0; color: #ffffff;">Total</th> 
+                  </tr>
+                  </thead> 
+                  <tbody>
+                  
+                    {% for country, metrics in quality_records.items %}
+                      {% for metric_name, metric_data in metrics.items %}
+                        <tr>
+                          {% if forloop.first %}
+                            <td rowspan="{{ metrics|length }}"> <b>{{ country }}</b></td>
+                          {% endif %}
+                          <td>{{ metric_data.name }}</td>
+                          <td>{{ metric_data.January|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.February|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.March|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.April|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.May|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.June|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.July|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.August|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.September|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.October|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.November|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.December|default:0|floatformat:"0" }}</td>
+                          <td>{{ metric_data.total|default:0|floatformat:"0" }}</td>
+                        </tr>
+                      {% endfor %}
+                    {% endfor %}
+                     
+                  </tbody>
+                  
+              </table>
+              </div>
+          </div>
+          </div>
+
+
+        <!-- Right side columns -->
+        
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+ <!-- <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script> -->
+ <!-- <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script> -->
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <!-- <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script> -->
+ <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ 
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+ <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script> -->
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script> -->
+
+
+ <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet"> -->
+    <!-- <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet"> -->
+    <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+
+    <style>
+        .alert {
+            padding: 10px;
+            background-color: #f44336;
+            color: #084298;
+            opacity: 1;
+            transition: opacity 0.6s;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            width: 500px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(90%);
+        }
+        
+        .alert.success {background-color: #04AA6D;}
+        .alert.info {
+            background-color: #cfe2ff; /* Updated background-color to use rgba() with opacity */
+        }
+        .alert.warning {background-color: #ff9800;}
+        
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .closebtn:hover {
+            color: black;
+        }
+        
+        /* Added styling for the first field */
+        .field-employee_id {
+            position: relative;
+        }
+        
+        .field-employee_id .alert {
+            position: absolute;
+            top: -30px; /* Adjust the top value to control the distance between the alert and the field */
+            left: 0;
+            right: 0;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+
+    <div class="field-employee_id">
+        <div class="alert warning" id="customAlertCheck" style="display: none;">
+            <i class="bi bi-info-circle me-1"></i>
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>  
+            <span>This Employee ID is already existing in the Attrition list! </span>
+        </div>
+
+    </div>
+    
+    <!-- Render the rest of the fields -->
+{% endblock %}

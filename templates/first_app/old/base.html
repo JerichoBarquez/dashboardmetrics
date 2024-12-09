@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+{% load static %}
+{% csrf_token %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="C:\\Users\\jbarquez2\\Documents\\myProject\\first_project\\static\\img\\iqvia-favicon.png" rel="icon">
+  <!-- <link href="C:\Users\jbarquez2.QAMR-ACCOUNTS\Documents\myProject\first_project\static\img\iqvia-favicon.png" rel="apple-touch-icon"> -->
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+   <!-- Vendor CSS Files -->
+   <link rel ="stylesheet" href ="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+ 
+  
+ <script src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>  
+ <script src ="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src ="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script> 
+
+ 
+ <link rel ="stylesheet" href ="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">  
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+
+  <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+
+</head>
+
+
+<style>
+
+
+.form-container {
+      /* max-width: 300px; */
+      padding: 10px ;
+      width:170px;
+      background-color: white;
+    }
+  /* Set a style for the submit/login button */
+  .form-container .btn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 10px 12px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom:5px;
+      opacity: 0.8;
+      outline: none !important;
+    }
+    
+    /* Add a red background color to the cancel button */
+    .form-container .okay {
+      background-color: #43b02a;
+      /* outline: none; */
+      
+    }
+    .form-container .clear {
+      background-color: #43b02a;
+      /* outline: none; */
+    }
+    /* Add some hover effects to buttons */
+    .form-container .btn:hover, .open-button:hover {
+      opacity: 1;
+    }
+
+    a:hover { cursor: pointer; }
+
+    .fa {
+    position: absolute;
+    right: 25px;
+    top: 11px;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    }
+
+    .date-text {
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    color: #aaa;
+  }
+
+
+
+    
+</style>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-favicon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">4</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header">
+              You have 4 new notifications
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Lorem Ipsum</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>30 min. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+              <div>
+                <h4>Atque rerum nesciunt</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>1 hr. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-check-circle text-success"></i>
+              <div>
+                <h4>Sit rerum fuga</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>2 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+              <div>
+                <h4>Dicta reprehenderit</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-chat-left-text"></i>
+            <span class="badge bg-success badge-number">3</span>
+          </a><!-- End Messages Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header">
+              You have 3 new messages
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <!-- <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle"> -->
+                <div>
+                  <h4>Maria Hudson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>4 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <!-- <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle"> -->
+                <div>
+                  <h4>Anna Nelson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>6 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <!-- <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle"> -->
+                <div>
+                  <h4>David Muldon</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>8 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="dropdown-footer">
+              <a href="#">Show all messages</a>
+            </li>
+
+          </ul><!-- End Messages Dropdown Items -->
+
+        </li><!-- End Messages Nav -->
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static "img/profile.jpeg" %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">Jericho</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Kevin Anderson</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+    
+
+      <li class="nav-item">
+        <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Employee Data</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'first_app:attrition' %}" class="active">
+              <i class="bi bi-circle"></i><span>Attrition</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'first_app:tables' %}">
+              <i class="bi bi-circle"></i><span>List of Employees</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Tables Nav -->
+
+      
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.html">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
+     
+
+     
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Attrition Rates</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Attrition</li>
+          <li class="breadcrumb-item active">Attrition Rate</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+                <div class="card-body">
+                  <h5 class="card-title">Total Attrition <span>| This Year</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{total_count}}</h6>
+                      <span class="text-success small pt-1 fw-bold"  style="font-size:14px">12%</span> <span class="text-muted small pt-2 ps-1" style="font-size:14px">increase</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Attrition <span>| This Month</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-bar-chart"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ total_current_month_count }}</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size:14px">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size:14px">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+             <!-- Reports -->
+             <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>   
+                    <li><a class="dropdown-item"  onclick="timeframe('month')">This Month</a></li>
+                    <li><a class="dropdown-item"  onclick="timeframe('year')">This Year</a></li>
+                    <li><span class="dropdown-item"><b>Custom Date</b></span></li>
+                    <li>
+                      <div class='col-sm-12' id="textbox1">
+                         <input type='text' class="form-control" id='picker1' placeholder="Start">
+                         <i class="fa fa-calendar"></i>
+                      </div>
+                      <div class='col-md-12'>
+                        <input type='text' class="form-control" id='picker2' placeholder="End">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <div class='col-md-12 form-container' >
+                        <button type="button" class="btn okay" onclick="customDate()">FILTER</button>
+                        <button type="button" class="btn clear" onclick="clearThis()">CLEAR</button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <script type="text/javascript">
+                 $(function () {
+                  $('#picker1').datetimepicker({
+                     format: 'MM/DD/YYYY'
+                   });
+                    $('#picker2').datetimepicker({
+                      useCurrent: false,
+                      format: 'MM/DD/YYYY'
+                    });
+                    $("#picker1").on("dp.change", function (e) {
+                      $('#picker2').data("DateTimePicker").minDate(e.date);
+                    });
+                    $("#picker2").on("dp.change", function (e) {
+                      $('#picker1').data("DateTimePicker").maxDate(e.date);
+                    });
+                  });
+
+              
+                
+
+                   function clearThis() {
+                       document.getElementById('picker1').value = "";
+                       document.getElementById('picker2').value= "";
+                  }
+
+                </script>
+
+                <div class="card-body">
+                  <h5 class="card-title" >Attrition by Job Role </h5>
+
+                  <!-- Bar Chart -->
+                  <canvas id="attritionAge" style="min-height: 500px;" > </canvas>
+
+                  <script>
+
+                    
+                  
+                    // document.addEventListener("DOMContentLoaded", () => {
+                  
+                     const coordinates = {
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                     }
+                      
+                      // const current_year = {
+                      //   x: [{% for c in attrition %} '{{ c.count }}', {% endfor %}],  
+                      //   y: [{% for pos in attrition %} '{{ pos.position }}', {% endfor %}] 
+                      // }
+                      
+
+                      const data = {
+                        labels: [{% for pos in attrition %} '{{ pos.position }}', {% endfor %}] ,
+                        datasets: [{
+                          label: 'Overall Production Hub',
+                          data: [{% for c in attrition %} '{{ c.count }}', {% endfor %}],
+                          backgroundColor: ['#00A3E0'],
+                          borderColor: ['#00A3E0'],
+                          borderWidth: 1
+                        },
+                        ]
+                      };
+
+                      const current_month = {
+                        labels: [{% for pos in attrition_by_current_month %} '{{ pos.position }}', {% endfor %}],
+                        datasets: [{
+                          label: 'Overall Production Hub',
+                          data: [{% for c in attrition_by_current_month %} '{{ c.count }}', {% endfor %}],
+                          backgroundColor: ['#00A3E0'],
+                          borderColor: ['#00A3E0'],
+                          borderWidth: 1
+                          }]
+                        };
+
+                      // const data_current_month = {
+                      //   labels: [{% for pos in attrition_by_current_month %} '{{ pos.position }}', {% endfor %}],
+                      //   datasets: [{
+                      //     // label: ['Overall Production Hub for the month of ' + {% with attrition|first as first_doc %} '{{ first_doc.month | date:"F Y" }}', {% endwith %}],
+                      //     label: 'Overall Production Hub',
+                      //     data: [{% for c in attrition_by_current_month %} '{{ c.count }}', {% endfor %}],
+                      //     backgroundColor: ['#00A3E0'],
+                      //     borderColor: ['#00A3E0'],
+                      //     borderWidth: 1
+                      //   },
+                      //   ]
+                      // };                     
+                      //   var data = data_current_year;
+                  
+                      
+                      
+                      const resetButton = {
+                        id: 'resetButton',
+                        beforeDraw (chart,args,options) {
+                          
+                          if (attritionAge.config.data.datasets[0].label !== 'Overall Production Hub' && attritionAge.config.options.plugins.title.text.indexOf("Date Range") === -1
+                          && attritionAge.config.options.plugins.title.text !== 'No data available'){
+                            const {ctx, chartArea:{top,bottom,right,width,height}}=
+                          chart;
+                          ctx.save();
+                          const text = 'Back';
+                          const thickBorder = 3;
+                          const textWidth = ctx.measureText(text).width;
+                  
+                          ctx.fillStyle = 'white';
+                          ctx.fillRect(right- (textWidth + 1 + 10),5,textWidth + 10, 20);
+                  
+                          ctx.fillStyle = '#667';
+                          ctx.font = '14px Noto Sans';
+                          ctx.fillText(text,right-(textWidth + 1 + 5), 16);
+                  
+                          ctx.lineWidth - thickBorder + 'px';
+                          ctx.strokeStyle = 'white';
+                          ctx.strokeRect(right- (textWidth + 1 + 10),5,textWidth + 10, 20);
+                  
+                          coordinates.top = 5;
+                          coordinates.bottom = 25;
+                          coordinates.left = right - (textWidth + 1 + 10);
+                          coordinates.right = right;
+                          ctx.restore();
+                          };
+                        }
+                      };
+                  
+                      const legendMargin = {
+                        id: 'legendMargin',
+                        beforeInit(chart, legend, options) {
+                          const fitValue = chart.legend.fit;
+                          chart.legend.fit = function fit() {
+                            fitValue.bind(chart.legend)();
+                            return this.height += 30;
+                          }
+                        }
+                      };
+                  
+                     
+                      // config 
+                      const config = {
+                        type: 'bar',
+                        data,
+                        options: {
+                          // indexAxis:'y',
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              grid: {
+                                tickLength: 0,
+                                color: (context) => {
+                                  if (context.tick.value === 0) {
+                                    return 'gray';
+                                  } else {
+                                    return 'rgba(0,0,0,0.1)'
+                                  }
+                  
+                                }
+                              },
+                              ticks: {
+                                padding: 15,
+                                 stepSize:2,
+                              },
+                              
+                            },
+                            x:{
+                            grid: {
+                                drawOnChartArea: false,
+                                tickLength: 5,
+                                color: 'black'
+                              }
+                          },
+                            
+                          },
+                          layout: {
+                            padding: {
+                              left: 30,
+                              right: 30,
+                              bottom: 30,
+                              bottom: 30
+                            },
+
+                          },
+                          
+                          animation: {
+                              delay: 300,
+                            },
+                          plugins: {
+                            legend: {
+                              onHover: (event, chartElement) => {
+                                event.native.target.style.cursor = 'pointer'
+                              },
+                              onLeave: (event, nativeElement) => {
+                                event.native.target.style.cursor = 'default'
+                              }
+                            },
+                              title: {
+                              display: true,
+                              text: 'YEAR ' + {{ data_current_year }},
+                              align: 'center',
+                              color: '#43b02a',
+                              font: {
+                                 size: 20,
+                              }
+                            },
+                            
+                          }
+                        },
+                        plugins: [resetButton],
+                      };
+                  
+                      
+                      // render init block
+                      let ctx = document.getElementById('attritionAge');
+                      let attritionAge = new Chart(
+                        ctx,
+                        config
+                      );
+                  
+                      var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                      function clickHandler(click) {
+                          const points = attritionAge.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
+                          if (points.length) {
+                            if (attritionAge.config.options.plugins.title.text.startsWith('YEAR') ){
+                             
+                              const firstPoint = points[0];
+                              const label = attritionAge.data.labels[firstPoint.index];
+                              console.log(label)
+                             
+                              $.ajax({
+                                type: "GET",
+                                url: "/first_app/position/",
+                                dataType: 'json',
+                                data: {
+                                  label: label,
+                                  // date: date,
+                                  csrfmiddlewaretoken: csrftoken
+                                },
+                    
+                                success: function (response) {
+                                  
+                                  if (response.length) {
+                                    var labels = [];
+                                    var chartData = [];
+                                    for (var i = 0; i < response.length; i++) {
+                                      labels.push(response[i].region);
+                                      chartData.push(response[i].count);
+                                    }
+                                    attritionAge.config.data = {
+                                      labels: labels,
+                                      datasets: [{
+                                        label: label,
+                                        data: chartData,
+                                        backgroundColor: '#43b02a',
+                                        borderColor: '#43b02a',
+                                        borderWidth: 1
+                                      }]
+                                    }
+                                    attritionAge.update();
+                                  }
+                                },
+                                error: function (xhr, status, error) {
+                                  console.log("error");
+                                  console.log(error);
+                                }
+                              });
+                            }
+                            if (attritionAge.config.options.plugins.title.text.startsWith('Month of')){
+                              
+                              const firstPoint = points[0];
+                              const label = attritionAge.data.labels[firstPoint.index];
+
+                              $.ajax({
+                                type: "GET",
+                                url: "/first_app/position/",
+                                dataType: 'json',
+                                data: {
+                                  label: label,
+                                  month: 'yes',
+                                  csrfmiddlewaretoken: csrftoken
+                                },
+                    
+                                success: function (response) {
+                                  
+                                  if (response.length) {
+                                    var labels = [];
+                                    var chartData = [];
+                                    for (var i = 0; i < response.length; i++) {
+                                      labels.push(response[i].region);
+                                      chartData.push(response[i].count);
+                                    }
+                                    attritionAge.config.data = {
+                                      labels: labels,
+                                      datasets: [{
+                                        label: label,
+                                        data: chartData,
+                                        backgroundColor: '#43b02a',
+                                        borderColor: '#43b02a',
+                                        borderWidth: 1
+                                      }]
+                                    }
+                                    attritionAge.update();
+                                  }
+                                },
+                                error: function (xhr, status, error) {
+                                  console.log("error");
+                                  console.log(error);
+                                }
+                              });
+                            }
+                          }
+                        }
+                  
+                      function resetChart(){
+                        attritionAge.destroy();
+                        if (attritionAge.config.options.plugins.title.text.startsWith('Month of')){
+                          attritionAge = new Chart(
+                            ctx,
+                            config,
+                            config.data = current_month,
+                          );
+                        }
+                        else{
+                          attritionAge = new Chart(
+                            ctx,
+                            config,
+                            config.data = data,
+                          );
+                        }
+                      }
+                      function clickButtonHandler(canvas, click) {
+                          const x = click.offsetX;
+                          const y = click.offsetY;
+                          if (attritionAge.config.data.datasets[0].label !== 'Overall Production Hub' && attritionAge.config.options.plugins.title.text.indexOf("Date Range") === -1
+                          && attritionAge.config.options.plugins.title.text !== 'No data available') {
+                            if (x > coordinates.left && x < coordinates.right && y > coordinates.top && y < coordinates.bottom) {
+                              resetChart();
+                            };
+                          };
+                        };
+
+                    function convertMonth(month){
+                      var monthNames = [  "January", "February", "March",  "April", "May", "June", "July",  "August", "September", "October",  "November", "December"];
+                      var monthNumber = month;
+                      var monthName = monthNames[monthNumber - 1];
+                      var newTitle = 'Month of ' + monthName;
+                      return newTitle;
+                    }
+
+                    function timeframe(period) {     
+                      if (period == 'month'){
+                        console.log('month')
+                        attritionAge.config.data = current_month;
+                        attritionAge.config.options.plugins.title.text = convertMonth({{ data_current_month }});
+                      }
+                      if (period == 'year'){
+                        attritionAge.config.data = data;
+                        attritionAge.config.options.plugins.title.text = 'YEAR ' + {{ data_current_year }} 
+                      }
+                     
+                      attritionAge.update();
+                    }
+
+                    function customDate(){
+                      const startDate = document.getElementById('picker1').value;
+                      const endDate = document.getElementById('picker2').value;
+                      console.log(startDate)
+                      
+                      
+                      $.ajax({
+                          type: "GET",
+                          url: "/first_app/position/",
+                          dataType: 'json',
+                          data: {
+                            start: startDate,
+                            end : endDate,
+                            // months : 'no',
+                            csrfmiddlewaretoken: csrftoken
+                          },
+              
+                          success: function (chart_data) {
+                            if (chart_data.labels.length && chart_data.datasets.length){
+                              renderChart(chart_data, startDate , endDate);
+                            }
+                            else{
+                              attritionAge.config.options.plugins.title.text = 'No data available';
+                              attritionAge.config.data = {
+                                      labels: [],
+                                      datasets: [{
+                                        label: "",
+                                        data: "",
+                                        // backgroundColor: '#43b02a',
+                                        // borderColor: '#43b02a',
+                                        // borderWidth: 1
+                                      }]
+                                    }
+                              attritionAge.update();
+                              
+                            }
+                          },
+                          error: function (xhr, status, error) {
+                            console.log("error");
+                            console.log(error);
+                          }
+                        });
+                    }
+
+                    function renderChart(chart_data, startDate, endDate) {
+                      
+                        const labels = chart_data.labels;
+                        const datasets = [];
+                        console.log(chart_data);
+                        chart_data.datasets.forEach(function(dataset) {
+                          const data = dataset.data;
+                          const backgroundColor = dataset.backgroundColor;
+                          const borderColor = dataset.borderColor;
+                          const borderWidth = dataset.borderWidth;
+                          const label = dataset.label;
+
+                          datasets.push({
+                            label: label,
+                            data: data,
+                            backgroundColor: backgroundColor,
+                            borderColor: borderColor,
+                            borderWidth: borderWidth
+                          });
+                        });
+
+                        const data = {
+                          labels: labels,
+                          datasets: datasets
+                        };
+
+                        // Change chart type to vertical bar chart
+                        attritionAge.config.type = "bar";
+                        attritionAge.config.data = data;
+                        const date1 = new Date(startDate);
+                        const date2 = new Date(endDate);
+                        if (date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear()) {
+                          attritionAge.config.options.plugins.title.text = 'Date Range: ' + formatDate(startDate)
+                        }else{
+                          attritionAge.config.options.plugins.title.text = 'Date Range: ' + formatDate(startDate) + ' - ' + formatDate(endDate);
+                        }
+                        
+
+                        attritionAge.update();
+                        
+
+                        // Render the chart here using the chart.js library
+                      }
+
+                    function formatDate(formatDate){
+                    const dateParts = formatDate.split('/');
+                    const month = parseInt(dateParts[0]) - 1; // JavaScript Date object uses 0-based months
+                    const year = parseInt(dateParts[2]);
+                    const dateFormat = new Date(year, month);
+
+                    const formattedDate = dateFormat.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                    return formattedDate; 
+                    }
+                  
+                        
+                      // function mousemovehandler(canvas, mousemove) {
+                      //     const x = mousemove.offsetX;
+                      //     const y = mousemove.offsetY;
+                      //     if (attritionAge.config.data.datasets[0].label !== 'Overall Production Hub') {
+                      //       if (x > coordinates.left && x < coordinates.right && y > coordinates.top && y < coordinates.bottom) {
+                      //         console.log('A')
+                      //         canvas.style.cursor = 'pointer';
+                      //       } else {
+                      //         canvas.style.cursor = 'default';
+                      //       };
+                      //     };
+                      //   };
+                  
+                        ctx.onclick = clickHandler;
+                  
+                        // ctx.addEventListener('mousemove', (e) => {
+                        //   attritionAge.resize();
+                        //   mousemovehandler(ctx, e);
+                        // })
+                  
+                        ctx.addEventListener('click', (e) => {
+                          attritionAge.resize();
+                          clickButtonHandler(ctx, e);
+                        })
+                     
+                    // });
+                  
+                   
+                  </script>
+                  <!-- End Line Chart -->
+
+               
+                    
+
+              </div>
+            </div><!-- End Reports -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+       
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+ <!-- <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script> -->
+ <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script>
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <!-- <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script> -->
+ <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ 
+ <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+ <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+ 
+ 
+</script>
+
+</body>
+
+</html>

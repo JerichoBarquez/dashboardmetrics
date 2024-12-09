@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - IQVIA Manila Hub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static "img/iqvia-icon.png" %}" rel="icon">
+  <link href="{% static "img/iqvia-icon.png" %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+ <!-- Vendor CSS Files -->
+ <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/bootstrap-icons/bootstrap-icons.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/boxicons/css/boxicons.min.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.snow.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/quill/quill.bubble.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/remixicon/remixicon.css" %}" rel="stylesheet">
+ <link href="{% static "vendor/simple-datatables/style.css" %}" rel="stylesheet">
+
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ 
+  <!-- Template Main CSS File -->
+  <link href="{% static "css/style.css" %}" rel="stylesheet">
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'first_app:index' %}" class="logo d-flex align-items-center">
+        <img src="{% static "img/iqvia-icon.png" %}" alt="" width="47" height="25">
+        <span class="d-none d-lg-block" style="font-size: 25px;">MPH Dashboard</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+  
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'first_app:index' %}">
+            <i class="bi bi-pin-map-fill"></i>
+            <span>Manila Production Hub</span>
+        </a>
+    </li><!-- End Dashboard Nav -->
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'first_app:performance' %}">
+        <i class="bi bi-grid"></i>
+        <span>Performance</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#productivity-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-graph-up"></i><span>Productivity</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="productivity-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>APAC</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>EMEA</span>
+          </a>
+        </li>
+        <li>
+          <a  href="#">
+            <i class="bi bi-circle"></i><span>USCA</span>
+          </a>
+        </li>
+        
+      </ul>
+    </li><!-- End Tables Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#quality-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-bar-chart-line"></i><span>Quality</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="quality-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="{% url 'first_app:quality' region='apac' %}">
+            <i class="bi bi-circle"></i><span>APAC</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>EMEA</span>
+          </a>
+        </li>
+        <li>
+          <a  href="#">
+            <i class="bi bi-circle"></i><span>USCA</span>
+          </a>
+        </li>
+        
+      </ul>
+    </li><!-- End Tables Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#delivery-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-truck"></i><span>On-Time Delivery</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="delivery-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>APAC</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>EMEA</span>
+          </a>
+        </li>
+        <li>
+          <a  href="#">
+            <i class="bi bi-circle"></i><span>USCA</span>
+          </a>
+        </li>
+        
+      </ul>
+    </li><!-- End Tables Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" >
+          <i class="bi bi-gear"></i><span>Utilization</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'first_app:utilization' region='apac' %}">
+              <i class="bi bi-circle"></i><span>APAC</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'first_app:utilization' region='emea' %}">
+              <i class="bi bi-circle"></i><span>EMEA</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>USCA</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Forms Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#attrition-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-graph-down"></i><span>Attrition</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="attrition-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'first_app:attrition' %}">
+              <i class="bi bi-circle"></i><span>APAC</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>EMEA</span>
+            </a>
+          </li>
+          <li>
+            <a  href="#">
+              <i class="bi bi-circle"></i><span>USCA</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li><!-- End Tables Nav -->
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Headcount</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'first_app:headcount' region='apac' %}">
+              <i class="bi bi-circle"></i><span>APAC</span>
+            </a>
+          </li>
+          
+          <li>
+            <a  href="#">
+              <i class="bi bi-circle"></i><span>EMEA</span>
+            </a>
+          </li>
+          <li>
+            <a  href="#">
+              <i class="bi bi-circle"></i><span>USCA</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li><!-- End Tables Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-person-check"></i><span>Attendance</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          
+          <li>
+            <a href="{% url 'first_app:attendance' region='apac' %}">
+              <i class="bi bi-circle"></i><span>APAC</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'first_app:attendance' region='emea' %}">
+              <i class="bi bi-circle"></i><span>EMEA</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'first_app:attendance' region='usca' %}">
+              <i class="bi bi-circle"></i><span>USCA</span>
+            </a>
+          </li>
+         
+        </ul>
+      </li><!-- End Forms Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+    
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin:index' %}">
+          <i class="bi bi-gear"></i>
+          <span>Administrator</span>  
+        </a>
+      </li><!-- End Login Page Nav -->
+
+      
+
+     
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Performance</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'first_app:index' %}"><i class="bi bi-house-door"></i></a></li>
+          <li class="breadcrumb-item">Overall</li>
+          <li class="breadcrumb-item active">Metrics</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card sales-card" style="padding-bottom: 0%;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Productivity <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-graph-up" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">145</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">12%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Quality <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-bar-chart-line" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Sales Card -->
+            <!-- Customers Card -->
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">On-time Dlvry <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-truck" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Attrition <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-graph-down" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Headcount <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-person-plus" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">{{overall_count}}</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xxl-2 col-md-2" style="padding-right: 5px;">
+              <div class="card info-card revenue-card" style="padding-bottom: 0px;">
+                <div class="card-header" style="font-size: 16px;color: #012970;font-weight: 500;padding-bottom: 4px;margin-bottom: 10px;">Overtime <span style="font-size: 12px;color: #899bbd;font-weight: 400;">| Year to Date</span></div>
+                <div class="card-body sales-card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                      <i class="bi bi-hourglass-bottom" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="font-size: 20px;">$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold" style="font-size: 14px;">8%</span> <span class="text-muted small pt-2 ps-1" style="font-size: 14px;">increase</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+         <!-- Left side columns -->
+         <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Reports -->
+            <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Attendance Rate <span>| Monthly</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="monthly_attendance" style="min-height: 380px;" class="echart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                      var dataFromViews = {{ overall_percentage_monthly|safe }};
+                      var attendanceRateData = [];
+                  
+                      var regionNames = [...new Set(dataFromViews.map(item => item.region))];
+                      var colors = ['#125488', '#2A93D5', '#37CAEC'];
+                      // Create an array to hold series objects
+                      var seriesData = [];
+                  
+                      // Loop through each region and populate the seriesData array
+                      regionNames.forEach((regionName, index) => {
+                        var series = {
+                          name: regionName,
+                          type: 'bar', // Set the chart type to 'bar'
+                          data: [],
+                          itemStyle: {
+                            color: colors[index % colors.length]
+                          }
+                        };
+                  
+                        // Populate the series data based on the region
+                        for (var i = 0; i < 12; i++) {
+                          var found = false;
+                  
+                          // Find the data for the current month and region
+                          for (var j = 0; j < dataFromViews.length; j++) {
+                            if (dataFromViews[j].month === i + 1 && dataFromViews[j].region === regionName) {
+                              series.data.push((dataFromViews[j].percentage * 100).toFixed(2));
+                              found = true;
+                              break;
+                            }
+                          }
+                  
+                          // If data doesn't exist for the current month and region, assign zero
+                          if (!found) {
+                            series.data.push(0);
+                          }
+                        }
+                  
+                        seriesData.push(series);
+                      });
+                  
+                      // Initialize ECharts instance
+                      var monthly_attendance = echarts.init(document.getElementById('monthly_attendance'));
+                  
+                      // Set ECharts options
+                      var options = {
+                        tooltip: {
+                          trigger: 'axis',
+                          axisPointer: {
+                            type: 'shadow'
+                          },
+                        },
+                        toolbox: {
+                        show: true,
+                        feature: {
+                          dataView: { readOnly: false },
+                          magicType: { type: ['line', 'bar'] },
+                          restore: {},
+                          saveAsImage: {}
+                        }
+                      },
+                        legend: {
+                          data: regionNames
+                        },
+                        xAxis: {
+                          type: 'category',
+                          data: monthNames,
+                          boundaryGap: false
+                        },
+                        yAxis: {
+                          type: 'value',
+                          axisLabel: {
+                            formatter: '{value}%'
+                          },
+                        },
+                        series: seriesData
+                      };
+                  
+                      // Set the options and render the chart
+                      monthly_attendance.setOption(options);
+                    });
+                  </script>
+                  <!-- End Line Chart -->
+
+                </div>
+
+              </div>
+            </div><!-- End Reports -->
+
+            <!-- Reports -->
+            <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Utilization Rate <span>| Monthly</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="monthly_utilization" style="min-height: 380px;" class="echart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      
+                    });
+                  </script>
+                  <!-- End Line Chart -->
+
+                </div>
+
+              </div>
+            </div><!-- End Reports -->
+
+          </div>
+         </div>
+
+         
+            
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+          
+         <!-- Budget Report -->
+         <div class="card">
+          <div class="filter">
+            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <li class="dropdown-header text-start">
+                <h6>Filter</h6>
+              </li>
+
+              <!-- <li><a class="dropdown-item" href="#">Today</a></li> -->
+              <li><a class="dropdown-item" href="#">This Month</a></li>
+              <li><a class="dropdown-item" href="#">This Year</a></li>
+            </ul>
+          </div>
+
+          <div class="card-body pb-0">
+            <h5 class="card-title">Headcount by Department </h5>
+
+            <div id="department_chart" style="min-height: 400px;" class="echart"></div>
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+              var department_chart = echarts.init(document.getElementById('department_chart'));
+
+              // Set pie chart options
+              var option = {
+                
+                tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                legend: {
+                  top: '2%',
+                  left: 'center',
+                  data: [
+                    {% for region in regions_count %}
+                      '{{ region.region }}',
+                    {% endfor %}
+                  ]
+                },
+                toolbox: {
+                  show: true,
+                  feature: {
+                    mark: { show: true },
+                    dataView: { show: true, readOnly: false },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                  }
+                },
+                series: [
+                  {
+                    name: 'Department',
+                    type: 'pie',
+                    // radius: ['35%', '65%'],
+                    radius: ['35%', '65%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                      show: false,
+                      position: 'center'
+                    },
+                    data: [
+                      {% for region in regions_count %}
+                        {
+                          value: {{ region.count }}, 
+                        name: '{{ region.region }}',
+                        itemStyle: {
+                          normal: {
+                            color: {% if region.region == 'APAC' %}'#125488'{% elif region.region == 'EMEA' %}'#2A93D5'{% elif region.region == 'USCA' %}'#37CAEC'{% endif %}
+                          }
+                        }
+                      },
+
+                        
+                    
+                      {% endfor %}
+                    ],
+                    itemStyle: {
+                      emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      },
+                      normal: {
+                        label: {
+                          show: true,
+                          formatter: '{b}: {c} '
+                        }
+                      }
+                    },
+                    emphasis: {
+                      label: {
+                        show: true,
+                        fontSize: '12',
+                        fontWeight: 'bold'
+                      }
+                    },
+                  }
+                ]
+              };
+
+              // Set options and render chart
+              department_chart.setOption(option);
+            });
+             
+            </script>
+
+          </div>
+        </div><!-- End Budget Report -->
+
+        <!-- Headcount by Tenure -->
+        <div class="card">
+          <div class="filter">
+            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <li class="dropdown-header text-start">
+                <h6>Filter</h6>
+              </li>
+
+              <li><a class="dropdown-item" href="#">APAC</a></li>
+              <li><a class="dropdown-item" href="#">EMEA</a></li>
+              <li><a class="dropdown-item" href="#">USCA</a></li>
+            </ul>
+          </div>
+
+          <div class="card-body pb-0">
+            <h5 class="card-title">Headcount by Tenure</h5>
+
+            <div id="headcount_tenure" style="min-height: 500px;margin-bottom: 20px;" class="echart"></div>
+
+            <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              var chartDom = document.getElementById('headcount_tenure');
+              var myChart_tenure = echarts.init(chartDom);
+
+              document.querySelectorAll('.dropdown-item').forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  var department = this.textContent.trim();
+                  updateChartByDepartment(department);
+                });
+              });
+
+              // Function to update the pie chart based on department
+              function updateChartByDepartment(department) {
+                $.ajax({
+                  url: '/mph/tenure_by_department/',
+                  type: 'GET',
+                  data: { department: department },
+                  success: function(response) {
+                    console.log(response.data);
+                    var options = {
+                      title: {
+                        text: department,
+                        left: 'center',
+                        textStyle: {
+                          color: '#012970' // Set the color of the series name here
+                        }
+                      },
+                      tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                      },
+                      legend: {
+                        top: '92%',
+                      },
+                      toolbox: {
+                        show: true,
+                        feature: {
+                          mark: { show: true },
+                          dataView: { show: true, readOnly: false },
+                          restore: { show: true },
+                          saveAsImage: { show: true },
+                          
+                        }
+                      },
+                      color: ['#125488', '#2A93D5', '#37CAEC', '#D1EBFF', '#4C9A2A', '#76BA1B', '#A4DE02'],
+                      series: [
+                        {
+                          name: department,
+                          type: 'pie',
+                          radius: ['35%', '65%'],
+                          avoidLabelOverlap: false,
+                          itemStyle: {
+                            emphasis: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            normal: {
+                              label: {
+                                show: true,
+                                formatter: '{b}:\n{c}'
+                              }
+                            }
+                          },
+                          emphasis: {
+                            label: {
+                              show: true,
+                              fontSize: '12',
+                              fontWeight: 'bold'
+                            }
+                          },
+                          data: response.data
+                        }
+                      ]
+                    };
+
+                    myChart_tenure.setOption(options);
+                  },
+                  error: function(xhr, status, error) {
+                    console.log(error);
+                  }
+                });
+                
+              }
+
+              
+              var option;
+
+              var pieData = JSON.parse('{{ tenure_count|replace_single_quotes|safe }}');
+              console.log(pieData)
+              
+              option = {
+          
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                  },
+                  legend: {
+                    top: '92%',
+                  },
+              
+                toolbox: {
+                  show: true,
+                  feature: {
+                    mark: { show: true },
+                    dataView: { show: true, readOnly: false },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                  }
+                },
+                color: ['#125488','#1167B1', '#2A93D5', '#37CAEC', '#4C9A2A', '#76BA1B', '#A4DE02'],
+                series: [
+                  {
+                    name: 'Tenure',
+                    type: 'pie',
+                    radius: ['35%', '65%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                      emphasis: {
+                          shadowBlur: 10,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+                        normal: {
+                          label: {
+                            show: true,
+                            formatter: '{b}:\n{c}'
+                          }
+                        }
+                      
+                    },
+                    emphasis: {
+                        label: {
+                          show: true,
+                          fontSize: '12',
+                          fontWeight: 'bold'
+                        }
+                      },
+                    
+                    data: pieData
+                  }
+                ]
+              };
+
+              option && myChart_tenure.setOption(option);
+            });
+              
+            </script>
+
+          </div>
+        </div><!-- End Website Traffic -->
+
+        
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>IQVIA</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+    
+      Designed by <a href="#">IQVIA Manila Hub</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+ <!-- Vendor JS Files -->
+ <!-- <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script> -->
+ 
+ <!-- Template Main JS File -->
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script src="{% static "vendor/apexcharts/apexcharts.min.js" %}"></script>
+ <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+ <script src="{% static "vendor/chart.js/chart.umd.js" %}"></script>
+ <script src="{% static "vendor/echarts/echarts.min.js" %}"></script>
+ <script src="{% static "vendor/quill/quill.min.js" %}"></script>
+ <script src="{% static "vendor/simple-datatables/simple-datatables.js" %}"></script>
+ <script src="{% static "vendor/tinymce/tinymce.min.js" %}"></script>
+ <script src="{% static "vendor/php-email-form/validate.js" %}"></script>
+
+ <!-- Template Main JS File -->
+ <script src="{% static "js/main.js" %}"></script>
+
+ 
+
+ 
+ 
+
+</body>
+
+</html>
